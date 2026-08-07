@@ -57,6 +57,17 @@
 .chart .c-gridline  { stroke: var(--grid); stroke-width: 1; }
 .chart .c-baseline  { stroke: var(--axis); stroke-width: 1.4; }
 
+/* Slide 5's three panels. The even-split line is the anchor a fixed axis needs:
+ * 100/n is true of crashes, of deaths, and of every point between, so it is the
+ * only mark that never fades. Dashed and muted so it reads as a rule rather
+ * than as data. */
+.chart .c-paneltitle { font-size: 16px; font-weight: 640; fill: var(--ink-2); }
+.chart .c-evenline   { stroke: var(--axis); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.chart .c-evenlabel  { font-size: 12px; fill: var(--muted); text-anchor: end; }
+.chart .c-note       { font-size: 12.5px; font-weight: 640; fill: var(--ink-2);
+                       text-anchor: middle; }
+.chart .c-note.is-start { text-anchor: start; }
+
 .chart .c-point   { opacity: 0.72; }
 .chart .c-trendline { stroke-linecap: round; }
 .chart .c-line    { }

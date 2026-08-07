@@ -190,6 +190,114 @@
       "Provinces ranked by crashes, reordering into provinces ranked by deaths");
   }
 
+  /* ----------------------------------------- slide 5: three panels of bars */
+
+  /* Bins never move sideways and the y-axis is fixed across both acts, so the
+   * gridlines, the even-split rule, the panel titles and the x tick labels are
+   * written once at mount and never touched again. Only bar heights, bar colour,
+   * callout opacity and the two swapping headings change per frame. */
+  function slide05(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide05(data, 0, options);
+
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img",
+      "aria-label": "Crashes by hour, day of week and month, re-heighting to show "
+        + "the same three views by deaths",
+    });
+
+    var gGrid = el("g", { class: "c-grid" });
+    var gBars = el("g", { class: "c-bars" });
+    var gText = el("g", { class: "c-text" });
+    svg.appendChild(gGrid); svg.appendChild(gBars); svg.appendChild(gText);
+
+    var headings = first.headings.map(function (h) {
+      var t = el("text", { class: "c-heading", x: 40, y: 62 }, h.text);
+      gText.appendChild(t);
+      return t;
+    });
+    gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle));
+    var axisTitles = first.axisTitles.map(function (a) {
+      var t = el("text", { class: "c-axistitle", x: a.x, y: a.y,
+                           "text-anchor": a.anchor }, a.text);
+      gText.appendChild(t);
+      return t;
+    });
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 18, "text-anchor": "end",
+    }, first.source));
+
+    var bars = {}, notes = {};
+    first.panels.forEach(function (panel) {
+      gText.appendChild(el("text", {
+        class: "c-paneltitle", x: panel.x, y: panel.y - 16,
+      }, panel.title));
+
+      panel.yTicks.forEach(function (tk) {
+        gGrid.appendChild(el("line", {
+          class: "c-gridline", x1: panel.x, x2: panel.x + panel.w, y1: tk.y, y2: tk.y,
+        }));
+        gGrid.appendChild(el("text", {
+          class: "c-tick", x: panel.x - 10, y: tk.y + 5, "text-anchor": "end",
+        }, tk.label));
+      });
+
+      gGrid.appendChild(el("line", {
+        class: "c-evenline", x1: panel.x, x2: panel.x + panel.w,
+        y1: panel.evenLine.y, y2: panel.evenLine.y,
+      }));
+      gGrid.appendChild(el("text", {
+        class: "c-evenlabel", x: panel.x + panel.w, y: panel.evenLine.y - 6,
+      }, panel.evenLine.label));
+
+      gGrid.appendChild(el("line", {
+        class: "c-baseline", x1: panel.x, x2: panel.x + panel.w,
+        y1: panel.y + panel.h, y2: panel.y + panel.h,
+      }));
+
+      panel.xTicks.forEach(function (tk) {
+        gText.appendChild(el("text", {
+          class: "c-tick", x: tk.x, y: panel.y + panel.h + 24,
+        }, tk.label));
+      });
+
+      panel.bars.forEach(function (b) {
+        var rect = el("rect", { class: "c-bar", x: b.x, width: b.width, rx: 1.5 });
+        gBars.appendChild(rect);
+        bars[b.key] = rect;
+      });
+
+      panel.notes.forEach(function (n) {
+        var t = el("text", {
+          class: "c-note" + (n.anchor === "start" ? " is-start" : ""),
+        }, n.text);
+        gText.appendChild(t);
+        notes[n.key] = t;
+      });
+    });
+
+    mount.appendChild(svg);
+
+    function update(progress) {
+      var m = L.slide05(data, progress, options);
+      m.panels.forEach(function (panel) {
+        panel.bars.forEach(function (b) {
+          set(bars[b.key], { y: b.y, height: Math.max(0, b.height), fill: b.color });
+        });
+        panel.notes.forEach(function (n) {
+          set(notes[n.key], { x: n.x, y: n.y, opacity: n.opacity.toFixed(3) });
+        });
+      });
+      m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity); });
+      m.axisTitles.forEach(function (a, i) { axisTitles[i].setAttribute("opacity", a.opacity); });
+    }
+
+    update(0);
+    return { svg: svg, update: update };
+  }
+
   /* --------------------------------------------------- slide 9: scatter */
 
   function slide09(mount, data, options) {
@@ -381,6 +489,6 @@
     return { svg: svg, update: update };
   }
 
-  return { slide04: slide04, slide04Story: slide04Story, slide08: slide08,
-           slide09: slide09, slide12: slide12 };
+  return { slide04: slide04, slide04Story: slide04Story, slide05: slide05,
+           slide08: slide08, slide09: slide09, slide12: slide12 };
 });

@@ -125,15 +125,28 @@
   </div>
 </section>
 
-<!-- 5 — when -->
-<section class="section section-static" data-kicker="Part 1 &middot; Descriptive" data-title="Time of day decides deployment">
-  <p class="kicker">Part 1 &middot; Descriptive</p>
-  <h1>Time of day decides deployment; day of week does not</h1>
-  <p class="takeaway">Hours differ by 2.1&times; &mdash; 02:00 carries 2.8% of crashes and
-    16:00 carries 5.8% &mdash; while weekdays sit inside a 13.6&ndash;15.6% band, near an even
-    14.3% split. Alcohol is the exception this chart does not isolate: 53% of alcohol-related
-    crashes fall on Friday&ndash;Sunday and 59% between 19:00 and 04:00.</p>
-  <div class="figwrap"><img src="assets/figures/fig01_when.svg" alt="Crashes by hour of day and by day of week"></div>
+<!-- 5 — when (LIVE) -->
+<section class="section section-live" data-kicker="Part 1 &middot; Descriptive" data-title="Time of day decides deployment">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Descriptive</p>
+    <h1>Time of day decides deployment; day of week does not</h1>
+  </div>
+  <div class="spacer">
+    <p>Hours differ by 2.1&times; &mdash; 02:00 carries 2.8% of crashes and 16:00 carries
+       5.8% &mdash; while weekdays sit inside a 13.6&ndash;15.6% band, near an even 14.3%
+       split. Scroll to count the same three views by deaths instead of by crashes.</p>
+  </div>
+  <div class="scroll-section" id="sec-s5">
+    <div class="pin"><div class="frame" id="mount-s5"></div></div>
+  </div>
+  <div class="spacer">
+    <p>Counted by deaths the peak moves to <b>19:00</b> and the spread widens to 2.7&times;:
+       19:00&ndash;04:00 is 34.6% of crashes but <b>41.9% of deaths</b>. The weekday panel
+       barely moves &mdash; 13.4&ndash;15.1%, Friday highest on either count &mdash; so the
+       day of the week still does not decide anything. Alcohol is why the evening does:
+       53% of alcohol-related crashes fall on Friday&ndash;Sunday and 59% between 19:00
+       and 04:00.</p>
+  </div>
 </section>
 
 <!-- 6 — conditions -->
@@ -161,97 +174,112 @@
 <script src="assets/js/layout.js"></script>
 <script src="assets/js/render.js"></script>
 <script>
-fetch("assets/data/charts/slide04_cause.json")
-  .then(function (r) { return r.json(); })
-  .then(function (data) {
-    // Three acts, one scalar. Every bit of act arithmetic — including where
-    // act 3 starts — lives in layout.js's slide04Story() and is covered by
-    // 12_qa_chart_layout.js. Nothing in this page knows what an act is.
-    var chart = ChartRender.slide04Story(document.getElementById("mount-s4"), data);
-    var section = document.getElementById("sec-s4");
-    var cue = document.getElementById("cue");
+(function () {
+  "use strict";
 
-    function tick() {
-      var r = section.getBoundingClientRect();
-      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
-      chart.update(p);
-      var inChart = r.top < window.innerHeight && r.bottom > 0;
-      cue.style.opacity = inChart && p > 0.02 && p < 0.98 ? 0 : 1;
+  var cue = document.getElementById("cue");
+  var live = [];   // one entry per pinned chart: { section, chart, anchors }
+
+  function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+
+  function animateScrollTo(targetY, duration) {
+    var startY = window.scrollY, delta = targetY - startY, t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var t = Math.min(1, (ts - t0) / duration);
+      window.scrollTo(0, startY + delta * easeInOutQuad(t));
+      if (t < 1) requestAnimationFrame(step);
     }
+    requestAnimationFrame(step);
+  }
+
+  /* Arrow/PageDown steps act by act with a deliberate 2s ease, instead of
+   * transport.js's default (jump straight to the next .section, which would skip
+   * a chart's middle and final states entirely). At the first and last stop the
+   * key falls through and transport.js moves to the neighbouring slide.
+   *
+   * This is the one timed animation on the site, and it is scoped to a
+   * deliberate key press. Free scrolling remains the presenter's own clock, and
+   * chart progress remains a pure function of scroll position, because what the
+   * tween moves is the *scroll* — ticket 08's requirement.
+   *
+   * The "which stop" arithmetic is ChartLayout.nextStop(), checked in
+   * 12_qa_chart_layout.js. Only the listener and the tween live here. */
+  var TOL = 12;   // px — a smooth scroll lands a pixel or two off its target
+
+  addEventListener("keydown", function (e) {
+    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+    var down = ["ArrowDown", "PageDown"].indexOf(e.key) !== -1;
+    var up = ["ArrowUp", "PageUp"].indexOf(e.key) !== -1;
+    if (!down && !up) return;
+
+    for (var i = 0; i < live.length; i++) {
+      var target = ChartLayout.nextStop(live[i].anchors(), window.scrollY,
+                                        down ? 1 : -1, TOL);
+      if (target === null) continue;   // not this chart's business
+      e.preventDefault();
+      e.stopImmediatePropagation();    // pre-empt transport.js's own handler
+      animateScrollTo(target, 2000);
+      return;
+    }
+  }, true);   // capture phase — runs before transport.js's listener
+
+  /* Absolute scroll positions, not chart-progress fractions. transport.js lands
+   * a presenter at the top of the *outer* section, where the intro and lead-in
+   * fill the screen and the chart has not pinned yet — so a stepper keyed to the
+   * pinned region never engaged there and the first press skipped the whole
+   * chart. These anchors span the section end to end: the intro, then one per
+   * act. `fractions` are where each act sits within the pinned travel. */
+  function anchorsFor(section, fractions) {
+    return function () {
+      var travel = section.offsetHeight - window.innerHeight;
+      var chartTop = section.getBoundingClientRect().top + window.scrollY;
+      var outerTop = section.closest(".section").getBoundingClientRect().top + window.scrollY;
+      return [outerTop].concat(fractions.map(function (f) { return chartTop + f * travel; }));
+    };
+  }
+
+  function tick() {
+    var anyMid = false;
+    live.forEach(function (item) {
+      var r = item.section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      item.chart.update(p);
+      if (r.top < window.innerHeight && r.bottom > 0 && p > 0.02 && p < 0.98) anyMid = true;
+    });
+    cue.style.opacity = anyMid ? 0 : 1;
+  }
+
+  Promise.all([
+    fetch("assets/data/charts/slide04_cause.json").then(function (r) { return r.json(); }),
+    fetch("assets/data/charts/slide05_when.json").then(function (r) { return r.json(); }),
+  ]).then(function (loaded) {
+    var cause = loaded[0], when = loaded[1];
+
+    // Three acts, one scalar. Every bit of act arithmetic — including where act 3
+    // starts — lives in layout.js's slide04Story() and is covered by
+    // 12_qa_chart_layout.js. Nothing in this page knows what an act is.
+    var s4 = document.getElementById("sec-s4");
+    live.push({
+      section: s4,
+      chart: ChartRender.slide04Story(document.getElementById("mount-s4"), cause),
+      anchors: anchorsFor(s4, [0, ChartLayout.SLIDE04_ACT3_START, 1]),
+    });
+
+    // Two acts: share of crashes, then share of deaths.
+    var s5 = document.getElementById("sec-s5");
+    live.push({
+      section: s5,
+      chart: ChartRender.slide05(document.getElementById("mount-s5"), when),
+      anchors: anchorsFor(s5, [0, 1]),
+    });
 
     addEventListener("scroll", tick, { passive: true });
     addEventListener("resize", tick);
     tick();
-    window.__chart = chart;
-
-    // Arrow/PageDown steps act by act with a deliberate 2s ease, instead of
-    // transport.js's default (jump straight to the next .section, which would
-    // skip this chart's middle and final states entirely). Only engaged while
-    // the pin is stuck to the viewport; at the first and last act the key falls
-    // through and transport.js moves to the neighbouring slide as normal.
-    //
-    // This is the one timed animation on the site, and it is scoped to a
-    // deliberate key press on one chart. Free scrolling remains the presenter's
-    // own clock, and chart progress remains a pure function of scroll position,
-    // because what the tween moves is the *scroll* — ticket 08's requirement.
-    // Absolute scroll positions, not chart-progress fractions. transport.js
-    // lands a presenter at the top of the *outer* section, where the intro and
-    // lead-in fill the screen and the chart has not pinned yet — so a stepper
-    // keyed to the pinned region never engaged there and the first press
-    // skipped the whole chart. These anchors span the section end to end:
-    // the intro, then one per act.
-    var outer = section.closest(".section");
-
-    function anchors() {
-      var travel = section.offsetHeight - window.innerHeight;
-      var chartTop = section.getBoundingClientRect().top + window.scrollY;
-      return [
-        outer.getBoundingClientRect().top + window.scrollY,  // intro / lead-in
-        chartTop,                                            // act 1  most common
-        chartTop + ChartLayout.SLIDE04_ACT3_START * travel,  // act 2  most lethal
-        chartTop + travel,                                   // act 3  the evidence
-      ];
-    }
-
-    function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
-    function animateScrollTo(targetY, duration) {
-      var startY = window.scrollY, delta = targetY - startY, t0 = null;
-      function step(ts) {
-        if (t0 === null) t0 = ts;
-        var t = Math.min(1, (ts - t0) / duration);
-        window.scrollTo(0, startY + delta * easeInOutQuad(t));
-        if (t < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    addEventListener("keydown", function (e) {
-      if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
-      var down = ["ArrowDown", "PageDown"].indexOf(e.key) !== -1;
-      var up = ["ArrowUp", "PageUp"].indexOf(e.key) !== -1;
-      if (!down && !up) return;
-
-      // Generous in px because a browser's own scroll lands a pixel or two off
-      // a target, and because the page clamps at its very bottom — but far
-      // smaller than the gap between any two acts.
-      var TOL = 12;
-      var a = anchors();
-      var y = window.scrollY;
-      if (y < a[0] - TOL || y > a[a.length - 1] + TOL) return; // another slide owns this key
-
-      var target = null;
-      if (down) {
-        for (var i = 0; i < a.length; i++) if (a[i] > y + TOL) { target = a[i]; break; }
-      } else {
-        for (var j = a.length - 1; j >= 0; j--) if (a[j] < y - TOL) { target = a[j]; break; }
-      }
-      if (target === null) return; // at the first or last act — fall through to the next slide
-
-      e.preventDefault();
-      e.stopImmediatePropagation(); // pre-empt transport.js's own keydown handler
-      animateScrollTo(target, 2000);
-    }, true); // capture phase — runs before transport.js's listener
+    window.__charts = live;
   });
+})();
 </script>
 <script src="assets/js/transport.js"></script>
 </body>

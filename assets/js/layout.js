@@ -55,6 +55,21 @@
   function fadeOut(p) { return clamp(1 - 2 * p, 0, 1); }
   function fadeIn(p) { return clamp(2 * p - 1, 0, 1); }
 
+  /* Stricter than fadeOut/fadeIn: visible only within `REST_BAND` of an endpoint,
+   * so a label is on screen at rest and gone for essentially the whole morph.
+   *
+   * Slide 8 gets away with the gentler gapped fade because its value labels are
+   * attached to rows, and a row's identity survives the reorder. Slide 5's
+   * callouts are claims about *which bar is the extreme*, and the extreme
+   * changes identity partway through — 16:00 is the busiest hour, 19:00 is the
+   * deadliest. A half-faded "peak 16:00" still pointing at 16:00 while the tallest
+   * bar has become 19:00 is not an imprecise label, it is a false one. So these
+   * are off before the bars have visibly moved.
+   */
+  var REST_BAND = 0.02;
+  function atRestOut(p) { return clamp(1 - clamp(p, 0, 1) / REST_BAND, 0, 1); }
+  function atRestIn(p) { return clamp((clamp(p, 0, 1) - (1 - REST_BAND)) / REST_BAND, 0, 1); }
+
   /* A hard swap at the midpoint, for the heading and the axis title.
    *
    * Two earlier attempts were both wrong on screen. A gapped fade left the chart
@@ -105,6 +120,227 @@
     var travel = elementHeight - viewportHeight;
     if (!(travel > 0)) return elementTop <= 0 ? 1 : 0;
     return clamp(-elementTop / travel, 0, 1);
+  }
+
+  /* Which scroll position an arrow key should move to, given the stops a slide
+   * defines. Pure, so the one piece of the keyboard stepper that has ever had a
+   * bug in it is testable without a browser — the rest (a listener and a tween)
+   * is trivial and stays in the page.
+   *
+   * `anchors` are absolute document Y positions in ascending order, spanning the
+   * slide end to end: the intro first, then one per act. Absolute, not
+   * chart-progress fractions, because a presenter arrives at the top of the
+   * *outer* section, where the lead-in fills the screen and the chart has not
+   * pinned yet — a stepper keyed to the pinned region never engages there, and
+   * the first press skips the whole chart. That was the bug.
+   *
+   * Returns null in two distinct situations that both mean "not mine": the
+   * scroll is outside this slide entirely, or it is at the slide's first or last
+   * stop and moving further out. In both cases the page's own handler should
+   * fall through to transport.js and move to the neighbouring section.
+   *
+   * `tol` is generous in px because a browser's own smooth scroll lands a pixel
+   * or two off a target and the page clamps at its very bottom — but it must
+   * stay far smaller than the gap between two stops.
+   */
+  function nextStop(anchors, scrollY, direction, tol) {
+    if (!anchors || !anchors.length) return null;
+    if (!isFinite(scrollY) || !isFinite(direction) || direction === 0) return null;
+    var t = isFinite(tol) ? Math.abs(tol) : 0;
+    var first = anchors[0], last = anchors[anchors.length - 1];
+    if (scrollY < first - t || scrollY > last + t) return null;
+
+    var i;
+    if (direction > 0) {
+      for (i = 0; i < anchors.length; i++) if (anchors[i] > scrollY + t) return anchors[i];
+    } else {
+      for (i = anchors.length - 1; i >= 0; i--) if (anchors[i] < scrollY - t) return anchors[i];
+    }
+    return null;
+  }
+
+  /* ----------------------------------------- slide 5: when, on both metrics */
+
+  var SLIDE05_DEFAULTS = {
+    width: 1280,
+    height: 720,
+    margin: { top: 138, right: 44, bottom: 104, left: 66 },
+    // Matches fig01_when's width_ratios, so the live chart and the deck figure
+    // are recognisably the same picture.
+    panelRatios: [1.5, 1, 1.2],
+    panelGap: 54,
+    barShare: 0.72,        // of a slot; the rest is the gap between bars
+    headroom: 1.15,        // the space callouts sit in, above the tallest bar
+    xTickEvery: { hour: 3, dow: 1, month: 1 },
+    noteCharWidth: 6.6,    // ~0.55em at the 12px callout, for overflow clamping
+  };
+
+  /* Three panels re-heighting from share-of-crashes to share-of-deaths on one
+   * scalar. Nothing reorders — the bins are chronological and stay put — so the
+   * only thing that moves is height, which is the whole point: 16:00 sags and
+   * 19:00 climbs past it.
+   *
+   * The y-axis is FIXED across both acts, per panel, at `headroom` x the larger
+   * of the two metrics' maxima. This is the decision the chart turns on. Scaling
+   * each act to its own maximum would keep the tallest bar at full height in
+   * both, which cancels exactly the thing being shown: the evening's rise would
+   * be absorbed by the frame growing with it, and the afternoon would appear to
+   * collapse further than it does. That is the same normalisation artefact that
+   * inverted a trendline on slide 9.
+   *
+   * A fixed axis is only readable against a fixed anchor, which is what the
+   * even-split line is for: 100/n is true of crashes, true of deaths, and true
+   * at every point between, so it is the one mark that never fades. The y ticks
+   * are likewise metric-free here — both acts are percentages on one scale — so
+   * unlike slide 8's, they never need to crossfade.
+   */
+  function slide05(data, progress, options) {
+    var o = Object.assign({}, SLIDE05_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var t = smoothstep(p);
+
+    var plot = {
+      x: o.margin.left, y: o.margin.top,
+      w: o.width - o.margin.left - o.margin.right,
+      h: o.height - o.margin.top - o.margin.bottom,
+    };
+
+    var ratios = o.panelRatios;
+    var ratioSum = ratios.reduce(function (a, b) { return a + b; }, 0);
+    var usable = plot.w - o.panelGap * (data.panels.length - 1);
+
+    var cursor = plot.x;
+    var panels = data.panels.map(function (src, pi) {
+      var w = usable * (ratios[pi] || 1) / ratioSum;
+      var panel = { key: src.key, title: src.title, x: cursor, y: plot.y, w: w, h: plot.h };
+      cursor += w + o.panelGap;
+
+      var bins = src.bins;
+      // One fixed domain for both acts. Taking the max over BOTH metrics is what
+      // makes the two acts comparable; taking it per act is the artefact above.
+      var yMax = o.headroom * bins.reduce(function (m, b) {
+        return Math.max(m, b.pc_crash, b.pc_death);
+      }, 0);
+      var yOf = function (v) { return panel.y + panel.h - (v / yMax) * panel.h; };
+
+      var slot = panel.w / bins.length;
+      var barW = slot * o.barShare;
+
+      var bars = bins.map(function (b, i) {
+        var value = lerp(b.pc_crash, b.pc_death, t);
+        var y = yOf(value);
+        return {
+          key: src.key + "-" + b.label,
+          label: b.label,
+          x: panel.x + i * slot + (slot - barW) / 2,
+          width: barW,
+          y: y,
+          height: panel.y + panel.h - y,
+          color: mixHex(PALETTE.volume, PALETTE.severity, t),
+          value: value,
+        };
+      });
+
+      var every = o.xTickEvery[src.key] || 1;
+      var xTicks = bins.reduce(function (acc, b, i) {
+        if (i % every === 0) acc.push({ index: i, x: bars[i].x + barW / 2, label: b.label });
+        return acc;
+      }, []);
+
+      var yTicks = niceTicks(yMax, 4).map(function (v) {
+        return { value: v, y: yOf(v), label: String(+v.toFixed(1)) };
+      });
+
+      /* Callouts. Two sets per panel, one per act, each visible only at its own
+       * end of the scroll. Positioned above the bar they describe and clamped
+       * inside the panel, because the extreme can sit in the first or last slot
+       * (02:00, 04:00) where a centred label would hang off the plot. */
+      function noteAt(bin, i, text, opacity) {
+        var half = text.length * o.noteCharWidth / 2;
+        var centre = bars[i].x + barW / 2;
+        return {
+          key: src.key + "-" + text,
+          text: text,
+          x: clamp(centre, panel.x + half, panel.x + panel.w - half),
+          y: bars[i].y - 13,
+          anchorX: centre,
+          width: half * 2,
+          opacity: opacity,
+        };
+      }
+
+      function extreme(field, pick) {
+        var best = 0;
+        for (var i = 1; i < bins.length; i++) {
+          if (pick(bins[i][field], bins[best][field])) best = i;
+        }
+        return best;
+      }
+      var hi = function (a, b) { return a > b; }, lo = function (a, b) { return a < b; };
+      var name = function (b) { return src.key === "hour" ? b.label + ":00" : b.label; };
+      var pct = function (v) { return v.toFixed(1) + "%"; };
+
+      var notes = [];
+      [["pc_crash", atRestOut(p)], ["pc_death", atRestIn(p)]].forEach(function (pair) {
+        var field = pair[0], op = pair[1];
+        var peak = extreme(field, hi);
+        if (src.key === "dow") {
+          // The weekday panel's claim is the absence of a peak, so naming one
+          // would argue against the slide. It gets the spread instead.
+          var lowB = bins[extreme(field, lo)], hiB = bins[peak];
+          // Inside the panel, in the headroom above the bars — not above the
+          // panel, where it landed on the panel title. Same placement the
+          // matplotlib figure uses for this note.
+          notes.push({
+            key: src.key + "-spread-" + field, text: "a spread of only "
+              + pct(lowB[field]) + "–" + pct(hiB[field]),
+            x: panel.x + 4, y: panel.y + 18, anchorX: panel.x + 4,
+            width: 0, opacity: op, anchor: "start",
+          });
+          return;
+        }
+        var tag = bins[peak].note ? " (" + bins[peak].note + ")" : "";
+        notes.push(noteAt(bins[peak], peak, "peak " + name(bins[peak])
+          + " " + pct(bins[peak][field]) + tag, op));
+        if (src.key === "hour") {
+          var low = extreme(field, lo);
+          notes.push(noteAt(bins[low], low, "low " + name(bins[low])
+            + " " + pct(bins[low][field]), op));
+        }
+      });
+
+      return Object.assign(panel, {
+        yMax: yMax, bars: bars, xTicks: xTicks, yTicks: yTicks, notes: notes,
+        // Metric-independent, so it is drawn once at full opacity and never
+        // fades: the only thing on screen that stays true mid-morph.
+        evenLine: { value: src.even_split, y: yOf(src.even_split),
+                    label: "even " + src.even_split.toFixed(1) + "%" },
+      });
+    });
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, progress: p,
+      headings: [
+        { text: "When crashes happen", opacity: swapOut(p) },
+        { text: "When deaths happen", opacity: swapIn(p) },
+      ],
+      // Right-anchored on the panel titles' own baseline. Left-aligned under the
+      // subtitle is where this started and the two overstruck each other; the
+      // panel titles occupy the left of that line, so the unit goes to the end
+      // of it, clear of the month panel's title.
+      axisTitles: [
+        { text: "% of all crashes", opacity: swapOut(p),
+          x: o.width - o.margin.right, y: plot.y - 16, anchor: "end" },
+        { text: "% of all deaths", opacity: swapIn(p),
+          x: o.width - o.margin.right, y: plot.y - 16, anchor: "end" },
+      ],
+      subtitle: "Hours differ far more than days do — and more so by deaths than "
+              + "by crashes. Line marks an even share.",
+      panels: panels,
+      source: data.source,
+      sourceX: o.width - 40,
+    };
   }
 
   /* -------------------------------------------------- slide 8: the reorder */
@@ -860,15 +1096,21 @@
     smoothstep: smoothstep,
     fadeIn: fadeIn,
     fadeOut: fadeOut,
+    atRestIn: atRestIn,
+    atRestOut: atRestOut,
+    REST_BAND: REST_BAND,
     swapIn: swapIn,
     swapOut: swapOut,
     mixHex: mixHex,
     niceTicks: niceTicks,
     progressFor: progressFor,
+    nextStop: nextStop,
     slide04: slide04,
     slide04Act3: slide04Act3,
     slide04Story: slide04Story,
     SLIDE04_ACT3_START: SLIDE04_ACT3_START,
+    slide05: slide05,
+    SLIDE05_DEFAULTS: SLIDE05_DEFAULTS,
     slide08: slide08,
     slide09: slide09,
     slide12: slide12,

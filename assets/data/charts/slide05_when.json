@@ -1,0 +1,358 @@
+{
+ "total_crashes": 110434,
+ "total_deaths": 13901,
+ "metrics": [
+  {
+   "key": "pc_crash",
+   "axis": "% of all crashes"
+  },
+  {
+   "key": "pc_death",
+   "axis": "% of all deaths"
+  }
+ ],
+ "panels": [
+  {
+   "key": "hour",
+   "title": "By hour",
+   "xlabel": "Hour of day",
+   "even_split": 4.17,
+   "missing": {
+    "crashes": 0,
+    "deaths": 0,
+    "note": "crashes with no hour recorded in the source file"
+   },
+   "bins": [
+    {
+     "label": "00",
+     "crashes": 3545,
+     "deaths": 543,
+     "pc_crash": 3.21,
+     "pc_death": 3.91
+    },
+    {
+     "label": "01",
+     "crashes": 3727,
+     "deaths": 511,
+     "pc_crash": 3.37,
+     "pc_death": 3.68
+    },
+    {
+     "label": "02",
+     "crashes": 3058,
+     "deaths": 419,
+     "pc_crash": 2.77,
+     "pc_death": 3.01
+    },
+    {
+     "label": "03",
+     "crashes": 3087,
+     "deaths": 399,
+     "pc_crash": 2.8,
+     "pc_death": 2.87
+    },
+    {
+     "label": "04",
+     "crashes": 3426,
+     "deaths": 382,
+     "pc_crash": 3.1,
+     "pc_death": 2.75
+    },
+    {
+     "label": "05",
+     "crashes": 3510,
+     "deaths": 463,
+     "pc_crash": 3.18,
+     "pc_death": 3.33
+    },
+    {
+     "label": "06",
+     "crashes": 3725,
+     "deaths": 492,
+     "pc_crash": 3.37,
+     "pc_death": 3.54
+    },
+    {
+     "label": "07",
+     "crashes": 5010,
+     "deaths": 672,
+     "pc_crash": 4.54,
+     "pc_death": 4.83
+    },
+    {
+     "label": "08",
+     "crashes": 4817,
+     "deaths": 516,
+     "pc_crash": 4.36,
+     "pc_death": 3.71
+    },
+    {
+     "label": "09",
+     "crashes": 5371,
+     "deaths": 568,
+     "pc_crash": 4.86,
+     "pc_death": 4.09
+    },
+    {
+     "label": "10",
+     "crashes": 5741,
+     "deaths": 520,
+     "pc_crash": 5.2,
+     "pc_death": 3.74
+    },
+    {
+     "label": "11",
+     "crashes": 5046,
+     "deaths": 523,
+     "pc_crash": 4.57,
+     "pc_death": 3.76
+    },
+    {
+     "label": "12",
+     "crashes": 4946,
+     "deaths": 532,
+     "pc_crash": 4.48,
+     "pc_death": 3.83
+    },
+    {
+     "label": "13",
+     "crashes": 5885,
+     "deaths": 507,
+     "pc_crash": 5.33,
+     "pc_death": 3.65
+    },
+    {
+     "label": "14",
+     "crashes": 5723,
+     "deaths": 509,
+     "pc_crash": 5.18,
+     "pc_death": 3.66
+    },
+    {
+     "label": "15",
+     "crashes": 6079,
+     "deaths": 645,
+     "pc_crash": 5.5,
+     "pc_death": 4.64
+    },
+    {
+     "label": "16",
+     "crashes": 6365,
+     "deaths": 719,
+     "pc_crash": 5.76,
+     "pc_death": 5.17
+    },
+    {
+     "label": "17",
+     "crashes": 5126,
+     "deaths": 658,
+     "pc_crash": 4.64,
+     "pc_death": 4.73
+    },
+    {
+     "label": "18",
+     "crashes": 4854,
+     "deaths": 746,
+     "pc_crash": 4.4,
+     "pc_death": 5.37
+    },
+    {
+     "label": "19",
+     "crashes": 5434,
+     "deaths": 1017,
+     "pc_crash": 4.92,
+     "pc_death": 7.32
+    },
+    {
+     "label": "20",
+     "crashes": 4254,
+     "deaths": 741,
+     "pc_crash": 3.85,
+     "pc_death": 5.33
+    },
+    {
+     "label": "21",
+     "crashes": 4125,
+     "deaths": 651,
+     "pc_crash": 3.74,
+     "pc_death": 4.68
+    },
+    {
+     "label": "22",
+     "crashes": 3955,
+     "deaths": 613,
+     "pc_crash": 3.58,
+     "pc_death": 4.41
+    },
+    {
+     "label": "23",
+     "crashes": 3625,
+     "deaths": 555,
+     "pc_crash": 3.28,
+     "pc_death": 3.99
+    }
+   ]
+  },
+  {
+   "key": "dow",
+   "title": "By day of week",
+   "xlabel": null,
+   "even_split": 14.29,
+   "missing": {
+    "crashes": 0,
+    "deaths": 0,
+    "note": "crashes with no dow recorded in the source file"
+   },
+   "bins": [
+    {
+     "label": "Mon",
+     "crashes": 15659,
+     "deaths": 1963,
+     "pc_crash": 14.18,
+     "pc_death": 14.12
+    },
+    {
+     "label": "Tue",
+     "crashes": 15309,
+     "deaths": 1896,
+     "pc_crash": 13.86,
+     "pc_death": 13.64
+    },
+    {
+     "label": "Wed",
+     "crashes": 15277,
+     "deaths": 1951,
+     "pc_crash": 13.83,
+     "pc_death": 14.03
+    },
+    {
+     "label": "Thu",
+     "crashes": 15014,
+     "deaths": 1858,
+     "pc_crash": 13.6,
+     "pc_death": 13.37
+    },
+    {
+     "label": "Fri",
+     "crashes": 17267,
+     "deaths": 2101,
+     "pc_crash": 15.64,
+     "pc_death": 15.11
+    },
+    {
+     "label": "Sat",
+     "crashes": 16437,
+     "deaths": 2037,
+     "pc_crash": 14.88,
+     "pc_death": 14.65
+    },
+    {
+     "label": "Sun",
+     "crashes": 15471,
+     "deaths": 2095,
+     "pc_crash": 14.01,
+     "pc_death": 15.07
+    }
+   ]
+  },
+  {
+   "key": "month",
+   "title": "By month",
+   "xlabel": null,
+   "even_split": 8.33,
+   "missing": {
+    "crashes": 0,
+    "deaths": 0,
+    "note": "crashes with no month recorded in the source file"
+   },
+   "bins": [
+    {
+     "label": "Jan",
+     "crashes": 11642,
+     "deaths": 1574,
+     "pc_crash": 10.54,
+     "pc_death": 11.32
+    },
+    {
+     "label": "Feb",
+     "crashes": 8435,
+     "deaths": 1099,
+     "pc_crash": 7.64,
+     "pc_death": 7.91
+    },
+    {
+     "label": "Mar",
+     "crashes": 9330,
+     "deaths": 1228,
+     "pc_crash": 8.45,
+     "pc_death": 8.83
+    },
+    {
+     "label": "Apr",
+     "crashes": 13879,
+     "deaths": 1763,
+     "pc_crash": 12.57,
+     "pc_death": 12.68,
+     "note": "Songkran"
+    },
+    {
+     "label": "May",
+     "crashes": 8703,
+     "deaths": 1010,
+     "pc_crash": 7.88,
+     "pc_death": 7.27
+    },
+    {
+     "label": "Jun",
+     "crashes": 7620,
+     "deaths": 964,
+     "pc_crash": 6.9,
+     "pc_death": 6.93
+    },
+    {
+     "label": "Jul",
+     "crashes": 8028,
+     "deaths": 943,
+     "pc_crash": 7.27,
+     "pc_death": 6.78
+    },
+    {
+     "label": "Aug",
+     "crashes": 7560,
+     "deaths": 874,
+     "pc_crash": 6.85,
+     "pc_death": 6.29
+    },
+    {
+     "label": "Sep",
+     "crashes": 7478,
+     "deaths": 818,
+     "pc_crash": 6.77,
+     "pc_death": 5.88
+    },
+    {
+     "label": "Oct",
+     "crashes": 7900,
+     "deaths": 928,
+     "pc_crash": 7.15,
+     "pc_death": 6.68
+    },
+    {
+     "label": "Nov",
+     "crashes": 7945,
+     "deaths": 1078,
+     "pc_crash": 7.19,
+     "pc_death": 7.75
+    },
+    {
+     "label": "Dec",
+     "crashes": 11914,
+     "deaths": 1622,
+     "pc_crash": 10.79,
+     "pc_death": 11.67
+    }
+   ]
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}
