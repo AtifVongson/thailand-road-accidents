@@ -436,6 +436,108 @@
     return { svg: svg, update: update };
   }
 
+  /* ------------------------------- slide 10: excess over what volume explains */
+
+  /* The scatter's geometry is fixed — points never move, they only change size,
+   * colour and opacity — so the parity line, the decade grid and the axis titles
+   * are written once. Only the ranked panel is built by the scalar. */
+  function slide10(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide10(data, 0, options);
+
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img",
+      "aria-label": "Highway sections plotted against the crashes a traffic-volume "
+        + "model expected, with the fourteen biggest overshoots ranked",
+    });
+
+    var gGrid = el("g", { class: "c-grid" });
+    var gPoints = el("g", { class: "c-points" });
+    var gRank = el("g", { class: "c-bars" });
+    var gText = el("g", { class: "c-text" });
+    [gGrid, gPoints, gRank, gText].forEach(function (g) { svg.appendChild(g); });
+
+    var headings = first.headings.map(function (h) {
+      var t = el("text", { class: "c-heading", x: 40, y: 58 }, h.text);
+      gText.appendChild(t);
+      return t;
+    });
+    gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 88 }, first.subtitle));
+    gText.appendChild(el("text", {
+      class: "c-limitation", x: first.scopeNote.x, y: first.scopeNote.y,
+    }, first.scopeNote.text));
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 16, "text-anchor": "end",
+    }, first.source));
+
+    first.decades.forEach(function (d) {
+      gGrid.appendChild(el("line", { class: "c-gridline", x1: d.x, x2: d.x,
+        y1: first.scatter.y, y2: first.scatter.y + first.scatter.h }));
+      gGrid.appendChild(el("line", { class: "c-gridline", x1: first.scatter.x,
+        x2: first.scatter.x + first.scatter.w, y1: d.y, y2: d.y }));
+      gGrid.appendChild(el("text", { class: "c-tick", x: d.x,
+        y: first.scatter.y + first.scatter.h + 22 }, d.label));
+      gGrid.appendChild(el("text", { class: "c-tick", x: first.scatter.x - 10,
+        y: d.y + 5, "text-anchor": "end" }, d.label));
+    });
+    gGrid.appendChild(el("line", { class: "c-parity",
+      x1: first.parity.x1, y1: first.parity.y1,
+      x2: first.parity.x2, y2: first.parity.y2 }));
+    gText.appendChild(el("text", { class: "c-paritylabel",
+      x: first.scatter.x + 12, y: first.scatter.y + 18 }, first.parity.label));
+    first.axisTitles.forEach(function (a) {
+      gText.appendChild(el("text", { class: "c-axistitle", x: a.x, y: a.y,
+        "text-anchor": a.anchor }, a.text));
+    });
+
+    var points = first.points.map(function (pt) {
+      var c = el("circle", { class: "c-point", cx: pt.cx, cy: pt.cy });
+      gPoints.appendChild(c);
+      return c;
+    });
+
+    var rankTitle = el("text", { class: "c-paneltitle", x: first.rankTitle.x,
+      y: first.rankTitle.y }, first.rankTitle.text);
+    var rankAxis = el("text", { class: "c-axistitle", x: first.rankAxis.x,
+      y: first.rankAxis.y }, first.rankAxis.text);
+    gText.appendChild(rankTitle); gText.appendChild(rankAxis);
+
+    var rows = first.rows.map(function (r) {
+      var g = el("g", {});
+      var bar = el("rect", { class: "c-bar", rx: 2, x: r.x, y: r.y,
+        height: r.height, fill: getLayout().PALETTE.severity });
+      var name = el("text", { class: "c-rowlabel", x: r.labelX,
+        y: r.y + r.height / 2 }, r.label);
+      var val = el("text", { class: "c-value", y: r.y + r.height / 2 }, r.value);
+      g.appendChild(bar); g.appendChild(name); g.appendChild(val);
+      gRank.appendChild(g);
+      return { g: g, bar: bar, val: val };
+    });
+
+    mount.appendChild(svg);
+
+    function update(progress) {
+      var m = L.slide10(data, progress, options);
+      m.points.forEach(function (pt, i) {
+        set(points[i], { r: pt.r, fill: pt.color, opacity: pt.opacity.toFixed(3) });
+      });
+      m.rows.forEach(function (r, i) {
+        var n = rows[i];
+        n.g.setAttribute("opacity", r.opacity.toFixed(3));
+        set(n.bar, { width: Math.max(0, r.width) });
+        set(n.val, { x: r.valueX });
+      });
+      m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity); });
+      rankTitle.setAttribute("opacity", m.rankTitle.opacity.toFixed(3));
+      rankAxis.setAttribute("opacity", m.rankAxis.opacity.toFixed(3));
+    }
+
+    update(0);
+    return { svg: svg, update: update };
+  }
+
   /* --------------------------------------------------- slide 9: scatter */
 
   function slide09(mount, data, options) {
@@ -628,5 +730,6 @@
   }
 
   return { slide04: slide04, slide04Story: slide04Story, slide05: slide05,
-           slide06: slide06, slide08: slide08, slide09: slide09, slide12: slide12 };
+           slide06: slide06, slide08: slide08, slide09: slide09, slide10: slide10,
+           slide12: slide12 };
 });

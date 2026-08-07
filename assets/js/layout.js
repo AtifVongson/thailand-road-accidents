@@ -605,6 +605,154 @@
     };
   }
 
+  /* --------------------------------- slide 10: excess over what volume explains */
+
+  var SLIDE10_DEFAULTS = {
+    width: 1280,
+    height: 720,
+    // Deep top margin because three lines stack above the plot — heading,
+    // subtitle and the scope note — and both panels then hang a title just under
+    // them. At 132 the scope note and the axis titles were 6px apart and
+    // overstruck. Deep bottom margin for the same reason: tick labels, then an
+    // axis title, then the source line.
+    margin: { top: 160, right: 44, bottom: 96, left: 74 },
+    panelGap: 96,
+    panelSplit: 0.46,     // left panel's share of the plot width
+    topN: 14,
+    barShare: 0.6,
+    headroom: 1.28,       // room past the longest bar for its "+N (Rx)" label
+    pointR: 4.4,
+    topPointR: 6.2,
+    labelGutter: 208,     // for the ranked list's Route/province/km labels
+  };
+
+  /* Two panels on one scalar. The scatter establishes the model; the ranking
+   * names the sections that beat it.
+   *
+   * Act 1 is every section against what a negative-binomial model predicts from
+   * traffic volume, on log-log axes with a parity line. Log axes because both
+   * quantities span two orders of magnitude — 6 to 749 expected, 10 to 1,893
+   * actual — and on a linear scale the bottom half of the sections collapse into
+   * the corner. Parity is then the 45° line, and "above the line" is literally
+   * "crashes more than volume explains".
+   *
+   * Act 2 fades the 146 sections that are not the story, lights the worst 14 in
+   * severity orange, and grows their overshoot as a ranked list beside the
+   * scatter. The points do not move: the ranking is a second view of the same
+   * marks, not a re-plot, so a section keeps its identity across the act.
+   *
+   * The model is fitted in Python and only its predictions are exported — this
+   * module does no statistics, and `expected` is never recomputed here.
+   */
+  function slide10(data, progress, options) {
+    var o = Object.assign({}, SLIDE10_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var t = smoothstep(p);
+    var pts = data.points;
+
+    var plot = {
+      x: o.margin.left, y: o.margin.top,
+      w: o.width - o.margin.left - o.margin.right,
+      h: o.height - o.margin.top - o.margin.bottom,
+    };
+    var leftW = (plot.w - o.panelGap) * o.panelSplit;
+    var rightW = plot.w - o.panelGap - leftW;
+    var scatter = { x: plot.x, y: plot.y, w: leftW, h: plot.h };
+    var rank = { x: plot.x + leftW + o.panelGap, y: plot.y, w: rightW, h: plot.h };
+
+    // One shared domain for both axes, so the parity line is a true 45 degrees
+    // and "above the line" is a fair reading rather than an artefact of two
+    // different scales.
+    var lo = pts.reduce(function (m, r) {
+      return Math.min(m, r.expected, r.crashes);
+    }, Infinity) * 0.7;
+    var hi = pts.reduce(function (m, r) {
+      return Math.max(m, r.expected, r.crashes);
+    }, 0) * 1.3;
+    var logLo = Math.log(lo), logHi = Math.log(hi);
+    var sx = function (v) { return scatter.x + (Math.log(v) - logLo) / (logHi - logLo) * scatter.w; };
+    var sy = function (v) { return scatter.y + scatter.h - (Math.log(v) - logLo) / (logHi - logLo) * scatter.h; };
+
+    // Decade ticks (1, 10, 100, 1000) that fall inside the domain.
+    var decades = [];
+    for (var e = Math.ceil(logLo / Math.LN10); Math.pow(10, e) <= hi; e++) {
+      var dv = Math.pow(10, e);
+      decades.push({ value: dv, x: sx(dv), y: sy(dv), label: fmt(dv) });
+    }
+
+    var tops = pts.filter(function (r) { return r.top; })
+                  .sort(function (a, b) { return b.excess - a.excess; });
+    var maxExcess = tops.reduce(function (m, r) { return Math.max(m, r.excess); }, 0);
+    var slotH = rank.h / o.topN;
+    var barH = slotH * o.barShare;
+    var barMax = rank.w - o.labelGutter;
+
+    var points = pts.map(function (r, i) {
+      return {
+        key: "s" + i,
+        cx: sx(r.expected), cy: sy(r.crashes),
+        r: r.top ? lerp(o.pointR, o.topPointR, t) : o.pointR,
+        // The 146 sections that are not the story recede rather than vanish:
+        // dropping them would make act 2 look like a different dataset.
+        opacity: r.top ? 1 : lerp(0.55, 0.16, t),
+        color: r.top ? mixHex(PALETTE.grid, PALETTE.severity, t) : PALETTE.grid,
+        top: !!r.top,
+      };
+    });
+
+    var rows = tops.map(function (r, i) {
+      var y = rank.y + i * slotH + (slotH - barH) / 2;
+      return {
+        key: "t" + i,
+        label: r.label,
+        y: y, height: barH,
+        x: rank.x + o.labelGutter,
+        width: (r.excess / (maxExcess * o.headroom)) * barMax * t,
+        labelX: rank.x + o.labelGutter - 12,
+        valueX: rank.x + o.labelGutter
+              + (r.excess / (maxExcess * o.headroom)) * barMax * t + 10,
+        value: "+" + fmt(r.excess) + "  (" + r.ratio.toFixed(1) + "×)",
+        // The whole panel arrives together rather than row by row: this is one
+        // list being revealed, not a race between fourteen bars.
+        opacity: t,
+      };
+    });
+
+    var pct = Math.round(data.model.deviance_explained * 100);
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, scatter: scatter, rank: rank, progress: p,
+      headings: [
+        { text: "Which sections crash more than traffic volume can explain",
+          opacity: swapOut(p) },
+        { text: "Fourteen sections crash far more than volume can explain",
+          opacity: swapIn(p) },
+      ],
+      // Two runs, not one string: the model line plus the scope note measures
+      // about 2,000px on a 1,280px canvas, and an SVG text run does not wrap.
+      subtitle: "Measured against a negative-binomial model predicting crashes from "
+              + "AADT × length × years — it explains " + pct + "% of the variation",
+      scopeNote: { text: data.scope_note, x: 40, y: 108 },
+      parity: { x1: sx(lo), y1: sy(lo), x2: sx(hi), y2: sy(hi),
+                label: "Above the line = crashes more than it should" },
+      decades: decades,
+      axisTitles: [
+        { text: "Crashes the model expected", x: scatter.x + scatter.w / 2,
+          y: scatter.y + scatter.h + 46, anchor: "middle" },
+        { text: "Crashes that actually happened", x: scatter.x,
+          y: scatter.y - 14, anchor: "start" },
+      ],
+      points: points,
+      rows: rows,
+      rankTitle: { text: "The " + o.topN + " biggest overshoots",
+                   x: rank.x, y: rank.y - 14, opacity: t },
+      rankAxis: { text: "Crashes above the expected number (5-year total)",
+                  x: rank.x + o.labelGutter, y: rank.y + rank.h + 46, opacity: t },
+      source: data.source,
+      sourceX: o.width - 40,
+    };
+  }
+
   /* -------------------------------------------------- slide 8: the reorder */
 
   var SLIDE08_DEFAULTS = {
@@ -1377,6 +1525,8 @@
     SLIDE06_DEFAULTS: SLIDE06_DEFAULTS,
     SLIDE06_STOPS: SLIDE06_STOPS,
     slide08: slide08,
+    slide10: slide10,
+    SLIDE10_DEFAULTS: SLIDE10_DEFAULTS,
     slide09: slide09,
     slide12: slide12,
     SLIDE04_DEFAULTS: SLIDE04_DEFAULTS,

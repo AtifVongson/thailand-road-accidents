@@ -100,11 +100,26 @@
   </div>
 </section>
 
-<!-- 10 — clusters + excess -->
-<section class="section section-static" data-kicker="Part 1 &middot; Excess risk" data-title="Crashing more than traffic volume explains">
-  <p class="kicker">Part 1 &middot; Excess risk</p>
-  <h1>Crashing more than traffic volume explains</h1>
-  <div class="figwrap"><img src="assets/figures/fig10_excess.svg" alt="Sections ranked by observed crashes against a negative-binomial model's expectation"></div>
+<!-- 10 — excess (LIVE) + clusters -->
+<section class="section section-live" data-kicker="Part 1 &middot; Excess risk" data-title="Crashing more than traffic volume explains">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Excess risk</p>
+    <h1>Crashing more than traffic volume explains</h1>
+  </div>
+  <div class="spacer">
+    <p>Every one of the 160 survey sections against the crashes a traffic-volume model
+       says it should have. The diagonal is the model being right; above it is a section
+       crashing more than its traffic explains. Scroll to name the worst fourteen.</p>
+  </div>
+  <div class="scroll-section" id="sec-s10">
+    <div class="pin"><div class="frame" id="mount-s10"></div></div>
+  </div>
+  <div class="spacer">
+    <p>48 of the 160 sections out-crash the model. The worst runs <b>12.9&times;</b> the
+       crashes it should &mdash; Route 7 at km 4 in Chon Buri, 1,289 crashes against an
+       expected 100. Route 9 at km 20 in Pathum Thani adds the most in absolute terms:
+       <b>+1,625</b> crashes over five years.</p>
+  </div>
   <div class="callout">
     <h2>Five archetypes, one ranking</h2>
     <p>k-means on traffic volume, heavy-vehicle share, crash rate and deaths per crash splits
@@ -137,27 +152,98 @@
 <script src="assets/js/layout.js"></script>
 <script src="assets/js/render.js"></script>
 <script>
-function wire(sectionId, mountId, dataUrl, layoutKey) {
-  fetch(dataUrl).then(function (r) { return r.json(); }).then(function (data) {
-    var chart = ChartRender[layoutKey](document.getElementById(mountId), data);
-    var section = document.getElementById(sectionId);
-    var cue = document.getElementById("cue");
+(function () {
+  "use strict";
 
-    function tick() {
-      var r = section.getBoundingClientRect();
-      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
-      chart.update(p);
-      var inChart = r.top < window.innerHeight && r.bottom > 0;
-      if (inChart) cue.style.opacity = p > 0.02 && p < 0.98 ? 0 : 1;
+  var cue = document.getElementById("cue");
+  var live = [];   // one entry per pinned chart: { section, chart, anchors }
+  var TOL = 12;    // px — a smooth scroll lands a pixel or two off its target
+
+  function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+
+  function animateScrollTo(targetY, duration) {
+    var startY = window.scrollY, delta = targetY - startY, t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var t = Math.min(1, (ts - t0) / duration);
+      window.scrollTo(0, startY + delta * easeInOutQuad(t));
+      if (t < 1) requestAnimationFrame(step);
     }
+    requestAnimationFrame(step);
+  }
+
+  /* Tab 2 had no stepper at all, so transport.js's plain section jump skipped
+   * every one of its charts' end states — a presenter driving with a remote
+   * could not show the reorder, the flattening trendline or the ranked
+   * overshoots. Same fix tab 1 uses, on the same tested arithmetic:
+   * ChartLayout.nextStop() decides where a key goes, checked in
+   * 12_qa_chart_layout.js; only the listener and the tween live here. */
+  addEventListener("keydown", function (e) {
+    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+    var down = ["ArrowDown", "PageDown"].indexOf(e.key) !== -1;
+    var up = ["ArrowUp", "PageUp"].indexOf(e.key) !== -1;
+    if (!down && !up) return;
+
+    for (var i = 0; i < live.length; i++) {
+      var target = ChartLayout.nextStop(live[i].anchors(), window.scrollY,
+                                        down ? 1 : -1, TOL);
+      if (target === null) continue;   // not this chart's business
+      e.preventDefault();
+      e.stopImmediatePropagation();    // pre-empt transport.js's own handler
+      animateScrollTo(target, 2000);
+      return;
+    }
+  }, true);   // capture phase — runs before transport.js's listener
+
+  // Absolute scroll positions spanning the section end to end: the intro, then
+  // one per act. A presenter lands at the top of the *outer* section, before the
+  // chart pins, so anchors keyed only to the pinned region never engage there.
+  function anchorsFor(section, fractions) {
+    return function () {
+      var travel = section.offsetHeight - window.innerHeight;
+      var chartTop = section.getBoundingClientRect().top + window.scrollY;
+      var outerTop = section.closest(".section").getBoundingClientRect().top + window.scrollY;
+      return [outerTop].concat(fractions.map(function (f) { return chartTop + f * travel; }));
+    };
+  }
+
+  function tick() {
+    var anyMid = false;
+    live.forEach(function (item) {
+      var r = item.section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      item.chart.update(p);
+      if (r.top < window.innerHeight && r.bottom > 0 && p > 0.02 && p < 0.98) anyMid = true;
+    });
+    cue.style.opacity = anyMid ? 0 : 1;
+  }
+
+  function wire(sectionId, mountId, dataUrl, layoutKey, stops) {
+    return fetch(dataUrl).then(function (r) { return r.json(); }).then(function (data) {
+      var section = document.getElementById(sectionId);
+      live.push({
+        section: section,
+        chart: ChartRender[layoutKey](document.getElementById(mountId), data),
+        anchors: anchorsFor(section, stops),
+      });
+    });
+  }
+
+  Promise.all([
+    wire("sec-s8", "mount-s8", "assets/data/charts/slide08_provinces.json", "slide08", [0, 1]),
+    wire("sec-s9", "mount-s9", "assets/data/charts/slide09_sections.json", "slide09", [0, 1]),
+    wire("sec-s10", "mount-s10", "assets/data/charts/slide10_excess.json", "slide10", [0, 1]),
+  ]).then(function () {
+    // Document order, so the stepper tries charts in the order a presenter meets
+    // them. Promise.all resolves in call order, but wire() pushes on completion,
+    // which is fetch-completion order — not the same thing.
+    live.sort(function (a, b) { return a.section.offsetTop - b.section.offsetTop; });
     addEventListener("scroll", tick, { passive: true });
     addEventListener("resize", tick);
     tick();
-    window["__chart_" + mountId] = chart;
+    window.__charts = live;
   });
-}
-wire("sec-s8", "mount-s8", "assets/data/charts/slide08_provinces.json", "slide08");
-wire("sec-s9", "mount-s9", "assets/data/charts/slide09_sections.json", "slide09");
+})();
 </script>
 <script src="assets/js/transport.js"></script>
 </body>

@@ -81,6 +81,11 @@
 .chart .is-thin .c-rowlabel { fill: var(--muted); }
 .chart .is-thin .c-value    { fill: var(--muted); }
 
+/* Slide 10. Parity is the model's own prediction, so it is drawn as ink rather
+ * than as data: everything above it is the finding. */
+.chart .c-parity      { stroke: var(--ink-2); stroke-width: 1.4; }
+.chart .c-paritylabel { font-size: 13px; fill: var(--ink); font-weight: 640; }
+
 .chart .c-point   { opacity: 0.72; }
 .chart .c-trendline { stroke-linecap: round; }
 .chart .c-line    { }

@@ -1,0 +1,1193 @@
+{
+ "sections": 160,
+ "crashes_covered": 26027,
+ "top_n": 14,
+ "model": {
+  "family": "negative binomial (alpha=1.0)",
+  "formula": "crashes ~ log(AADT), offset log(length_km x years)",
+  "deviance_explained": 0.48,
+  "intercept": -8.6008,
+  "log_aadt": 0.8838
+ },
+ "worst_ratio": 12.88,
+ "scope_note": "AADT exists only for the 6 DOH main routes, so this runs on 160 survey sections covering 26,027 crashes — about a quarter of the national file, not all of it.",
+ "points": [
+  {
+   "crashes": 295,
+   "expected": 133.7,
+   "excess": 161.3,
+   "ratio": 2.21,
+   "top": true,
+   "label": "Route 1 · Tak · km 512",
+   "route": 1,
+   "km": 511.8,
+   "aadt": 15713
+  },
+  {
+   "crashes": 244,
+   "expected": 132.4,
+   "excess": 111.6,
+   "ratio": 1.84,
+   "top": false
+  },
+  {
+   "crashes": 11,
+   "expected": 118.0,
+   "excess": -107.0,
+   "ratio": 0.09,
+   "top": false
+  },
+  {
+   "crashes": 66,
+   "expected": 139.7,
+   "excess": -73.7,
+   "ratio": 0.47,
+   "top": false
+  },
+  {
+   "crashes": 49,
+   "expected": 121.6,
+   "excess": -72.6,
+   "ratio": 0.4,
+   "top": false
+  },
+  {
+   "crashes": 44,
+   "expected": 99.8,
+   "excess": -55.8,
+   "ratio": 0.44,
+   "top": false
+  },
+  {
+   "crashes": 27,
+   "expected": 91.8,
+   "excess": -64.8,
+   "ratio": 0.29,
+   "top": false
+  },
+  {
+   "crashes": 29,
+   "expected": 97.4,
+   "excess": -68.4,
+   "ratio": 0.3,
+   "top": false
+  },
+  {
+   "crashes": 13,
+   "expected": 47.9,
+   "excess": -34.9,
+   "ratio": 0.27,
+   "top": false
+  },
+  {
+   "crashes": 21,
+   "expected": 79.6,
+   "excess": -58.6,
+   "ratio": 0.26,
+   "top": false
+  },
+  {
+   "crashes": 155,
+   "expected": 157.9,
+   "excess": -2.9,
+   "ratio": 0.98,
+   "top": false
+  },
+  {
+   "crashes": 107,
+   "expected": 111.8,
+   "excess": -4.8,
+   "ratio": 0.96,
+   "top": false
+  },
+  {
+   "crashes": 64,
+   "expected": 69.3,
+   "excess": -5.3,
+   "ratio": 0.92,
+   "top": false
+  },
+  {
+   "crashes": 53,
+   "expected": 137.8,
+   "excess": -84.8,
+   "ratio": 0.38,
+   "top": false
+  },
+  {
+   "crashes": 95,
+   "expected": 186.0,
+   "excess": -91.0,
+   "ratio": 0.51,
+   "top": false
+  },
+  {
+   "crashes": 131,
+   "expected": 92.7,
+   "excess": 38.3,
+   "ratio": 1.41,
+   "top": false
+  },
+  {
+   "crashes": 141,
+   "expected": 132.2,
+   "excess": 8.8,
+   "ratio": 1.07,
+   "top": false
+  },
+  {
+   "crashes": 12,
+   "expected": 64.3,
+   "excess": -52.3,
+   "ratio": 0.19,
+   "top": false
+  },
+  {
+   "crashes": 10,
+   "expected": 68.6,
+   "excess": -58.6,
+   "ratio": 0.15,
+   "top": false
+  },
+  {
+   "crashes": 11,
+   "expected": 59.7,
+   "excess": -48.7,
+   "ratio": 0.18,
+   "top": false
+  },
+  {
+   "crashes": 24,
+   "expected": 107.5,
+   "excess": -83.5,
+   "ratio": 0.22,
+   "top": false
+  },
+  {
+   "crashes": 60,
+   "expected": 89.9,
+   "excess": -29.9,
+   "ratio": 0.67,
+   "top": false
+  },
+  {
+   "crashes": 68,
+   "expected": 525.7,
+   "excess": -457.7,
+   "ratio": 0.13,
+   "top": false
+  },
+  {
+   "crashes": 172,
+   "expected": 617.5,
+   "excess": -445.5,
+   "ratio": 0.28,
+   "top": false
+  },
+  {
+   "crashes": 286,
+   "expected": 748.9,
+   "excess": -462.9,
+   "ratio": 0.38,
+   "top": false
+  },
+  {
+   "crashes": 68,
+   "expected": 311.8,
+   "excess": -243.8,
+   "ratio": 0.22,
+   "top": false
+  },
+  {
+   "crashes": 55,
+   "expected": 123.7,
+   "excess": -68.7,
+   "ratio": 0.44,
+   "top": false
+  },
+  {
+   "crashes": 37,
+   "expected": 116.0,
+   "excess": -79.0,
+   "ratio": 0.32,
+   "top": false
+  },
+  {
+   "crashes": 112,
+   "expected": 114.5,
+   "excess": -2.5,
+   "ratio": 0.98,
+   "top": false
+  },
+  {
+   "crashes": 68,
+   "expected": 87.2,
+   "excess": -19.2,
+   "ratio": 0.78,
+   "top": false
+  },
+  {
+   "crashes": 56,
+   "expected": 31.6,
+   "excess": 24.4,
+   "ratio": 1.77,
+   "top": false
+  },
+  {
+   "crashes": 77,
+   "expected": 24.4,
+   "excess": 52.6,
+   "ratio": 3.16,
+   "top": false
+  },
+  {
+   "crashes": 194,
+   "expected": 34.6,
+   "excess": 159.4,
+   "ratio": 5.61,
+   "top": true,
+   "label": "Route 1 · Nakhon Sawan · km 254",
+   "route": 1,
+   "km": 254.0,
+   "aadt": 6345
+  },
+  {
+   "crashes": 68,
+   "expected": 46.7,
+   "excess": 21.3,
+   "ratio": 1.46,
+   "top": false
+  },
+  {
+   "crashes": 110,
+   "expected": 52.9,
+   "excess": 57.1,
+   "ratio": 2.08,
+   "top": false
+  },
+  {
+   "crashes": 56,
+   "expected": 34.2,
+   "excess": 21.8,
+   "ratio": 1.64,
+   "top": false
+  },
+  {
+   "crashes": 23,
+   "expected": 149.1,
+   "excess": -126.1,
+   "ratio": 0.15,
+   "top": false
+  },
+  {
+   "crashes": 107,
+   "expected": 99.8,
+   "excess": 7.2,
+   "ratio": 1.07,
+   "top": false
+  },
+  {
+   "crashes": 36,
+   "expected": 121.2,
+   "excess": -85.2,
+   "ratio": 0.3,
+   "top": false
+  },
+  {
+   "crashes": 47,
+   "expected": 138.5,
+   "excess": -91.5,
+   "ratio": 0.34,
+   "top": false
+  },
+  {
+   "crashes": 19,
+   "expected": 84.6,
+   "excess": -65.6,
+   "ratio": 0.22,
+   "top": false
+  },
+  {
+   "crashes": 29,
+   "expected": 84.0,
+   "excess": -55.0,
+   "ratio": 0.35,
+   "top": false
+  },
+  {
+   "crashes": 67,
+   "expected": 125.0,
+   "excess": -58.0,
+   "ratio": 0.54,
+   "top": false
+  },
+  {
+   "crashes": 78,
+   "expected": 94.0,
+   "excess": -16.0,
+   "ratio": 0.83,
+   "top": false
+  },
+  {
+   "crashes": 92,
+   "expected": 130.2,
+   "excess": -38.2,
+   "ratio": 0.71,
+   "top": false
+  },
+  {
+   "crashes": 143,
+   "expected": 236.8,
+   "excess": -93.8,
+   "ratio": 0.6,
+   "top": false
+  },
+  {
+   "crashes": 95,
+   "expected": 266.6,
+   "excess": -171.6,
+   "ratio": 0.36,
+   "top": false
+  },
+  {
+   "crashes": 26,
+   "expected": 299.7,
+   "excess": -273.7,
+   "ratio": 0.09,
+   "top": false
+  },
+  {
+   "crashes": 98,
+   "expected": 155.5,
+   "excess": -57.5,
+   "ratio": 0.63,
+   "top": false
+  },
+  {
+   "crashes": 295,
+   "expected": 174.0,
+   "excess": 121.0,
+   "ratio": 1.7,
+   "top": false
+  },
+  {
+   "crashes": 343,
+   "expected": 246.7,
+   "excess": 96.3,
+   "ratio": 1.39,
+   "top": false
+  },
+  {
+   "crashes": 161,
+   "expected": 248.3,
+   "excess": -87.3,
+   "ratio": 0.65,
+   "top": false
+  },
+  {
+   "crashes": 61,
+   "expected": 91.5,
+   "excess": -30.5,
+   "ratio": 0.67,
+   "top": false
+  },
+  {
+   "crashes": 21,
+   "expected": 50.8,
+   "excess": -29.8,
+   "ratio": 0.41,
+   "top": false
+  },
+  {
+   "crashes": 205,
+   "expected": 144.7,
+   "excess": 60.3,
+   "ratio": 1.42,
+   "top": false
+  },
+  {
+   "crashes": 235,
+   "expected": 291.1,
+   "excess": -56.1,
+   "ratio": 0.81,
+   "top": false
+  },
+  {
+   "crashes": 90,
+   "expected": 565.2,
+   "excess": -475.2,
+   "ratio": 0.16,
+   "top": false
+  },
+  {
+   "crashes": 137,
+   "expected": 212.2,
+   "excess": -75.2,
+   "ratio": 0.65,
+   "top": false
+  },
+  {
+   "crashes": 42,
+   "expected": 41.7,
+   "excess": 0.3,
+   "ratio": 1.01,
+   "top": false
+  },
+  {
+   "crashes": 195,
+   "expected": 423.7,
+   "excess": -228.7,
+   "ratio": 0.46,
+   "top": false
+  },
+  {
+   "crashes": 255,
+   "expected": 505.6,
+   "excess": -250.6,
+   "ratio": 0.5,
+   "top": false
+  },
+  {
+   "crashes": 24,
+   "expected": 207.6,
+   "excess": -183.6,
+   "ratio": 0.12,
+   "top": false
+  },
+  {
+   "crashes": 83,
+   "expected": 218.5,
+   "excess": -135.5,
+   "ratio": 0.38,
+   "top": false
+  },
+  {
+   "crashes": 40,
+   "expected": 104.6,
+   "excess": -64.6,
+   "ratio": 0.38,
+   "top": false
+  },
+  {
+   "crashes": 30,
+   "expected": 149.9,
+   "excess": -119.9,
+   "ratio": 0.2,
+   "top": false
+  },
+  {
+   "crashes": 81,
+   "expected": 119.4,
+   "excess": -38.4,
+   "ratio": 0.68,
+   "top": false
+  },
+  {
+   "crashes": 146,
+   "expected": 214.2,
+   "excess": -68.2,
+   "ratio": 0.68,
+   "top": false
+  },
+  {
+   "crashes": 26,
+   "expected": 103.8,
+   "excess": -77.8,
+   "ratio": 0.25,
+   "top": false
+  },
+  {
+   "crashes": 47,
+   "expected": 101.5,
+   "excess": -54.5,
+   "ratio": 0.46,
+   "top": false
+  },
+  {
+   "crashes": 13,
+   "expected": 97.1,
+   "excess": -84.1,
+   "ratio": 0.13,
+   "top": false
+  },
+  {
+   "crashes": 28,
+   "expected": 85.5,
+   "excess": -57.5,
+   "ratio": 0.33,
+   "top": false
+  },
+  {
+   "crashes": 30,
+   "expected": 131.7,
+   "excess": -101.7,
+   "ratio": 0.23,
+   "top": false
+  },
+  {
+   "crashes": 160,
+   "expected": 248.0,
+   "excess": -88.0,
+   "ratio": 0.65,
+   "top": false
+  },
+  {
+   "crashes": 33,
+   "expected": 238.0,
+   "excess": -205.0,
+   "ratio": 0.14,
+   "top": false
+  },
+  {
+   "crashes": 46,
+   "expected": 104.4,
+   "excess": -58.4,
+   "ratio": 0.44,
+   "top": false
+  },
+  {
+   "crashes": 44,
+   "expected": 204.6,
+   "excess": -160.6,
+   "ratio": 0.22,
+   "top": false
+  },
+  {
+   "crashes": 52,
+   "expected": 118.9,
+   "excess": -66.9,
+   "ratio": 0.44,
+   "top": false
+  },
+  {
+   "crashes": 104,
+   "expected": 537.3,
+   "excess": -433.3,
+   "ratio": 0.19,
+   "top": false
+  },
+  {
+   "crashes": 75,
+   "expected": 312.7,
+   "excess": -237.7,
+   "ratio": 0.24,
+   "top": false
+  },
+  {
+   "crashes": 34,
+   "expected": 338.2,
+   "excess": -304.2,
+   "ratio": 0.1,
+   "top": false
+  },
+  {
+   "crashes": 93,
+   "expected": 200.2,
+   "excess": -107.2,
+   "ratio": 0.46,
+   "top": false
+  },
+  {
+   "crashes": 126,
+   "expected": 200.5,
+   "excess": -74.5,
+   "ratio": 0.63,
+   "top": false
+  },
+  {
+   "crashes": 245,
+   "expected": 225.6,
+   "excess": 19.4,
+   "ratio": 1.09,
+   "top": false
+  },
+  {
+   "crashes": 117,
+   "expected": 194.6,
+   "excess": -77.6,
+   "ratio": 0.6,
+   "top": false
+  },
+  {
+   "crashes": 206,
+   "expected": 218.1,
+   "excess": -12.1,
+   "ratio": 0.94,
+   "top": false
+  },
+  {
+   "crashes": 238,
+   "expected": 156.9,
+   "excess": 81.1,
+   "ratio": 1.52,
+   "top": false
+  },
+  {
+   "crashes": 246,
+   "expected": 105.9,
+   "excess": 140.1,
+   "ratio": 2.32,
+   "top": false
+  },
+  {
+   "crashes": 28,
+   "expected": 37.0,
+   "excess": -9.0,
+   "ratio": 0.76,
+   "top": false
+  },
+  {
+   "crashes": 28,
+   "expected": 69.5,
+   "excess": -41.5,
+   "ratio": 0.4,
+   "top": false
+  },
+  {
+   "crashes": 10,
+   "expected": 83.6,
+   "excess": -73.6,
+   "ratio": 0.12,
+   "top": false
+  },
+  {
+   "crashes": 28,
+   "expected": 107.8,
+   "excess": -79.8,
+   "ratio": 0.26,
+   "top": false
+  },
+  {
+   "crashes": 77,
+   "expected": 70.3,
+   "excess": 6.7,
+   "ratio": 1.1,
+   "top": false
+  },
+  {
+   "crashes": 55,
+   "expected": 65.3,
+   "excess": -10.3,
+   "ratio": 0.84,
+   "top": false
+  },
+  {
+   "crashes": 56,
+   "expected": 63.1,
+   "excess": -7.1,
+   "ratio": 0.89,
+   "top": false
+  },
+  {
+   "crashes": 20,
+   "expected": 57.4,
+   "excess": -37.4,
+   "ratio": 0.35,
+   "top": false
+  },
+  {
+   "crashes": 21,
+   "expected": 41.3,
+   "excess": -20.3,
+   "ratio": 0.51,
+   "top": false
+  },
+  {
+   "crashes": 39,
+   "expected": 33.1,
+   "excess": 5.9,
+   "ratio": 1.18,
+   "top": false
+  },
+  {
+   "crashes": 41,
+   "expected": 42.6,
+   "excess": -1.6,
+   "ratio": 0.96,
+   "top": false
+  },
+  {
+   "crashes": 43,
+   "expected": 21.9,
+   "excess": 21.1,
+   "ratio": 1.96,
+   "top": false
+  },
+  {
+   "crashes": 60,
+   "expected": 71.7,
+   "excess": -11.7,
+   "ratio": 0.84,
+   "top": false
+  },
+  {
+   "crashes": 220,
+   "expected": 128.7,
+   "excess": 91.3,
+   "ratio": 1.71,
+   "top": false
+  },
+  {
+   "crashes": 135,
+   "expected": 69.7,
+   "excess": 65.3,
+   "ratio": 1.94,
+   "top": false
+  },
+  {
+   "crashes": 84,
+   "expected": 77.8,
+   "excess": 6.2,
+   "ratio": 1.08,
+   "top": false
+  },
+  {
+   "crashes": 281,
+   "expected": 204.7,
+   "excess": 76.3,
+   "ratio": 1.37,
+   "top": false
+  },
+  {
+   "crashes": 287,
+   "expected": 177.4,
+   "excess": 109.6,
+   "ratio": 1.62,
+   "top": false
+  },
+  {
+   "crashes": 17,
+   "expected": 105.5,
+   "excess": -88.5,
+   "ratio": 0.16,
+   "top": false
+  },
+  {
+   "crashes": 15,
+   "expected": 125.0,
+   "excess": -110.0,
+   "ratio": 0.12,
+   "top": false
+  },
+  {
+   "crashes": 17,
+   "expected": 103.4,
+   "excess": -86.4,
+   "ratio": 0.16,
+   "top": false
+  },
+  {
+   "crashes": 25,
+   "expected": 43.8,
+   "excess": -18.8,
+   "ratio": 0.57,
+   "top": false
+  },
+  {
+   "crashes": 39,
+   "expected": 106.0,
+   "excess": -67.0,
+   "ratio": 0.37,
+   "top": false
+  },
+  {
+   "crashes": 98,
+   "expected": 90.3,
+   "excess": 7.7,
+   "ratio": 1.09,
+   "top": false
+  },
+  {
+   "crashes": 84,
+   "expected": 68.8,
+   "excess": 15.2,
+   "ratio": 1.22,
+   "top": false
+  },
+  {
+   "crashes": 41,
+   "expected": 274.3,
+   "excess": -233.3,
+   "ratio": 0.15,
+   "top": false
+  },
+  {
+   "crashes": 51,
+   "expected": 273.8,
+   "excess": -222.8,
+   "ratio": 0.19,
+   "top": false
+  },
+  {
+   "crashes": 46,
+   "expected": 150.6,
+   "excess": -104.6,
+   "ratio": 0.31,
+   "top": false
+  },
+  {
+   "crashes": 12,
+   "expected": 66.0,
+   "excess": -54.0,
+   "ratio": 0.18,
+   "top": false
+  },
+  {
+   "crashes": 71,
+   "expected": 197.0,
+   "excess": -126.0,
+   "ratio": 0.36,
+   "top": false
+  },
+  {
+   "crashes": 40,
+   "expected": 79.8,
+   "excess": -39.8,
+   "ratio": 0.5,
+   "top": false
+  },
+  {
+   "crashes": 58,
+   "expected": 149.8,
+   "excess": -91.8,
+   "ratio": 0.39,
+   "top": false
+  },
+  {
+   "crashes": 530,
+   "expected": 259.2,
+   "excess": 270.8,
+   "ratio": 2.04,
+   "top": true,
+   "label": "Route 4 · Phetchaburi · km 136",
+   "route": 4,
+   "km": 135.6,
+   "aadt": 41470
+  },
+  {
+   "crashes": 182,
+   "expected": 278.1,
+   "excess": -96.1,
+   "ratio": 0.65,
+   "top": false
+  },
+  {
+   "crashes": 156,
+   "expected": 266.9,
+   "excess": -110.9,
+   "ratio": 0.58,
+   "top": false
+  },
+  {
+   "crashes": 77,
+   "expected": 174.0,
+   "excess": -97.0,
+   "ratio": 0.44,
+   "top": false
+  },
+  {
+   "crashes": 97,
+   "expected": 202.7,
+   "excess": -105.7,
+   "ratio": 0.48,
+   "top": false
+  },
+  {
+   "crashes": 162,
+   "expected": 140.1,
+   "excess": 21.9,
+   "ratio": 1.16,
+   "top": false
+  },
+  {
+   "crashes": 158,
+   "expected": 165.0,
+   "excess": -7.0,
+   "ratio": 0.96,
+   "top": false
+  },
+  {
+   "crashes": 351,
+   "expected": 227.8,
+   "excess": 123.2,
+   "ratio": 1.54,
+   "top": false
+  },
+  {
+   "crashes": 251,
+   "expected": 307.1,
+   "excess": -56.1,
+   "ratio": 0.82,
+   "top": false
+  },
+  {
+   "crashes": 292,
+   "expected": 194.2,
+   "excess": 97.8,
+   "ratio": 1.5,
+   "top": false
+  },
+  {
+   "crashes": 305,
+   "expected": 182.7,
+   "excess": 122.3,
+   "ratio": 1.67,
+   "top": false
+  },
+  {
+   "crashes": 194,
+   "expected": 113.0,
+   "excess": 81.0,
+   "ratio": 1.72,
+   "top": false
+  },
+  {
+   "crashes": 67,
+   "expected": 81.8,
+   "excess": -14.8,
+   "ratio": 0.82,
+   "top": false
+  },
+  {
+   "crashes": 25,
+   "expected": 58.6,
+   "excess": -33.6,
+   "ratio": 0.43,
+   "top": false
+  },
+  {
+   "crashes": 59,
+   "expected": 45.2,
+   "excess": 13.8,
+   "ratio": 1.3,
+   "top": false
+  },
+  {
+   "crashes": 34,
+   "expected": 88.7,
+   "excess": -54.7,
+   "ratio": 0.38,
+   "top": false
+  },
+  {
+   "crashes": 27,
+   "expected": 50.8,
+   "excess": -23.8,
+   "ratio": 0.53,
+   "top": false
+  },
+  {
+   "crashes": 16,
+   "expected": 34.9,
+   "excess": -18.9,
+   "ratio": 0.46,
+   "top": false
+  },
+  {
+   "crashes": 14,
+   "expected": 21.0,
+   "excess": -7.0,
+   "ratio": 0.67,
+   "top": false
+  },
+  {
+   "crashes": 21,
+   "expected": 133.4,
+   "excess": -112.4,
+   "ratio": 0.16,
+   "top": false
+  },
+  {
+   "crashes": 129,
+   "expected": 88.6,
+   "excess": 40.4,
+   "ratio": 1.46,
+   "top": false
+  },
+  {
+   "crashes": 12,
+   "expected": 6.4,
+   "excess": 5.6,
+   "ratio": 1.86,
+   "top": false
+  },
+  {
+   "crashes": 10,
+   "expected": 66.9,
+   "excess": -56.9,
+   "ratio": 0.15,
+   "top": false
+  },
+  {
+   "crashes": 71,
+   "expected": 106.4,
+   "excess": -35.4,
+   "ratio": 0.67,
+   "top": false
+  },
+  {
+   "crashes": 1336,
+   "expected": 553.8,
+   "excess": 782.2,
+   "ratio": 2.41,
+   "top": true,
+   "label": "Route 7 · Bangkok Metropolis · km 17",
+   "route": 7,
+   "km": 17.0,
+   "aadt": 230850
+  },
+  {
+   "crashes": 1086,
+   "expected": 678.2,
+   "excess": 407.8,
+   "ratio": 1.6,
+   "top": true,
+   "label": "Route 7 · Samut Prakan · km 26",
+   "route": 7,
+   "km": 25.9,
+   "aadt": 216395
+  },
+  {
+   "crashes": 863,
+   "expected": 440.0,
+   "excess": 423.0,
+   "ratio": 1.96,
+   "top": true,
+   "label": "Route 7 · Chachoengsao · km 45",
+   "route": 7,
+   "km": 45.4,
+   "aadt": 85181
+  },
+  {
+   "crashes": 809,
+   "expected": 384.9,
+   "excess": 424.1,
+   "ratio": 2.1,
+   "top": true,
+   "label": "Route 7 · Chon Buri · km 68",
+   "route": 7,
+   "km": 67.9,
+   "aadt": 93431
+  },
+  {
+   "crashes": 501,
+   "expected": 279.7,
+   "excess": 221.3,
+   "ratio": 1.79,
+   "top": true,
+   "label": "Route 7 · Chon Buri · km 105",
+   "route": 7,
+   "km": 105.1,
+   "aadt": 65542
+  },
+  {
+   "crashes": 387,
+   "expected": 194.6,
+   "excess": 192.4,
+   "ratio": 1.99,
+   "top": true,
+   "label": "Route 7 · Chon Buri · km 79",
+   "route": 7,
+   "km": 79.3,
+   "aadt": 72407
+  },
+  {
+   "crashes": 914,
+   "expected": 255.5,
+   "excess": 658.5,
+   "ratio": 3.58,
+   "top": true,
+   "label": "Route 7 · Chon Buri · km 89",
+   "route": 7,
+   "km": 89.3,
+   "aadt": 79644
+  },
+  {
+   "crashes": 575,
+   "expected": 95.7,
+   "excess": 479.3,
+   "ratio": 6.01,
+   "top": true,
+   "label": "Route 7 · Chon Buri · km 123",
+   "route": 7,
+   "km": 123.0,
+   "aadt": 18220
+  },
+  {
+   "crashes": 1289,
+   "expected": 100.1,
+   "excess": 1188.9,
+   "ratio": 12.88,
+   "top": true,
+   "label": "Route 7 · Chon Buri · km 4",
+   "route": 7,
+   "km": 4.0,
+   "aadt": 52313
+  },
+  {
+   "crashes": 332,
+   "expected": 351.2,
+   "excess": -19.2,
+   "ratio": 0.95,
+   "top": false
+  },
+  {
+   "crashes": 261,
+   "expected": 401.8,
+   "excess": -140.8,
+   "ratio": 0.65,
+   "top": false
+  },
+  {
+   "crashes": 128,
+   "expected": 197.7,
+   "excess": -69.7,
+   "ratio": 0.65,
+   "top": false
+  },
+  {
+   "crashes": 284,
+   "expected": 312.5,
+   "excess": -28.5,
+   "ratio": 0.91,
+   "top": false
+  },
+  {
+   "crashes": 87,
+   "expected": 164.8,
+   "excess": -77.8,
+   "ratio": 0.53,
+   "top": false
+  },
+  {
+   "crashes": 399,
+   "expected": 637.0,
+   "excess": -238.0,
+   "ratio": 0.63,
+   "top": false
+  },
+  {
+   "crashes": 1893,
+   "expected": 268.3,
+   "excess": 1624.7,
+   "ratio": 7.06,
+   "top": true,
+   "label": "Route 9 · Pathum Thani · km 20",
+   "route": 9,
+   "km": 20.5,
+   "aadt": 143368
+  },
+  {
+   "crashes": 1160,
+   "expected": 222.9,
+   "excess": 937.1,
+   "ratio": 5.2,
+   "top": true,
+   "label": "Route 9 · Bangkok Metropolis · km 60",
+   "route": 9,
+   "km": 59.5,
+   "aadt": 114983
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}
