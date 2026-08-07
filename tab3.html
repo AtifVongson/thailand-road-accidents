@@ -1,0 +1,205 @@
+<!doctype html>
+<!--
+  Tab 3 — Slides 12-15 of the Final Outline plus the uncounted references
+  slide (16). Owns the interactive map (ticket 09): one MapLibre instance,
+  Slide 14, watched by default.
+
+  Copy is reproduced verbatim from analysis/scripts/06_build_deck.js. Slide 12
+  is a live chart; the map on Slide 14 replaces the deck's static
+  fig06_map_severity image (same measure, same source — assets/js/map-tab3.js).
+
+  Needs a local server, not file://. python -m http.server 8789 --directory site
+  MapLibre is vendored in assets/vendor/, not pulled from a CDN, so a venue
+  with no usable network still shows the map.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tab 3 — Thai Highway Accidents 2021-2025</title>
+<link href="assets/vendor/maplibre-gl.css" rel="stylesheet">
+<script src="assets/vendor/maplibre-gl.js"></script>
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/charts.css">
+</head>
+<body>
+
+<div class="mobile-notice">
+  <h1>Thai Highway Accidents 2021&ndash;2025</h1>
+  <p>This site is built to be driven from a laptop onto a projector, not read on a phone.
+     A presenter is showing it live &mdash; ask to see the deck instead, or view this on a
+     larger screen.</p>
+  <a href="assets/Thailand_Road_Accidents_Analysis.pdf">Download the presentation deck</a>
+</div>
+
+<header class="topnav">
+  <div class="tabs">
+    <a class="tab" href="tab1.html">Tab 1 &middot; Slides 1&ndash;6</a>
+    <a class="tab" href="tab2.html">Tab 2 &middot; Slides 7&ndash;11</a>
+    <a class="tab current" href="tab3.html">Tab 3 &middot; Slides 12&ndash;16</a>
+  </div>
+  <button class="idxbtn" id="idxbtn">Sections &#9662;</button>
+</header>
+<nav class="secindex" id="secindex"></nav>
+
+<main>
+
+<!-- 12 — seasonality (LIVE) -->
+<section class="section section-live" data-kicker="Part 2 &middot; Seasonality" data-title="The spike is real — and partly measures enforcement">
+  <div class="live-intro">
+    <p class="kicker">Part 2 &middot; Seasonality</p>
+    <h1>The spike is real &mdash; and partly measures enforcement</h1>
+  </div>
+  <div class="spacer">
+    <p>Sixty months, January 2021 through December 2025. Scroll to watch the Seven Dangerous
+       Days windows shade in as the series reaches each one.</p>
+  </div>
+  <div class="scroll-section tall" id="sec-s12">
+    <div class="pin"><div class="frame" id="mount-s12"></div></div>
+  </div>
+  <div class="spacer">
+    <p>Crashes run 3.1&times; an ordinary day inside the Seven Dangerous Days &mdash; Songkran
+       11&ndash;17 April and New Year 30 December &ndash; 5 January, level with each other.
+       Read the alcohol share with care: 5.8% of crashes inside those windows are recorded as
+       alcohol-related against 0.8% outside &mdash; because that is when officers are running
+       breath tests. The campaign window is when Thailand measures drink-driving, not only
+       when it happens.</p>
+  </div>
+</section>
+
+<!-- 13 — forecast -->
+<section class="section section-static" data-kicker="Part 2 &middot; Forecast" data-title="Planning next year's checkpoint capacity">
+  <p class="kicker">Part 2 &middot; Forecast</p>
+  <h1>Planning next year's checkpoint capacity</h1>
+  <div class="figwrap"><img src="assets/figures/fig15_forecast.svg" alt="SARIMA forecast of monthly crashes and deaths through 2026"></div>
+  <p class="takeaway">SARIMA on log counts, backtested against the last 12 months at MAPE
+    3.6% for crashes and 8.6% for deaths &mdash; better than assuming the same as last year.
+    April 2026 is forecast at 2,924 crashes (80% interval 2,550&ndash;3,352) and 346 deaths
+    (283&ndash;422); September is the trough at 1,539. Reporting lag was tested and rejected:
+    December 2021 had 551 days to be reported and 2,222 crashes, December 2025 had 28 days
+    and 2,560.</p>
+  <div class="figwrap" style="margin-top:22px;max-width:760px">
+    <img src="assets/figures/fig14_reporting_lag.svg" alt="Reporting lag against monthly crash count, testing for undercount">
+  </div>
+</section>
+
+<!-- 14 — recommendation, part 1 + the map (LIVE) -->
+<section class="section section-live" data-kicker="Part 3 &middot; Recommendation, part 1" data-title="Deploy where deaths are, not where crashes are">
+  <div class="live-intro">
+    <p class="kicker">Part 3 &middot; Recommendation, part 1</p>
+    <h1>Deploy where deaths are, not where crashes are</h1>
+  </div>
+  <div class="spacer">
+    <p>National choropleth first &mdash; deaths per 100 crashes, province by province. Scroll
+       to move the camera into the north-east and watch the road network and fatal crashes
+       fade in. The map is watched, not driven &mdash; press Explore to pan and zoom it
+       yourself.</p>
+  </div>
+  <div class="scroll-section" id="map-scroll" style="height:220vh">
+    <div class="pin mappin">
+      <div id="map"></div>
+      <div class="map-caption" id="map-caption"></div>
+      <div class="map-legend" id="map-legend"></div>
+      <button class="map-explore" id="map-explore">Explore</button>
+      <div class="map-hover" id="map-hover"></div>
+    </div>
+  </div>
+  <div class="spacer">
+    <p>Target sections, not provinces &mdash; the 14 sections crashing furthest above their
+       expected rate are 79% motorway, Routes 7 and 9, while deaths per crash concentrate in
+       the north-east. Staff by month: April needs 1.9&times; September's capacity. Surge for
+       the Seven Dangerous Days at roughly 3&times; ordinary staffing, starting two weeks
+       early. Set checkpoints by hour &mdash; weekdays differ by under two points, hours by
+       2.1&times;.</p>
+  </div>
+</section>
+
+<!-- 15 — recommendation, part 2 -->
+<section class="section section-static dark" data-kicker="Part 3 &middot; Recommendation, part 2" data-title="How to run it, and what it cannot see">
+  <p class="kicker">Part 3 &middot; Recommendation, part 2</p>
+  <h1>How to run it, and what it cannot see</h1>
+  <div class="callout">
+    <h2>Limitation &mdash; and what follows from it</h2>
+    <p>Alcohol is recorded on 1.4% of crashes, but almost entirely inside the 14 campaign days
+      each year. Outside them it appears only when a crash was serious enough to investigate
+      &mdash; the fatality premium falls from 2.31&times; to 1.17&times; once detection is
+      consistent, and inverts at night. Detected year-round at the in-window rate, there
+      would be roughly <b>4,900 more alcohol crashes and 750 more alcohol deaths</b> than the
+      345 this data records.</p>
+    <p><b>Year-round breath testing is therefore a prerequisite for evaluating any deployment
+      plan, including this one.</b> Without it, a fall in recorded alcohol crashes cannot be
+      told apart from a fall in testing.</p>
+  </div>
+  <div class="body" style="margin-top:20px">
+    <p><b>Implementation:</b> tailor by archetype &mdash; freight corridors need heavy-vehicle
+      enforcement, killer highways need speed and alignment work, urban motorways need faster
+      incident response rather than more checkpoints. Measure against the forecast's lower
+      bound. Report deaths per 100 crashes by section, not crash counts &mdash; crash counts
+      fall whenever traffic falls, which flatters any campaign.</p>
+  </div>
+  <p class="limits">Two further limits: this file is highways only &mdash; about 17% of
+    Thailand's road deaths &mdash; and the exposure analysis covers six main routes, 23.6% of
+    the crashes. Treat the plan as a hypothesis with a measurable test attached, not as a
+    settled answer.</p>
+</section>
+
+<!-- 16 — references (uncounted) -->
+<section class="section section-static" data-kicker="References" data-title="Sources, geography and tools">
+  <p class="kicker">References</p>
+  <h1>Sources, geography and tools</h1>
+  <div class="refs">
+    <h2>Data</h2>
+    <ul>
+      <li>Highway accident records 2021&ndash;2025 (B.E. 2564&ndash;2568) &mdash; Office of the
+        Permanent Secretary, Ministry of Transport. Every number in this deck except the WHO
+        figures comes from this file.</li>
+      <li>Annual Average Daily Traffic 2021&ndash;2025 &mdash; Department of Highways.</li>
+      <li>Annual Average Daily Traffic 2021&ndash;2025 &mdash; Department of Rural Roads.</li>
+      <li>Thailand's national road-death total &mdash; Department of Disease Control,
+        three-database integrated system, 2024.</li>
+      <li>World Health Organization, Global status report on road safety 2023 &mdash; Thailand
+        country profile, data year 2021.</li>
+    </ul>
+    <h2>Geography and tools</h2>
+    <ul>
+      <li>Highway centrelines &mdash; ArcGIS open data, Department of Highways and Department
+        of Rural Roads. Used as map geometry only, never as an analytical value.</li>
+      <li>Province boundaries &mdash; GADM 4.1. Map geometry only.</li>
+      <li>Python 3.14 with pandas, statsmodels, scikit-learn, scipy and matplotlib; MapLibre
+        GL JS for the maps; PptxGenJS for the uploaded deck.</li>
+      <li>This site: three scrolling tabs, one per presenter.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div class="cue" id="cue">scroll</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/render.js"></script>
+<script>
+fetch("assets/data/charts/slide12_monthly.json")
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    var chart = ChartRender.slide12(document.getElementById("mount-s12"), data);
+    var section = document.getElementById("sec-s12");
+    var cue = document.getElementById("cue");
+
+    function tick() {
+      var r = section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      chart.update(p);
+      var inChart = r.top < window.innerHeight && r.bottom > 0;
+      if (inChart) cue.style.opacity = p > 0.02 && p < 0.98 ? 0 : 1;
+    }
+    addEventListener("scroll", tick, { passive: true });
+    addEventListener("resize", tick);
+    tick();
+    window.__chart_s12 = chart;
+  });
+</script>
+<script src="assets/js/map-tab3.js"></script>
+<script src="assets/js/transport.js"></script>
+</body>
+</html>

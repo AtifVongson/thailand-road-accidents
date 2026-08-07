@@ -1,0 +1,1146 @@
+{
+ "sections": 160,
+ "crashes_covered": 26027,
+ "scope_note": "AADT exists only for the 6 DOH main routes, so this panel runs on 160 survey sections covering 26,027 crashes — about a quarter of the national file, not all of it.",
+ "panel_a": {
+  "metric": "crashes",
+  "fit": "log-log",
+  "slope": 0.4498,
+  "intercept": -0.1935,
+  "pearson_r": 0.501,
+  "spearman_r": 0.277,
+  "p_value": 1.57e-11
+ },
+ "panel_b": {
+  "metric": "deaths_per_crash",
+  "fit": "log-linear",
+  "slope": -0.015781,
+  "intercept": 0.285612,
+  "pearson_r": -0.173,
+  "spearman_r": -0.202,
+  "p_value": 0.0287
+ },
+ "points": [
+  {
+   "aadt": 15713,
+   "crashes": 295,
+   "deaths_per_crash": 0.1153,
+   "route": 1,
+   "province": "Tak"
+  },
+  {
+   "aadt": 10955,
+   "crashes": 244,
+   "deaths_per_crash": 0.123,
+   "route": 1,
+   "province": "Tak"
+  },
+  {
+   "aadt": 44537,
+   "crashes": 11,
+   "deaths_per_crash": 0.0909,
+   "route": 1,
+   "province": "Bangkok Metropolis"
+  },
+  {
+   "aadt": 12258,
+   "crashes": 66,
+   "deaths_per_crash": 0.0758,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 12871,
+   "crashes": 49,
+   "deaths_per_crash": 0.0612,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 8793,
+   "crashes": 44,
+   "deaths_per_crash": 0.0909,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 12724,
+   "crashes": 27,
+   "deaths_per_crash": 0.1481,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 54499,
+   "crashes": 29,
+   "deaths_per_crash": 0.069,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 33737,
+   "crashes": 13,
+   "deaths_per_crash": 0.0,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 31046,
+   "crashes": 21,
+   "deaths_per_crash": 0.1905,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 17487,
+   "crashes": 155,
+   "deaths_per_crash": 0.1742,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 11296,
+   "crashes": 107,
+   "deaths_per_crash": 0.0561,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 12945,
+   "crashes": 64,
+   "deaths_per_crash": 0.1719,
+   "route": 1,
+   "province": "Lampang"
+  },
+  {
+   "aadt": 20427,
+   "crashes": 53,
+   "deaths_per_crash": 0.0943,
+   "route": 1,
+   "province": "Phayao"
+  },
+  {
+   "aadt": 29122,
+   "crashes": 95,
+   "deaths_per_crash": 0.1368,
+   "route": 1,
+   "province": "Phayao"
+  },
+  {
+   "aadt": 7827,
+   "crashes": 131,
+   "deaths_per_crash": 0.2672,
+   "route": 1,
+   "province": "Phayao"
+  },
+  {
+   "aadt": 15581,
+   "crashes": 141,
+   "deaths_per_crash": 0.1702,
+   "route": 1,
+   "province": "Chiang Rai"
+  },
+  {
+   "aadt": 21602,
+   "crashes": 12,
+   "deaths_per_crash": 0.1667,
+   "route": 1,
+   "province": "Chiang Rai"
+  },
+  {
+   "aadt": 27904,
+   "crashes": 10,
+   "deaths_per_crash": 0.1,
+   "route": 1,
+   "province": "Chiang Rai"
+  },
+  {
+   "aadt": 24114,
+   "crashes": 11,
+   "deaths_per_crash": 0.5455,
+   "route": 1,
+   "province": "Chiang Rai"
+  },
+  {
+   "aadt": 22258,
+   "crashes": 24,
+   "deaths_per_crash": 0.125,
+   "route": 1,
+   "province": "Chiang Rai"
+  },
+  {
+   "aadt": 10298,
+   "crashes": 60,
+   "deaths_per_crash": 0.2167,
+   "route": 1,
+   "province": "Chiang Rai"
+  },
+  {
+   "aadt": 210642,
+   "crashes": 68,
+   "deaths_per_crash": 0.2206,
+   "route": 1,
+   "province": "Pathum Thani"
+  },
+  {
+   "aadt": 222293,
+   "crashes": 172,
+   "deaths_per_crash": 0.3081,
+   "route": 1,
+   "province": "Phra Nakhon Si Ayutthaya"
+  },
+  {
+   "aadt": 117753,
+   "crashes": 286,
+   "deaths_per_crash": 0.0699,
+   "route": 1,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 54439,
+   "crashes": 68,
+   "deaths_per_crash": 0.0441,
+   "route": 1,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 43946,
+   "crashes": 55,
+   "deaths_per_crash": 0.2,
+   "route": 1,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 26426,
+   "crashes": 37,
+   "deaths_per_crash": 0.1081,
+   "route": 1,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 15318,
+   "crashes": 112,
+   "deaths_per_crash": 0.1339,
+   "route": 1,
+   "province": "Lop Buri"
+  },
+  {
+   "aadt": 10100,
+   "crashes": 68,
+   "deaths_per_crash": 0.2941,
+   "route": 1,
+   "province": "Lop Buri"
+  },
+  {
+   "aadt": 4217,
+   "crashes": 56,
+   "deaths_per_crash": 0.0536,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 4412,
+   "crashes": 77,
+   "deaths_per_crash": 0.1429,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 6345,
+   "crashes": 194,
+   "deaths_per_crash": 0.0825,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 8133,
+   "crashes": 68,
+   "deaths_per_crash": 0.1618,
+   "route": 1,
+   "province": "Chai Nat"
+  },
+  {
+   "aadt": 14631,
+   "crashes": 110,
+   "deaths_per_crash": 0.1636,
+   "route": 1,
+   "province": "Chai Nat"
+  },
+  {
+   "aadt": 12937,
+   "crashes": 56,
+   "deaths_per_crash": 0.0893,
+   "route": 1,
+   "province": "Chai Nat"
+  },
+  {
+   "aadt": 45103,
+   "crashes": 23,
+   "deaths_per_crash": 0.2174,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 29260,
+   "crashes": 107,
+   "deaths_per_crash": 0.1215,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 36616,
+   "crashes": 36,
+   "deaths_per_crash": 0.1111,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 40231,
+   "crashes": 47,
+   "deaths_per_crash": 0.0426,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 15593,
+   "crashes": 19,
+   "deaths_per_crash": 0.4211,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 16981,
+   "crashes": 29,
+   "deaths_per_crash": 0.2414,
+   "route": 1,
+   "province": "Nakhon Sawan"
+  },
+  {
+   "aadt": 21373,
+   "crashes": 67,
+   "deaths_per_crash": 0.2537,
+   "route": 1,
+   "province": "Kamphaeng Phet"
+  },
+  {
+   "aadt": 19119,
+   "crashes": 78,
+   "deaths_per_crash": 0.2051,
+   "route": 1,
+   "province": "Kamphaeng Phet"
+  },
+  {
+   "aadt": 22633,
+   "crashes": 92,
+   "deaths_per_crash": 0.1087,
+   "route": 1,
+   "province": "Kamphaeng Phet"
+  },
+  {
+   "aadt": 27017,
+   "crashes": 143,
+   "deaths_per_crash": 0.1189,
+   "route": 1,
+   "province": "Kamphaeng Phet"
+  },
+  {
+   "aadt": 108784,
+   "crashes": 95,
+   "deaths_per_crash": 0.2316,
+   "route": 2,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 102943,
+   "crashes": 26,
+   "deaths_per_crash": 0.2692,
+   "route": 2,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 48641,
+   "crashes": 98,
+   "deaths_per_crash": 0.0408,
+   "route": 2,
+   "province": "Saraburi"
+  },
+  {
+   "aadt": 59480,
+   "crashes": 295,
+   "deaths_per_crash": 0.0644,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 44457,
+   "crashes": 343,
+   "deaths_per_crash": 0.0408,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 40805,
+   "crashes": 161,
+   "deaths_per_crash": 0.1491,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 29158,
+   "crashes": 61,
+   "deaths_per_crash": 0.1148,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 26055,
+   "crashes": 21,
+   "deaths_per_crash": 0.0952,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 28710,
+   "crashes": 205,
+   "deaths_per_crash": 0.0683,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 74206,
+   "crashes": 235,
+   "deaths_per_crash": 0.0468,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 98286,
+   "crashes": 90,
+   "deaths_per_crash": 0.0667,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 31718,
+   "crashes": 137,
+   "deaths_per_crash": 0.0365,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 27680,
+   "crashes": 42,
+   "deaths_per_crash": 0.0,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 26525,
+   "crashes": 195,
+   "deaths_per_crash": 0.041,
+   "route": 2,
+   "province": "Nakhon Ratchasima"
+  },
+  {
+   "aadt": 27804,
+   "crashes": 255,
+   "deaths_per_crash": 0.2078,
+   "route": 2,
+   "province": "Khon Kaen"
+  },
+  {
+   "aadt": 46627,
+   "crashes": 24,
+   "deaths_per_crash": 0.0417,
+   "route": 2,
+   "province": "Khon Kaen"
+  },
+  {
+   "aadt": 54763,
+   "crashes": 83,
+   "deaths_per_crash": 0.0602,
+   "route": 2,
+   "province": "Khon Kaen"
+  },
+  {
+   "aadt": 24224,
+   "crashes": 40,
+   "deaths_per_crash": 0.075,
+   "route": 2,
+   "province": "Khon Kaen"
+  },
+  {
+   "aadt": 30051,
+   "crashes": 30,
+   "deaths_per_crash": 0.0333,
+   "route": 2,
+   "province": "Khon Kaen"
+  },
+  {
+   "aadt": 11213,
+   "crashes": 81,
+   "deaths_per_crash": 0.1235,
+   "route": 2,
+   "province": "Udon Thani"
+  },
+  {
+   "aadt": 26191,
+   "crashes": 146,
+   "deaths_per_crash": 0.0685,
+   "route": 2,
+   "province": "Udon Thani"
+  },
+  {
+   "aadt": 25929,
+   "crashes": 26,
+   "deaths_per_crash": 0.1154,
+   "route": 2,
+   "province": "Udon Thani"
+  },
+  {
+   "aadt": 25574,
+   "crashes": 47,
+   "deaths_per_crash": 0.1277,
+   "route": 2,
+   "province": "Udon Thani"
+  },
+  {
+   "aadt": 25597,
+   "crashes": 13,
+   "deaths_per_crash": 0.0,
+   "route": 2,
+   "province": "Nong Khai"
+  },
+  {
+   "aadt": 33063,
+   "crashes": 28,
+   "deaths_per_crash": 0.1786,
+   "route": 2,
+   "province": "Nong Khai"
+  },
+  {
+   "aadt": 21999,
+   "crashes": 30,
+   "deaths_per_crash": 0.3333,
+   "route": 3,
+   "province": "Bangkok Metropolis"
+  },
+  {
+   "aadt": 33503,
+   "crashes": 160,
+   "deaths_per_crash": 0.2437,
+   "route": 3,
+   "province": "Samut Prakan"
+  },
+  {
+   "aadt": 52354,
+   "crashes": 33,
+   "deaths_per_crash": 0.0909,
+   "route": 3,
+   "province": "Chachoengsao"
+  },
+  {
+   "aadt": 35625,
+   "crashes": 46,
+   "deaths_per_crash": 0.087,
+   "route": 3,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 47500,
+   "crashes": 44,
+   "deaths_per_crash": 0.0682,
+   "route": 3,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 46897,
+   "crashes": 52,
+   "deaths_per_crash": 0.2308,
+   "route": 3,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 66312,
+   "crashes": 104,
+   "deaths_per_crash": 0.125,
+   "route": 3,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 29591,
+   "crashes": 75,
+   "deaths_per_crash": 0.08,
+   "route": 3,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 34921,
+   "crashes": 34,
+   "deaths_per_crash": 0.2941,
+   "route": 3,
+   "province": "Rayong"
+  },
+  {
+   "aadt": 20773,
+   "crashes": 93,
+   "deaths_per_crash": 0.0968,
+   "route": 3,
+   "province": "Rayong"
+  },
+  {
+   "aadt": 23212,
+   "crashes": 126,
+   "deaths_per_crash": 0.0317,
+   "route": 3,
+   "province": "Rayong"
+  },
+  {
+   "aadt": 31479,
+   "crashes": 245,
+   "deaths_per_crash": 0.2245,
+   "route": 3,
+   "province": "Chanthaburi"
+  },
+  {
+   "aadt": 43525,
+   "crashes": 117,
+   "deaths_per_crash": 0.3077,
+   "route": 3,
+   "province": "Chanthaburi"
+  },
+  {
+   "aadt": 31357,
+   "crashes": 206,
+   "deaths_per_crash": 0.2136,
+   "route": 3,
+   "province": "Chanthaburi"
+  },
+  {
+   "aadt": 16455,
+   "crashes": 238,
+   "deaths_per_crash": 0.0798,
+   "route": 3,
+   "province": "Chanthaburi"
+  },
+  {
+   "aadt": 10264,
+   "crashes": 246,
+   "deaths_per_crash": 0.1382,
+   "route": 3,
+   "province": "Trat"
+  },
+  {
+   "aadt": 2880,
+   "crashes": 28,
+   "deaths_per_crash": 0.1786,
+   "route": 3,
+   "province": "Trat"
+  },
+  {
+   "aadt": 6075,
+   "crashes": 28,
+   "deaths_per_crash": 0.25,
+   "route": 3,
+   "province": "Trat"
+  },
+  {
+   "aadt": 66008,
+   "crashes": 10,
+   "deaths_per_crash": 0.1,
+   "route": 4,
+   "province": "Nakhon Pathom"
+  },
+  {
+   "aadt": 55597,
+   "crashes": 28,
+   "deaths_per_crash": 0.1071,
+   "route": 4,
+   "province": "Nakhon Pathom"
+  },
+  {
+   "aadt": 6240,
+   "crashes": 77,
+   "deaths_per_crash": 0.039,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 9664,
+   "crashes": 55,
+   "deaths_per_crash": 0.0545,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 10805,
+   "crashes": 56,
+   "deaths_per_crash": 0.125,
+   "route": 4,
+   "province": "Krabi"
+  },
+  {
+   "aadt": 10274,
+   "crashes": 20,
+   "deaths_per_crash": 0.05,
+   "route": 4,
+   "province": "Krabi"
+  },
+  {
+   "aadt": 5365,
+   "crashes": 21,
+   "deaths_per_crash": 0.1429,
+   "route": 4,
+   "province": "Trang"
+  },
+  {
+   "aadt": 6568,
+   "crashes": 39,
+   "deaths_per_crash": 0.0513,
+   "route": 4,
+   "province": "Trang"
+  },
+  {
+   "aadt": 7993,
+   "crashes": 41,
+   "deaths_per_crash": 0.0,
+   "route": 4,
+   "province": "Trang"
+  },
+  {
+   "aadt": 5667,
+   "crashes": 43,
+   "deaths_per_crash": 0.0465,
+   "route": 4,
+   "province": "Trang"
+  },
+  {
+   "aadt": 24836,
+   "crashes": 60,
+   "deaths_per_crash": 0.1,
+   "route": 4,
+   "province": "Trang"
+  },
+  {
+   "aadt": 19859,
+   "crashes": 220,
+   "deaths_per_crash": 0.0682,
+   "route": 4,
+   "province": "Trang"
+  },
+  {
+   "aadt": 9772,
+   "crashes": 135,
+   "deaths_per_crash": 0.0519,
+   "route": 4,
+   "province": "Phatthalung"
+  },
+  {
+   "aadt": 18141,
+   "crashes": 84,
+   "deaths_per_crash": 0.1071,
+   "route": 4,
+   "province": "Phatthalung"
+  },
+  {
+   "aadt": 33221,
+   "crashes": 281,
+   "deaths_per_crash": 0.0996,
+   "route": 4,
+   "province": "Phatthalung"
+  },
+  {
+   "aadt": 26639,
+   "crashes": 287,
+   "deaths_per_crash": 0.1672,
+   "route": 4,
+   "province": "Phatthalung"
+  },
+  {
+   "aadt": 30585,
+   "crashes": 17,
+   "deaths_per_crash": 0.4118,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 29797,
+   "crashes": 15,
+   "deaths_per_crash": 0.3333,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 32885,
+   "crashes": 17,
+   "deaths_per_crash": 0.1176,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 31133,
+   "crashes": 25,
+   "deaths_per_crash": 0.04,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 28449,
+   "crashes": 39,
+   "deaths_per_crash": 0.1026,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 15039,
+   "crashes": 98,
+   "deaths_per_crash": 0.1633,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 10549,
+   "crashes": 84,
+   "deaths_per_crash": 0.2738,
+   "route": 4,
+   "province": "Songkhla"
+  },
+  {
+   "aadt": 95868,
+   "crashes": 41,
+   "deaths_per_crash": 0.1463,
+   "route": 4,
+   "province": "Nakhon Pathom"
+  },
+  {
+   "aadt": 98973,
+   "crashes": 51,
+   "deaths_per_crash": 0.1569,
+   "route": 4,
+   "province": "Nakhon Pathom"
+  },
+  {
+   "aadt": 87753,
+   "crashes": 46,
+   "deaths_per_crash": 0.1522,
+   "route": 4,
+   "province": "Nakhon Pathom"
+  },
+  {
+   "aadt": 33944,
+   "crashes": 12,
+   "deaths_per_crash": 0.1667,
+   "route": 4,
+   "province": "Ratchaburi"
+  },
+  {
+   "aadt": 62299,
+   "crashes": 71,
+   "deaths_per_crash": 0.1972,
+   "route": 4,
+   "province": "Ratchaburi"
+  },
+  {
+   "aadt": 30421,
+   "crashes": 40,
+   "deaths_per_crash": 0.25,
+   "route": 4,
+   "province": "Ratchaburi"
+  },
+  {
+   "aadt": 34604,
+   "crashes": 58,
+   "deaths_per_crash": 0.0517,
+   "route": 4,
+   "province": "Ratchaburi"
+  },
+  {
+   "aadt": 41470,
+   "crashes": 530,
+   "deaths_per_crash": 0.1226,
+   "route": 4,
+   "province": "Phetchaburi"
+  },
+  {
+   "aadt": 41439,
+   "crashes": 182,
+   "deaths_per_crash": 0.1374,
+   "route": 4,
+   "province": "Phetchaburi"
+  },
+  {
+   "aadt": 45407,
+   "crashes": 156,
+   "deaths_per_crash": 0.0962,
+   "route": 4,
+   "province": "Phetchaburi"
+  },
+  {
+   "aadt": 23624,
+   "crashes": 77,
+   "deaths_per_crash": 0.2597,
+   "route": 4,
+   "province": "Phetchaburi"
+  },
+  {
+   "aadt": 22599,
+   "crashes": 97,
+   "deaths_per_crash": 0.1546,
+   "route": 4,
+   "province": "Prachuap Khiri Khan"
+  },
+  {
+   "aadt": 26446,
+   "crashes": 162,
+   "deaths_per_crash": 0.142,
+   "route": 4,
+   "province": "Prachuap Khiri Khan"
+  },
+  {
+   "aadt": 22990,
+   "crashes": 158,
+   "deaths_per_crash": 0.2911,
+   "route": 4,
+   "province": "Prachuap Khiri Khan"
+  },
+  {
+   "aadt": 22157,
+   "crashes": 351,
+   "deaths_per_crash": 0.1254,
+   "route": 4,
+   "province": "Prachuap Khiri Khan"
+  },
+  {
+   "aadt": 27953,
+   "crashes": 251,
+   "deaths_per_crash": 0.1235,
+   "route": 4,
+   "province": "Prachuap Khiri Khan"
+  },
+  {
+   "aadt": 20892,
+   "crashes": 292,
+   "deaths_per_crash": 0.1199,
+   "route": 4,
+   "province": "Chumphon"
+  },
+  {
+   "aadt": 20187,
+   "crashes": 305,
+   "deaths_per_crash": 0.0885,
+   "route": 4,
+   "province": "Chumphon"
+  },
+  {
+   "aadt": 9271,
+   "crashes": 194,
+   "deaths_per_crash": 0.1392,
+   "route": 4,
+   "province": "Ranong"
+  },
+  {
+   "aadt": 6577,
+   "crashes": 67,
+   "deaths_per_crash": 0.0746,
+   "route": 4,
+   "province": "Ranong"
+  },
+  {
+   "aadt": 5602,
+   "crashes": 25,
+   "deaths_per_crash": 0.0,
+   "route": 4,
+   "province": "Ranong"
+  },
+  {
+   "aadt": 6383,
+   "crashes": 59,
+   "deaths_per_crash": 0.0678,
+   "route": 4,
+   "province": "Ranong"
+  },
+  {
+   "aadt": 10421,
+   "crashes": 34,
+   "deaths_per_crash": 0.1176,
+   "route": 4,
+   "province": "Ranong"
+  },
+  {
+   "aadt": 4394,
+   "crashes": 27,
+   "deaths_per_crash": 0.2593,
+   "route": 4,
+   "province": "Ranong"
+  },
+  {
+   "aadt": 4009,
+   "crashes": 16,
+   "deaths_per_crash": 0.1875,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 4184,
+   "crashes": 14,
+   "deaths_per_crash": 0.0,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 13826,
+   "crashes": 21,
+   "deaths_per_crash": 0.2381,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 9001,
+   "crashes": 129,
+   "deaths_per_crash": 0.1783,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 576,
+   "crashes": 12,
+   "deaths_per_crash": 0.25,
+   "route": 4,
+   "province": "Phangnga"
+  },
+  {
+   "aadt": 10500,
+   "crashes": 10,
+   "deaths_per_crash": 0.0,
+   "route": 4,
+   "province": "Krabi"
+  },
+  {
+   "aadt": 12760,
+   "crashes": 71,
+   "deaths_per_crash": 0.2254,
+   "route": 4,
+   "province": "Krabi"
+  },
+  {
+   "aadt": 230850,
+   "crashes": 1336,
+   "deaths_per_crash": 0.003,
+   "route": 7,
+   "province": "Bangkok Metropolis"
+  },
+  {
+   "aadt": 216395,
+   "crashes": 1086,
+   "deaths_per_crash": 0.0129,
+   "route": 7,
+   "province": "Samut Prakan"
+  },
+  {
+   "aadt": 85181,
+   "crashes": 863,
+   "deaths_per_crash": 0.0174,
+   "route": 7,
+   "province": "Chachoengsao"
+  },
+  {
+   "aadt": 93431,
+   "crashes": 809,
+   "deaths_per_crash": 0.0198,
+   "route": 7,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 65542,
+   "crashes": 501,
+   "deaths_per_crash": 0.006,
+   "route": 7,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 72407,
+   "crashes": 387,
+   "deaths_per_crash": 0.0284,
+   "route": 7,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 79644,
+   "crashes": 914,
+   "deaths_per_crash": 0.0153,
+   "route": 7,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 18220,
+   "crashes": 575,
+   "deaths_per_crash": 0.0226,
+   "route": 7,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 52313,
+   "crashes": 1289,
+   "deaths_per_crash": 0.0132,
+   "route": 7,
+   "province": "Chon Buri"
+  },
+  {
+   "aadt": 161932,
+   "crashes": 332,
+   "deaths_per_crash": 0.0361,
+   "route": 9,
+   "province": "Bangkok Metropolis"
+  },
+  {
+   "aadt": 174974,
+   "crashes": 261,
+   "deaths_per_crash": 0.0307,
+   "route": 9,
+   "province": "Nonthaburi"
+  },
+  {
+   "aadt": 154465,
+   "crashes": 128,
+   "deaths_per_crash": 0.0234,
+   "route": 9,
+   "province": "Nonthaburi"
+  },
+  {
+   "aadt": 144486,
+   "crashes": 284,
+   "deaths_per_crash": 0.0282,
+   "route": 9,
+   "province": "Nonthaburi"
+  },
+  {
+   "aadt": 70477,
+   "crashes": 87,
+   "deaths_per_crash": 0.0,
+   "route": 9,
+   "province": "Pathum Thani"
+  },
+  {
+   "aadt": 145591,
+   "crashes": 399,
+   "deaths_per_crash": 0.0301,
+   "route": 9,
+   "province": "Phra Nakhon Si Ayutthaya"
+  },
+  {
+   "aadt": 143368,
+   "crashes": 1893,
+   "deaths_per_crash": 0.0069,
+   "route": 9,
+   "province": "Pathum Thani"
+  },
+  {
+   "aadt": 114983,
+   "crashes": 1160,
+   "deaths_per_crash": 0.0138,
+   "route": 9,
+   "province": "Bangkok Metropolis"
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

@@ -1,0 +1,354 @@
+{
+ "months": [
+  {
+   "month": "2021-01",
+   "crashes": 2254,
+   "deaths": 381
+  },
+  {
+   "month": "2021-02",
+   "crashes": 1628,
+   "deaths": 235
+  },
+  {
+   "month": "2021-03",
+   "crashes": 1808,
+   "deaths": 283
+  },
+  {
+   "month": "2021-04",
+   "crashes": 2789,
+   "deaths": 320
+  },
+  {
+   "month": "2021-05",
+   "crashes": 1435,
+   "deaths": 182
+  },
+  {
+   "month": "2021-06",
+   "crashes": 1288,
+   "deaths": 167
+  },
+  {
+   "month": "2021-07",
+   "crashes": 1259,
+   "deaths": 146
+  },
+  {
+   "month": "2021-08",
+   "crashes": 1233,
+   "deaths": 161
+  },
+  {
+   "month": "2021-09",
+   "crashes": 1268,
+   "deaths": 147
+  },
+  {
+   "month": "2021-10",
+   "crashes": 1490,
+   "deaths": 183
+  },
+  {
+   "month": "2021-11",
+   "crashes": 1388,
+   "deaths": 215
+  },
+  {
+   "month": "2021-12",
+   "crashes": 2222,
+   "deaths": 295
+  },
+  {
+   "month": "2022-01",
+   "crashes": 1947,
+   "deaths": 251
+  },
+  {
+   "month": "2022-02",
+   "crashes": 1551,
+   "deaths": 158
+  },
+  {
+   "month": "2022-03",
+   "crashes": 1680,
+   "deaths": 187
+  },
+  {
+   "month": "2022-04",
+   "crashes": 2294,
+   "deaths": 284
+  },
+  {
+   "month": "2022-05",
+   "crashes": 1560,
+   "deaths": 204
+  },
+  {
+   "month": "2022-06",
+   "crashes": 1340,
+   "deaths": 165
+  },
+  {
+   "month": "2022-07",
+   "crashes": 1680,
+   "deaths": 215
+  },
+  {
+   "month": "2022-08",
+   "crashes": 1555,
+   "deaths": 193
+  },
+  {
+   "month": "2022-09",
+   "crashes": 1436,
+   "deaths": 162
+  },
+  {
+   "month": "2022-10",
+   "crashes": 1640,
+   "deaths": 192
+  },
+  {
+   "month": "2022-11",
+   "crashes": 1630,
+   "deaths": 254
+  },
+  {
+   "month": "2022-12",
+   "crashes": 2253,
+   "deaths": 354
+  },
+  {
+   "month": "2023-01",
+   "crashes": 2309,
+   "deaths": 309
+  },
+  {
+   "month": "2023-02",
+   "crashes": 1612,
+   "deaths": 248
+  },
+  {
+   "month": "2023-03",
+   "crashes": 1751,
+   "deaths": 211
+  },
+  {
+   "month": "2023-04",
+   "crashes": 2768,
+   "deaths": 378
+  },
+  {
+   "month": "2023-05",
+   "crashes": 1709,
+   "deaths": 224
+  },
+  {
+   "month": "2023-06",
+   "crashes": 1701,
+   "deaths": 214
+  },
+  {
+   "month": "2023-07",
+   "crashes": 1705,
+   "deaths": 231
+  },
+  {
+   "month": "2023-08",
+   "crashes": 1540,
+   "deaths": 153
+  },
+  {
+   "month": "2023-09",
+   "crashes": 1656,
+   "deaths": 180
+  },
+  {
+   "month": "2023-10",
+   "crashes": 1535,
+   "deaths": 178
+  },
+  {
+   "month": "2023-11",
+   "crashes": 1533,
+   "deaths": 181
+  },
+  {
+   "month": "2023-12",
+   "crashes": 2320,
+   "deaths": 303
+  },
+  {
+   "month": "2024-01",
+   "crashes": 2585,
+   "deaths": 285
+  },
+  {
+   "month": "2024-02",
+   "crashes": 1845,
+   "deaths": 230
+  },
+  {
+   "month": "2024-03",
+   "crashes": 2176,
+   "deaths": 299
+  },
+  {
+   "month": "2024-04",
+   "crashes": 3088,
+   "deaths": 423
+  },
+  {
+   "month": "2024-05",
+   "crashes": 2012,
+   "deaths": 201
+  },
+  {
+   "month": "2024-06",
+   "crashes": 1633,
+   "deaths": 218
+  },
+  {
+   "month": "2024-07",
+   "crashes": 1660,
+   "deaths": 195
+  },
+  {
+   "month": "2024-08",
+   "crashes": 1555,
+   "deaths": 168
+  },
+  {
+   "month": "2024-09",
+   "crashes": 1589,
+   "deaths": 159
+  },
+  {
+   "month": "2024-10",
+   "crashes": 1529,
+   "deaths": 197
+  },
+  {
+   "month": "2024-11",
+   "crashes": 1721,
+   "deaths": 250
+  },
+  {
+   "month": "2024-12",
+   "crashes": 2559,
+   "deaths": 349
+  },
+  {
+   "month": "2025-01",
+   "crashes": 2547,
+   "deaths": 348
+  },
+  {
+   "month": "2025-02",
+   "crashes": 1799,
+   "deaths": 228
+  },
+  {
+   "month": "2025-03",
+   "crashes": 1915,
+   "deaths": 248
+  },
+  {
+   "month": "2025-04",
+   "crashes": 2940,
+   "deaths": 358
+  },
+  {
+   "month": "2025-05",
+   "crashes": 1987,
+   "deaths": 199
+  },
+  {
+   "month": "2025-06",
+   "crashes": 1658,
+   "deaths": 200
+  },
+  {
+   "month": "2025-07",
+   "crashes": 1724,
+   "deaths": 156
+  },
+  {
+   "month": "2025-08",
+   "crashes": 1677,
+   "deaths": 199
+  },
+  {
+   "month": "2025-09",
+   "crashes": 1529,
+   "deaths": 170
+  },
+  {
+   "month": "2025-10",
+   "crashes": 1706,
+   "deaths": 178
+  },
+  {
+   "month": "2025-11",
+   "crashes": 1673,
+   "deaths": 178
+  },
+  {
+   "month": "2025-12",
+   "crashes": 2560,
+   "deaths": 321
+  }
+ ],
+ "ordinary_day": {
+  "crashes_per_day": 60.48,
+  "deaths_per_day": 7.61
+ },
+ "campaign_windows": {
+  "songkran_11_17_apr": {
+   "crashes": 6655,
+   "deaths": 856,
+   "crashes_per_day": 190.14,
+   "deaths_per_day": 24.46,
+   "crash_multiple": 3.14,
+   "death_multiple": 3.21
+  },
+  "new_year_30dec_5jan": {
+   "crashes": 6573,
+   "deaths": 903,
+   "crashes_per_day": 187.8,
+   "deaths_per_day": 25.8,
+   "crash_multiple": 3.11,
+   "death_multiple": 3.39
+  },
+  "both_combined": {
+   "crashes": 13228,
+   "deaths": 1759,
+   "crashes_per_day": 188.97,
+   "deaths_per_day": 25.13,
+   "crash_multiple": 3.12,
+   "death_multiple": 3.3
+  }
+ },
+ "superseded_windows": {
+  "new_year_27dec_2jan": {
+   "crashes": 7262,
+   "deaths": 968,
+   "crashes_per_day": 207.49,
+   "deaths_per_day": 27.66,
+   "crash_multiple": 3.43,
+   "death_multiple": 3.63
+  },
+  "new_year_29dec_4jan": {
+   "crashes": 7381,
+   "deaths": 978,
+   "crashes_per_day": 210.89,
+   "deaths_per_day": 27.94,
+   "crash_multiple": 3.49,
+   "death_multiple": 3.67
+  },
+  "note": "Not for display. Kept so a number that moved between drafts can be traced: the outline originally said 27 Dec - 2 Jan and the seasonality figure used 29 Dec - 4 Jan before 30 Dec - 5 Jan was settled."
+ },
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

@@ -1,0 +1,77 @@
+<!doctype html>
+<!--
+  Track 2 — Slide 4, the cause chart. Bars reorder from most-common to
+  most-lethal as the presenter scrolls: speeding leads on frequency, but
+  the deadliest tier is a different set of causes entirely.
+
+  Same shape as slide08.html — stands alone so the chart can be driven and
+  inspected without the rest of the site existing. Layout maths lives in
+  assets/js/layout.js (slide04) and is checked by
+  analysis/scripts/12_qa_chart_layout.js without a browser.
+
+  Needs a local server, not file://, because it fetches its data.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The most common cause is not the most lethal one</title>
+<link rel="stylesheet" href="assets/css/charts.css">
+<style>
+  html, body { margin: 0; background: var(--surface); color: var(--ink);
+               font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
+  .scroll-section { height: 300vh; position: relative; }
+  .pin { position: sticky; top: 0; height: 100vh; display: grid;
+         place-items: center; padding: 0 clamp(16px, 4vw, 64px); }
+  .frame { width: min(1280px, 100%); }
+  .spacer { height: 40vh; display: grid; place-items: center; }
+  .spacer p { max-width: 46ch; font-size: clamp(16px, 1.5vw, 20px);
+              line-height: 1.6; color: var(--ink-2); text-align: center; }
+  .cue { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+         font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<div class="spacer">
+  <p>Speeding is 71% of crashes. Scroll to see the same 18 causes reordered
+     by how often they kill instead of how often they happen.</p>
+</div>
+
+<section class="scroll-section" id="section">
+  <div class="pin"><div class="frame" id="mount"></div></div>
+</section>
+
+<div class="spacer">
+  <p>Alcohol sits in the deadliest tier, alongside causes far less discussed —
+     this caption is provisional and pinned to the settled limitation copy
+     before rehearsal (ticket 10).</p>
+</div>
+
+<div class="cue" id="cue">scroll</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/render.js"></script>
+<script>
+fetch("assets/data/charts/slide04_cause.json")
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    var chart = ChartRender.slide04(document.getElementById("mount"), data);
+    var section = document.getElementById("section");
+    var cue = document.getElementById("cue");
+
+    function tick() {
+      var r = section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      chart.update(p);
+      cue.style.opacity = p > 0.02 && p < 0.98 ? 0 : 1;
+    }
+
+    addEventListener("scroll", tick, { passive: true });
+    addEventListener("resize", tick);
+    tick();
+    window.__chart = chart;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<!--
+  Tab 1 — Slides 1-6 of the Final Outline. One presenter drives this tab only;
+  Tabs 2 and 3 are separate pages (tab2.html, tab3.html) so a handoff is a
+  click, not a state change, and so this tab never touches the Tab 3 map data.
+
+  Copy below is reproduced verbatim from analysis/scripts/06_build_deck.js so
+  the site and the uploaded deck cannot tell a different story — see 11_qa_deck_text.py.
+  Slide 4 is a live chart (assets/js/layout.js + render.js), not fig02's
+  static image; the deck keeps the static version, the site does not need to.
+
+  Needs a local server, not file://, because the live chart and figures are
+  fetched. python -m http.server 8789 --directory site
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tab 1 — Thai Highway Accidents 2021-2025</title>
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/charts.css">
+</head>
+<body>
+
+<div class="mobile-notice">
+  <h1>Thai Highway Accidents 2021&ndash;2025</h1>
+  <p>This site is built to be driven from a laptop onto a projector, not read on a phone.
+     A presenter is showing it live &mdash; ask to see the deck instead, or view this on a
+     larger screen.</p>
+  <a href="assets/Thailand_Road_Accidents_Analysis.pdf">Download the presentation deck</a>
+</div>
+
+<header class="topnav">
+  <div class="tabs">
+    <a class="tab current" href="tab1.html">Tab 1 &middot; Slides 1&ndash;6</a>
+    <a class="tab" href="tab2.html">Tab 2 &middot; Slides 7&ndash;11</a>
+    <a class="tab" href="tab3.html">Tab 3 &middot; Slides 12&ndash;16</a>
+  </div>
+  <button class="idxbtn" id="idxbtn">Sections &#9662;</button>
+</header>
+<nav class="secindex" id="secindex"></nav>
+
+<main>
+
+<!-- 1 — title -->
+<section class="section section-static dark" data-kicker="Title" data-title="Thai Highway Accidents 2021&ndash;2025">
+  <p class="kicker">DADT-D-0012-26-Evening &middot; Data Science &amp; Visualization</p>
+  <h1>Thai Highway Accidents<br>2021&ndash;2025</h1>
+  <p class="takeaway ink-2">When and where should checkpoint labor be positioned to prevent
+    alcohol-related road deaths?</p>
+  <p class="takeaway muted" style="margin-top:2px">Traffic Enforcement Resource Allocation
+    Manager &middot; Royal Thai Police / DDPM</p>
+  <div class="stats" style="margin-top:34px">
+    <div class="stat"><div class="v volume">110,434</div><div class="l">Crashes</div></div>
+    <div class="stat"><div class="v severity">13,901</div><div class="l">Deaths</div></div>
+    <div class="stat"><div class="v">5 years</div><div class="l">Jan 2021 &ndash; Dec 2025</div></div>
+    <div class="stat"><div class="v">77</div><div class="l">Provinces</div></div>
+  </div>
+</section>
+
+<!-- 2 — the stakes -->
+<section class="section section-static" data-kicker="Part 1 &middot; The stakes" data-title="Thailand loses about 50 people a day">
+  <p class="kicker">Part 1 &middot; The stakes</p>
+  <h1>Thailand loses about 50 people a day on its roads</h1>
+  <div class="stats">
+    <div class="stat"><div class="v severity">25.4</div><div class="l">Road deaths per 100,000 people (2021)</div></div>
+    <div class="stat"><div class="v severity">18,218</div><div class="l">Estimated road deaths a year, all roads</div></div>
+    <div class="stat"><div class="v">9th</div><div class="l">Highest rate of 175 WHO member countries</div></div>
+    <div class="stat"><div class="v">83.8%</div><div class="l">Of them motorcyclists &mdash; about one in five globally</div></div>
+  </div>
+  <div class="callout">
+    <h2>Why our own totals are smaller &mdash; and not in conflict</h2>
+    <p>WHO counts every road in Thailand and adjusts for under-reporting. <b>This project
+      analyses the 110,434 highway crashes and 13,901 deaths recorded by the Ministry of
+      Transport between 2021 and 2025</b> &mdash; a recorded subset of the national toll, not
+      a contradiction of it.</p>
+  </div>
+  <p class="limits">Source: World Health Organization, Global status report on road safety 2023
+    &mdash; Thailand country profile, data year 2021. This is the only figure in the deck that
+    does not come from Datasource/.</p>
+</section>
+
+<!-- 3 — dataset & method -->
+<section class="section section-static" data-kicker="Part 1 &middot; Data and method" data-title="What this dataset can answer">
+  <p class="kicker">Part 1 &middot; Data and method</p>
+  <h1>What this dataset can answer, and what it cannot</h1>
+  <div class="stats">
+    <div class="stat"><div class="v volume">110,434</div><div class="l">Crashes, after removing 1,702 duplicate records</div></div>
+    <div class="stat"><div class="v volume">99.4%</div><div class="l">Carry usable coordinates</div></div>
+    <div class="stat"><div class="v volume">100%</div><div class="l">Dates and times parsed, all five years</div></div>
+    <div class="stat"><div class="v volume">160</div><div class="l">Road sections with matched traffic volume</div></div>
+  </div>
+  <div class="callout">
+    <h2>The limitation, stated before anyone has to ask</h2>
+    <p><b>This file covers about 17% of Thailand's road deaths</b> &mdash; 2,780 deaths a year
+      here against 17,447 nationally (Department of Disease Control three-database system,
+      2024). It records highways, rural highways and expressways only &mdash; not city
+      streets or local roads, which is where most motorcyclists die.</p>
+  </div>
+  <p class="takeaway">Method: risk is measured against exposure &mdash; crashes per
+    vehicle-kilometre, using traffic volume &times; section length &times; years &mdash; so a
+    busy road is not automatically a dangerous one. Every conclusion that follows is about
+    highways, not about Thailand as a whole: motorcycles are 36% of deaths in this file
+    against roughly 81% nationally.</p>
+</section>
+
+<!-- 4 — why alcohol (LIVE) -->
+<section class="section section-live" data-kicker="Part 1 &middot; Descriptive" data-title="Alcohol is in the deadliest tier of crash causes">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Descriptive</p>
+    <h1>Alcohol is in the deadliest tier of crash causes</h1>
+  </div>
+  <div class="spacer">
+    <p>Speeding is 71% of crashes. Scroll to see the same 18 causes reordered by how often
+       they kill instead of how often they happen.</p>
+  </div>
+  <div class="scroll-section" id="sec-s4">
+    <div class="pin"><div class="frame" id="mount-s4"></div></div>
+  </div>
+  <div class="spacer">
+    <p>Alcohol is 1.4% of recorded crashes but kills 22.0 per 100 &mdash; against 12.6 across
+       all crashes and 11.7 for speeding. Three other causes sit statistically level with it,
+       so the point is the magnitude, not the ranking.</p>
+  </div>
+</section>
+
+<!-- 5 — when -->
+<section class="section section-static" data-kicker="Part 1 &middot; Descriptive" data-title="Time of day decides deployment">
+  <p class="kicker">Part 1 &middot; Descriptive</p>
+  <h1>Time of day decides deployment; day of week does not</h1>
+  <p class="takeaway">Hours differ by 2.1&times; &mdash; 02:00 carries 2.8% of crashes and
+    16:00 carries 5.8% &mdash; while weekdays sit inside a 13.6&ndash;15.6% band, near an even
+    14.3% split. Alcohol is the exception this chart does not isolate: 53% of alcohol-related
+    crashes fall on Friday&ndash;Sunday and 59% between 19:00 and 04:00.</p>
+  <div class="figwrap"><img src="assets/figures/fig01_when.svg" alt="Crashes by hour of day and by day of week"></div>
+</section>
+
+<!-- 6 — conditions -->
+<section class="section section-static" data-kicker="Part 1 &middot; Descriptive" data-title="Motorcycles kill far more per crash">
+  <p class="kicker">Part 1 &middot; Descriptive</p>
+  <h1>Motorcycles crash less often and kill far more per crash</h1>
+  <div class="figwrap"><img src="assets/figures/fig03_vehicle.svg" alt="Crashes and deaths per 100 crashes by vehicle type"></div>
+  <div class="callout">
+    <p><b>Pickups are 37% of crashes and kill 9.0 per 100. Motorcycles are 14% of crashes
+      and kill 32.0 &mdash; 3.6&times; more per crash.</b></p>
+    <p>Road alignment and weather point the same way: straight road is 71.5% of crashes at
+      12.3 deaths per 100, no safer than a curve; and 86% of crashes happen in clear weather,
+      which is deadlier per crash than rain &mdash; 13.1 against 7.9.</p>
+  </div>
+  <div class="figpair" style="margin-top:26px">
+    <div class="figwrap"><img src="assets/figures/fig03b_roadtype.svg" alt="Crashes and deaths per 100 crashes by road alignment"></div>
+    <div class="figwrap"><img src="assets/figures/fig03c_weather.svg" alt="Crashes and deaths per 100 crashes by weather"></div>
+  </div>
+</section>
+
+</main>
+
+<div class="cue" id="cue">scroll</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/render.js"></script>
+<script>
+fetch("assets/data/charts/slide04_cause.json")
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    var chart = ChartRender.slide04(document.getElementById("mount-s4"), data);
+    var section = document.getElementById("sec-s4");
+    var cue = document.getElementById("cue");
+
+    function tick() {
+      var r = section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      chart.update(p);
+      var inChart = r.top < window.innerHeight && r.bottom > 0;
+      cue.style.opacity = inChart && p > 0.02 && p < 0.98 ? 0 : 1;
+    }
+
+    addEventListener("scroll", tick, { passive: true });
+    addEventListener("resize", tick);
+    tick();
+    window.__chart = chart;
+  });
+</script>
+<script src="assets/js/transport.js"></script>
+</body>
+</html>

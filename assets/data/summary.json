@@ -1,0 +1,121 @@
+{
+  "crashes_total": 110434,
+  "crashes_joined": 108056,
+  "join_pct": 97.8,
+  "sections_with_crashes": 3886,
+  "hex_cells": 2603,
+  "fatal_points": 11931,
+  "accident_points": 109801,
+  "deaths_total": 13901,
+  "deaths_mapped": 13890,
+  "causes": [
+    {
+      "code": 0,
+      "en": "Speeding",
+      "th": "ขับรถเร็วเกินกำหนด",
+      "crashes": 78374,
+      "events": 7997,
+      "deaths": 9204,
+      "death_rate": 11.7
+    },
+    {
+      "code": 1,
+      "en": "Cut in / pulled out sharply",
+      "th": "ตัดหน้ากระชั้นชิด",
+      "crashes": 8170,
+      "events": 1563,
+      "deaths": 1761,
+      "death_rate": 21.6
+    },
+    {
+      "code": 2,
+      "en": "Fell asleep at the wheel",
+      "th": "หลับใน",
+      "crashes": 7637,
+      "events": 618,
+      "deaths": 815,
+      "death_rate": 10.7
+    },
+    {
+      "code": 3,
+      "en": "Alcohol",
+      "th": "เมาสุรา/แอลกอฮอล์",
+      "crashes": 1565,
+      "events": 270,
+      "deaths": 345,
+      "death_rate": 22.0
+    },
+    {
+      "code": 4,
+      "en": "Ran a signal or sign",
+      "th": "ฝ่าฝืนสัญญาณไฟ/เครื่องหมายจราจร",
+      "crashes": 1132,
+      "events": 209,
+      "deaths": 241,
+      "death_rate": 21.3
+    },
+    {
+      "code": 5,
+      "en": "Driving against traffic",
+      "th": "ขับรถย้อนศร",
+      "crashes": 495,
+      "events": 186,
+      "deaths": 222,
+      "death_rate": 44.8
+    },
+    {
+      "code": 6,
+      "en": "Reckless / rushing",
+      "th": "ความประมาท/เร่งรีบ (วิ่งตัดหน้า)",
+      "crashes": 199,
+      "events": 130,
+      "deaths": 133,
+      "death_rate": 66.8
+    },
+    {
+      "code": 7,
+      "en": "Illegal overtaking",
+      "th": "แซงรถอย่างผิดกฎหมาย",
+      "crashes": 433,
+      "events": 105,
+      "deaths": 141,
+      "death_rate": 32.6
+    },
+    {
+      "code": 8,
+      "en": "Vehicle defect",
+      "th": "อุปกรณ์รถบกพร่อง",
+      "crashes": 1311,
+      "events": 70,
+      "deaths": 91,
+      "death_rate": 6.9
+    },
+    {
+      "code": 9,
+      "en": "Unfamiliar route / inexperience",
+      "th": "ไม่คุ้นเคยเส้นทาง/ขับรถไม่ชำนาญ",
+      "crashes": 735,
+      "events": 70,
+      "deaths": 84,
+      "death_rate": 11.4
+    },
+    {
+      "code": 10,
+      "en": "Other recorded cause",
+      "th": "อื่น ๆ",
+      "crashes": 8463,
+      "events": 694,
+      "deaths": 837,
+      "death_rate": 9.9
+    },
+    {
+      "code": 11,
+      "en": "Not recorded",
+      "th": "ไม่ระบุ",
+      "crashes": 1920,
+      "events": 19,
+      "deaths": 27,
+      "death_rate": 1.4
+    }
+  ]
+}

@@ -1,0 +1,728 @@
+{
+ "total_crashes": 110434,
+ "total_deaths": 13901,
+ "top_n": 12,
+ "unassigned": {
+  "crashes": 1949,
+  "deaths": 240,
+  "note": "crashes with no province recorded in the source file"
+ },
+ "on_both_lists": [
+  "Chiang Mai",
+  "Chon Buri",
+  "Nakhon Ratchasima",
+  "Nakhon Si Thammarat",
+  "Pathum Thani",
+  "Suphan Buri",
+  "Surat Thani",
+  "Tak"
+ ],
+ "crash_list_only": [
+  "Bangkok Metropolis",
+  "Phra Nakhon Si Ayutthaya",
+  "Phrae",
+  "Samut Prakan"
+ ],
+ "death_list_only": [
+  "Chanthaburi",
+  "Kanchanaburi",
+  "Nakhon Sawan",
+  "Udon Thani"
+ ],
+ "provinces": [
+  {
+   "label": "Bangkok Metropolis",
+   "label_th": "กรุงเทพมหานคร",
+   "crashes": 11115,
+   "deaths": 235,
+   "rank_crashes": 1,
+   "rank_deaths": 19,
+   "death_rate": 2.1
+  },
+  {
+   "label": "Chon Buri",
+   "label_th": "ชลบุรี",
+   "crashes": 6277,
+   "deaths": 336,
+   "rank_crashes": 2,
+   "rank_deaths": 7,
+   "death_rate": 5.4
+  },
+  {
+   "label": "Nakhon Ratchasima",
+   "label_th": "นครราชสีมา",
+   "crashes": 4833,
+   "deaths": 470,
+   "rank_crashes": 3,
+   "rank_deaths": 2,
+   "death_rate": 9.7
+  },
+  {
+   "label": "Chiang Mai",
+   "label_th": "เชียงใหม่",
+   "crashes": 3680,
+   "deaths": 348,
+   "rank_crashes": 4,
+   "rank_deaths": 6,
+   "death_rate": 9.5
+  },
+  {
+   "label": "Suphan Buri",
+   "label_th": "สุพรรณบุรี",
+   "crashes": 3567,
+   "deaths": 422,
+   "rank_crashes": 5,
+   "rank_deaths": 4,
+   "death_rate": 11.8
+  },
+  {
+   "label": "Samut Prakan",
+   "label_th": "สมุทรปราการ",
+   "crashes": 2992,
+   "deaths": 243,
+   "rank_crashes": 6,
+   "rank_deaths": 18,
+   "death_rate": 8.1
+  },
+  {
+   "label": "Surat Thani",
+   "label_th": "สุราษฎร์ธานี",
+   "crashes": 2676,
+   "deaths": 485,
+   "rank_crashes": 7,
+   "rank_deaths": 1,
+   "death_rate": 18.1
+  },
+  {
+   "label": "Pathum Thani",
+   "label_th": "ปทุมธานี",
+   "crashes": 2415,
+   "deaths": 310,
+   "rank_crashes": 8,
+   "rank_deaths": 8,
+   "death_rate": 12.8
+  },
+  {
+   "label": "Tak",
+   "label_th": "ตาก",
+   "crashes": 2344,
+   "deaths": 274,
+   "rank_crashes": 9,
+   "rank_deaths": 12,
+   "death_rate": 11.7
+  },
+  {
+   "label": "Nakhon Si Thammarat",
+   "label_th": "นครศรีธรรมราช",
+   "crashes": 2282,
+   "deaths": 352,
+   "rank_crashes": 10,
+   "rank_deaths": 5,
+   "death_rate": 15.4
+  },
+  {
+   "label": "Phrae",
+   "label_th": "แพร่",
+   "crashes": 2271,
+   "deaths": 171,
+   "rank_crashes": 11,
+   "rank_deaths": 34,
+   "death_rate": 7.5
+  },
+  {
+   "label": "Phra Nakhon Si Ayutthaya",
+   "label_th": "อยุธยา",
+   "crashes": 2042,
+   "deaths": 212,
+   "rank_crashes": 12,
+   "rank_deaths": 27,
+   "death_rate": 10.4
+  },
+  {
+   "label": "Phetchabun",
+   "label_th": "เพชรบูรณ์",
+   "crashes": 1985,
+   "deaths": 265,
+   "rank_crashes": 13,
+   "rank_deaths": 14,
+   "death_rate": 13.4
+  },
+  {
+   "label": "Chachoengsao",
+   "label_th": "ฉะเชิงเทรา",
+   "crashes": 1951,
+   "deaths": 220,
+   "rank_crashes": 14,
+   "rank_deaths": 22,
+   "death_rate": 11.3
+  },
+  {
+   "label": "Chanthaburi",
+   "label_th": "จันทบุรี",
+   "crashes": 1794,
+   "deaths": 423,
+   "rank_crashes": 15,
+   "rank_deaths": 3,
+   "death_rate": 23.6
+  },
+  {
+   "label": "Samut Sakhon",
+   "label_th": "สมุทรสาคร",
+   "crashes": 1735,
+   "deaths": 99,
+   "rank_crashes": 16,
+   "rank_deaths": 60,
+   "death_rate": 5.7
+  },
+  {
+   "label": "Prachuap Khiri Khan",
+   "label_th": "ประจวบคีรีขันธ์",
+   "crashes": 1695,
+   "deaths": 264,
+   "rank_crashes": 17,
+   "rank_deaths": 15,
+   "death_rate": 15.6
+  },
+  {
+   "label": "Nakhon Sawan",
+   "label_th": "นครสวรรค์",
+   "crashes": 1681,
+   "deaths": 289,
+   "rank_crashes": 18,
+   "rank_deaths": 9,
+   "death_rate": 17.2
+  },
+  {
+   "label": "Chumphon",
+   "label_th": "ชุมพร",
+   "crashes": 1552,
+   "deaths": 167,
+   "rank_crashes": 19,
+   "rank_deaths": 37,
+   "death_rate": 10.8
+  },
+  {
+   "label": "Lop Buri",
+   "label_th": "ลพบุรี",
+   "crashes": 1547,
+   "deaths": 270,
+   "rank_crashes": 20,
+   "rank_deaths": 13,
+   "death_rate": 17.5
+  },
+  {
+   "label": "Kanchanaburi",
+   "label_th": "กาญจนบุรี",
+   "crashes": 1448,
+   "deaths": 287,
+   "rank_crashes": 21,
+   "rank_deaths": 10,
+   "death_rate": 19.8
+  },
+  {
+   "label": "Khon Kaen",
+   "label_th": "ขอนแก่น",
+   "crashes": 1433,
+   "deaths": 232,
+   "rank_crashes": 22,
+   "rank_deaths": 20,
+   "death_rate": 16.2
+  },
+  {
+   "label": "Songkhla",
+   "label_th": "สงขลา",
+   "crashes": 1360,
+   "deaths": 177,
+   "rank_crashes": 23,
+   "rank_deaths": 32,
+   "death_rate": 13.0
+  },
+  {
+   "label": "Sukhothai",
+   "label_th": "สุโขทัย",
+   "crashes": 1350,
+   "deaths": 132,
+   "rank_crashes": 24,
+   "rank_deaths": 49,
+   "death_rate": 9.8
+  },
+  {
+   "label": "Trang",
+   "label_th": "ตรัง",
+   "crashes": 1324,
+   "deaths": 136,
+   "rank_crashes": 25,
+   "rank_deaths": 46,
+   "death_rate": 10.3
+  },
+  {
+   "label": "Phatthalung",
+   "label_th": "พัทลุง",
+   "crashes": 1311,
+   "deaths": 178,
+   "rank_crashes": 26,
+   "rank_deaths": 31,
+   "death_rate": 13.6
+  },
+  {
+   "label": "Udon Thani",
+   "label_th": "อุดรธานี",
+   "crashes": 1293,
+   "deaths": 277,
+   "rank_crashes": 27,
+   "rank_deaths": 11,
+   "death_rate": 21.4
+  },
+  {
+   "label": "Saraburi",
+   "label_th": "สระบุรี",
+   "crashes": 1276,
+   "deaths": 224,
+   "rank_crashes": 28,
+   "rank_deaths": 21,
+   "death_rate": 17.6
+  },
+  {
+   "label": "Phetchaburi",
+   "label_th": "เพชรบุรี",
+   "crashes": 1245,
+   "deaths": 164,
+   "rank_crashes": 29,
+   "rank_deaths": 38,
+   "death_rate": 13.2
+  },
+  {
+   "label": "Chiang Rai",
+   "label_th": "เชียงราย",
+   "crashes": 1205,
+   "deaths": 183,
+   "rank_crashes": 30,
+   "rank_deaths": 30,
+   "death_rate": 15.2
+  },
+  {
+   "label": "Rayong",
+   "label_th": "ระยอง",
+   "crashes": 1198,
+   "deaths": 140,
+   "rank_crashes": 31,
+   "rank_deaths": 45,
+   "death_rate": 11.7
+  },
+  {
+   "label": "Uttaradit",
+   "label_th": "อุตรดิตถ์",
+   "crashes": 1152,
+   "deaths": 127,
+   "rank_crashes": 32,
+   "rank_deaths": 50,
+   "death_rate": 11.0
+  },
+  {
+   "label": "Maha Sarakham",
+   "label_th": "มหาสารคาม",
+   "crashes": 1146,
+   "deaths": 209,
+   "rank_crashes": 33,
+   "rank_deaths": 28,
+   "death_rate": 18.2
+  },
+  {
+   "label": "Lampang",
+   "label_th": "ลำปาง",
+   "crashes": 1138,
+   "deaths": 148,
+   "rank_crashes": 34,
+   "rank_deaths": 41,
+   "death_rate": 13.0
+  },
+  {
+   "label": "Sakon Nakhon",
+   "label_th": "สกลนคร",
+   "crashes": 1131,
+   "deaths": 244,
+   "rank_crashes": 35,
+   "rank_deaths": 16,
+   "death_rate": 21.6
+  },
+  {
+   "label": "Ang Thong",
+   "label_th": "อ่างทอง",
+   "crashes": 1088,
+   "deaths": 152,
+   "rank_crashes": 36,
+   "rank_deaths": 40,
+   "death_rate": 14.0
+  },
+  {
+   "label": "Ubon Ratchathani",
+   "label_th": "อุบลราชธานี",
+   "crashes": 1087,
+   "deaths": 174,
+   "rank_crashes": 37,
+   "rank_deaths": 33,
+   "death_rate": 16.0
+  },
+  {
+   "label": "Loei",
+   "label_th": "เลย",
+   "crashes": 1083,
+   "deaths": 195,
+   "rank_crashes": 38,
+   "rank_deaths": 29,
+   "death_rate": 18.0
+  },
+  {
+   "label": "Prachin Buri",
+   "label_th": "ปราจีนบุรี",
+   "crashes": 1082,
+   "deaths": 170,
+   "rank_crashes": 39,
+   "rank_deaths": 36,
+   "death_rate": 15.7
+  },
+  {
+   "label": "Kamphaeng Phet",
+   "label_th": "กำแพงเพชร",
+   "crashes": 1065,
+   "deaths": 217,
+   "rank_crashes": 40,
+   "rank_deaths": 24,
+   "death_rate": 20.4
+  },
+  {
+   "label": "Surin",
+   "label_th": "สุรินทร์",
+   "crashes": 1028,
+   "deaths": 244,
+   "rank_crashes": 41,
+   "rank_deaths": 16,
+   "death_rate": 23.7
+  },
+  {
+   "label": "Roi Et",
+   "label_th": "ร้อยเอ็ด",
+   "crashes": 999,
+   "deaths": 213,
+   "rank_crashes": 42,
+   "rank_deaths": 26,
+   "death_rate": 21.3
+  },
+  {
+   "label": "Nan",
+   "label_th": "น่าน",
+   "crashes": 964,
+   "deaths": 70,
+   "rank_crashes": 43,
+   "rank_deaths": 64,
+   "death_rate": 7.3
+  },
+  {
+   "label": "Phitsanulok",
+   "label_th": "พิษณุโลก",
+   "crashes": 902,
+   "deaths": 214,
+   "rank_crashes": 44,
+   "rank_deaths": 25,
+   "death_rate": 23.7
+  },
+  {
+   "label": "Chai Nat",
+   "label_th": "ชัยนาท",
+   "crashes": 895,
+   "deaths": 171,
+   "rank_crashes": 45,
+   "rank_deaths": 34,
+   "death_rate": 19.1
+  },
+  {
+   "label": "Si Sa Ket",
+   "label_th": "ศรีสะเกษ",
+   "crashes": 885,
+   "deaths": 163,
+   "rank_crashes": 46,
+   "rank_deaths": 39,
+   "death_rate": 18.4
+  },
+  {
+   "label": "Sa Kaeo",
+   "label_th": "สระแก้ว",
+   "crashes": 845,
+   "deaths": 125,
+   "rank_crashes": 47,
+   "rank_deaths": 51,
+   "death_rate": 14.8
+  },
+  {
+   "label": "Kalasin",
+   "label_th": "กาฬสินธุ์",
+   "crashes": 820,
+   "deaths": 145,
+   "rank_crashes": 48,
+   "rank_deaths": 42,
+   "death_rate": 17.7
+  },
+  {
+   "label": "Nakhon Pathom",
+   "label_th": "นครปฐม",
+   "crashes": 806,
+   "deaths": 96,
+   "rank_crashes": 49,
+   "rank_deaths": 61,
+   "death_rate": 11.9
+  },
+  {
+   "label": "Nonthaburi",
+   "label_th": "นนทบุรี",
+   "crashes": 805,
+   "deaths": 116,
+   "rank_crashes": 50,
+   "rank_deaths": 54,
+   "death_rate": 14.4
+  },
+  {
+   "label": "Lamphun",
+   "label_th": "ลำพูน",
+   "crashes": 804,
+   "deaths": 110,
+   "rank_crashes": 51,
+   "rank_deaths": 57,
+   "death_rate": 13.7
+  },
+  {
+   "label": "Mukdahan",
+   "label_th": "มุกดาหาร",
+   "crashes": 759,
+   "deaths": 220,
+   "rank_crashes": 52,
+   "rank_deaths": 22,
+   "death_rate": 29.0
+  },
+  {
+   "label": "Krabi",
+   "label_th": "กระบี่",
+   "crashes": 746,
+   "deaths": 107,
+   "rank_crashes": 53,
+   "rank_deaths": 59,
+   "death_rate": 14.3
+  },
+  {
+   "label": "Phayao",
+   "label_th": "พะเยา",
+   "crashes": 737,
+   "deaths": 145,
+   "rank_crashes": 54,
+   "rank_deaths": 42,
+   "death_rate": 19.7
+  },
+  {
+   "label": "Trat",
+   "label_th": "ตราด",
+   "crashes": 705,
+   "deaths": 135,
+   "rank_crashes": 55,
+   "rank_deaths": 47,
+   "death_rate": 19.1
+  },
+  {
+   "label": "Sing Buri",
+   "label_th": "สิงห์บุรี",
+   "crashes": 700,
+   "deaths": 120,
+   "rank_crashes": 56,
+   "rank_deaths": 52,
+   "death_rate": 17.1
+  },
+  {
+   "label": "Ratchaburi",
+   "label_th": "ราชบุรี",
+   "crashes": 687,
+   "deaths": 142,
+   "rank_crashes": 57,
+   "rank_deaths": 44,
+   "death_rate": 20.7
+  },
+  {
+   "label": "Chaiyaphum",
+   "label_th": "ชัยภูมิ",
+   "crashes": 652,
+   "deaths": 113,
+   "rank_crashes": 58,
+   "rank_deaths": 55,
+   "death_rate": 17.3
+  },
+  {
+   "label": "Uthai Thani",
+   "label_th": "อุทัยธานี",
+   "crashes": 647,
+   "deaths": 119,
+   "rank_crashes": 59,
+   "rank_deaths": 53,
+   "death_rate": 18.4
+  },
+  {
+   "label": "Yasothon",
+   "label_th": "ยโสธร",
+   "crashes": 629,
+   "deaths": 135,
+   "rank_crashes": 60,
+   "rank_deaths": 47,
+   "death_rate": 21.5
+  },
+  {
+   "label": "Narathiwat",
+   "label_th": "นราธิวาส",
+   "crashes": 621,
+   "deaths": 94,
+   "rank_crashes": 61,
+   "rank_deaths": 63,
+   "death_rate": 15.1
+  },
+  {
+   "label": "Bueng Kan",
+   "label_th": "บึงกาฬ",
+   "crashes": 592,
+   "deaths": 112,
+   "rank_crashes": 62,
+   "rank_deaths": 56,
+   "death_rate": 18.9
+  },
+  {
+   "label": "Yala",
+   "label_th": "ยะลา",
+   "crashes": 589,
+   "deaths": 50,
+   "rank_crashes": 63,
+   "rank_deaths": 74,
+   "death_rate": 8.5
+  },
+  {
+   "label": "Nakhon Phanom",
+   "label_th": "นครพนม",
+   "crashes": 571,
+   "deaths": 109,
+   "rank_crashes": 64,
+   "rank_deaths": 58,
+   "death_rate": 19.1
+  },
+  {
+   "label": "Phuket",
+   "label_th": "ภูเก็ต",
+   "crashes": 539,
+   "deaths": 44,
+   "rank_crashes": 65,
+   "rank_deaths": 76,
+   "death_rate": 8.2
+  },
+  {
+   "label": "Pattani",
+   "label_th": "ปัตตานี",
+   "crashes": 531,
+   "deaths": 49,
+   "rank_crashes": 66,
+   "rank_deaths": 75,
+   "death_rate": 9.2
+  },
+  {
+   "label": "Phangnga",
+   "label_th": "พังงา",
+   "crashes": 523,
+   "deaths": 65,
+   "rank_crashes": 67,
+   "rank_deaths": 67,
+   "death_rate": 12.4
+  },
+  {
+   "label": "Samut Songkhram",
+   "label_th": "สมุทรสงคราม",
+   "crashes": 491,
+   "deaths": 63,
+   "rank_crashes": 68,
+   "rank_deaths": 69,
+   "death_rate": 12.8
+  },
+  {
+   "label": "Buri Ram",
+   "label_th": "บุรีรัมย์",
+   "crashes": 486,
+   "deaths": 95,
+   "rank_crashes": 69,
+   "rank_deaths": 62,
+   "death_rate": 19.5
+  },
+  {
+   "label": "Nakhon Nayok",
+   "label_th": "นครนายก",
+   "crashes": 454,
+   "deaths": 67,
+   "rank_crashes": 70,
+   "rank_deaths": 65,
+   "death_rate": 14.8
+  },
+  {
+   "label": "Nong Bua Lam Phu",
+   "label_th": "หนองบัวลำภู",
+   "crashes": 429,
+   "deaths": 66,
+   "rank_crashes": 71,
+   "rank_deaths": 66,
+   "death_rate": 15.4
+  },
+  {
+   "label": "Mae Hong Son",
+   "label_th": "แม่ฮ่องสอน",
+   "crashes": 362,
+   "deaths": 54,
+   "rank_crashes": 72,
+   "rank_deaths": 72,
+   "death_rate": 14.9
+  },
+  {
+   "label": "Satun",
+   "label_th": "สตูล",
+   "crashes": 340,
+   "deaths": 60,
+   "rank_crashes": 73,
+   "rank_deaths": 70,
+   "death_rate": 17.6
+  },
+  {
+   "label": "Phichit",
+   "label_th": "พิจิตร",
+   "crashes": 298,
+   "deaths": 65,
+   "rank_crashes": 74,
+   "rank_deaths": 67,
+   "death_rate": 21.8
+  },
+  {
+   "label": "Nong Khai",
+   "label_th": "หนองคาย",
+   "crashes": 281,
+   "deaths": 59,
+   "rank_crashes": 75,
+   "rank_deaths": 71,
+   "death_rate": 21.0
+  },
+  {
+   "label": "Amnat Charoen",
+   "label_th": "อำนาจเจริญ",
+   "crashes": 267,
+   "deaths": 52,
+   "rank_crashes": 76,
+   "rank_deaths": 73,
+   "death_rate": 19.5
+  },
+  {
+   "label": "Ranong",
+   "label_th": "ระนอง",
+   "crashes": 247,
+   "deaths": 33,
+   "rank_crashes": 77,
+   "rank_deaths": 77,
+   "death_rate": 13.4
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

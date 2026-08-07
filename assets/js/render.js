@@ -1,0 +1,347 @@
+/* Turns geometry from layout.js into SVG elements. Nothing else belongs here.
+ *
+ * No scales, no ticks, no interpolation, no data reshaping — if a number is
+ * computed in this file, it is in the wrong file, because nothing here can be
+ * tested without a browser and this project has never had a dependable one.
+ *
+ * Elements are created once and then updated in place, so scrolling mutates
+ * attributes rather than rebuilding the DOM on every frame.
+ */
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory();
+  else root.ChartRender = factory();
+})(typeof self !== "undefined" ? self : this, function () {
+  "use strict";
+
+  var NS = "http://www.w3.org/2000/svg";
+
+  function el(name, attrs, text) {
+    var n = document.createElementNS(NS, name);
+    for (var k in attrs) if (attrs[k] !== undefined) n.setAttribute(k, attrs[k]);
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function set(node, attrs) {
+    for (var k in attrs) if (attrs[k] !== undefined) node.setAttribute(k, attrs[k]);
+  }
+
+  function getLayout() {
+    return typeof ChartLayout !== "undefined" ? ChartLayout : require("./layout.js");
+  }
+
+  /* -------------------------------------------------- shared: bar reorder */
+
+  /* Slides 4 and 8 are the same shape — a headline pair, a crossfading axis,
+   * and a set of rows whose position, length and colour are all the layout
+   * module returns. `layoutFn` is `ChartLayout.slide04` or `.slide08`. */
+  function mountBarChart(mount, layoutFn, data, options, ariaLabel) {
+    var L = getLayout();
+    var first = layoutFn(data, 0, options);
+
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img", "aria-label": ariaLabel,
+    });
+
+    var gGrid = el("g", { class: "c-grid" });
+    var gBars = el("g", { class: "c-bars" });
+    var gText = el("g", { class: "c-text" });
+    svg.appendChild(gGrid); svg.appendChild(gBars); svg.appendChild(gText);
+
+    var headings = first.headings.map(function (h) {
+      var t = el("text", { class: "c-heading", x: 40, y: 62 }, h.text);
+      gText.appendChild(t);
+      return t;
+    });
+    gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle));
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 18, "text-anchor": "end",
+    }, first.source));
+
+    var baseline = el("line", {
+      class: "c-baseline", x1: first.plot.x, x2: first.plot.x,
+      y1: first.plot.y - 10, y2: first.plot.y + first.plot.h,
+    });
+    gGrid.appendChild(baseline);
+
+    var tickGroups = first.tickSets.map(function (ts) {
+      var g = el("g", {});
+      var parts = ts.ticks.map(function (t) {
+        var line = el("line", {
+          class: "c-gridline", x1: t.x, x2: t.x,
+          y1: first.plot.y - 10, y2: first.plot.y + first.plot.h,
+        });
+        var label = el("text", {
+          class: "c-tick", x: t.x, y: first.plot.y + first.plot.h + 24,
+        }, t.label);
+        g.appendChild(line); g.appendChild(label);
+        return { line: line, label: label };
+      });
+      gGrid.appendChild(g);
+      return { group: g, parts: parts };
+    });
+
+    var axisTitles = first.axisTitles.map(function (a) {
+      var t = el("text", { class: "c-axistitle", x: a.x, y: a.y }, a.text);
+      gText.appendChild(t);
+      return t;
+    });
+
+    var rows = {};
+    first.rows.forEach(function (r) {
+      var g = el("g", {});
+      var bar = el("rect", { class: "c-bar", rx: 3, x: r.x, height: r.height });
+      var name = el("text", { class: "c-rowlabel" + (r.onBothLists ? " is-both" : "") }, r.label);
+      var values = r.values.map(function (v) {
+        var t = el("text", { class: "c-value" }, v.text);
+        g.appendChild(t);
+        return t;
+      });
+      g.insertBefore(bar, g.firstChild);
+      g.appendChild(name);
+      gBars.appendChild(g);
+      rows[r.key] = { g: g, bar: bar, name: name, values: values };
+    });
+
+    mount.appendChild(svg);
+
+    function update(progress) {
+      var m = layoutFn(data, progress, options);
+
+      m.rows.forEach(function (r) {
+        var n = rows[r.key];
+        n.g.setAttribute("opacity", r.opacity.toFixed(3));
+        set(n.bar, { y: r.y, width: Math.max(0, r.width), fill: r.color });
+        set(n.name, { x: r.labelX, y: r.y + r.height / 2 });
+        r.values.forEach(function (v, i) {
+          set(n.values[i], { x: r.valueX, y: r.y + r.height / 2, opacity: v.opacity.toFixed(3) });
+          n.values[i].textContent = v.text;
+        });
+      });
+
+      m.tickSets.forEach(function (ts, i) {
+        tickGroups[i].group.setAttribute("opacity", ts.ticks[0].opacity.toFixed(3));
+        ts.ticks.forEach(function (t, j) {
+          var part = tickGroups[i].parts[j];
+          if (!part) return;
+          set(part.line, { x1: t.x, x2: t.x });
+          set(part.label, { x: t.x });
+          part.label.textContent = t.label;
+        });
+      });
+
+      m.axisTitles.forEach(function (a, i) { axisTitles[i].setAttribute("opacity", a.opacity.toFixed(3)); });
+      m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity.toFixed(3)); });
+    }
+
+    update(0);
+    return { svg: svg, update: update };
+  }
+
+  function slide04(mount, data, options) {
+    var L = getLayout();
+    return mountBarChart(mount, L.slide04, data, options,
+      "Highway crash causes, reordering from most common to most lethal");
+  }
+
+  function slide08(mount, data, options) {
+    var L = getLayout();
+    return mountBarChart(mount, L.slide08, data, options,
+      "Provinces ranked by crashes, reordering into provinces ranked by deaths");
+  }
+
+  /* --------------------------------------------------- slide 9: scatter */
+
+  function slide09(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide09(data, 0, options);
+
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img",
+      "aria-label": "AADT against crash count, morphing into AADT against fatality rate",
+    });
+
+    var gGrid = el("g", { class: "c-grid" });
+    var gTrend = el("g", { class: "c-trend" });
+    var gPoints = el("g", { class: "c-points" });
+    var gText = el("g", { class: "c-text" });
+    svg.appendChild(gGrid); svg.appendChild(gTrend); svg.appendChild(gPoints); svg.appendChild(gText);
+
+    var headings = first.headings.map(function (h) {
+      var t = el("text", { class: "c-heading", x: 40, y: 62 }, h.text);
+      gText.appendChild(t);
+      return t;
+    });
+    gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle));
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 18, "text-anchor": "end",
+    }, first.source));
+    var xAxisTitle = el("text", {
+      class: "c-axistitle", x: first.xAxisTitle.x, y: first.xAxisTitle.y, "text-anchor": "middle",
+    }, first.xAxisTitle.text);
+    gText.appendChild(xAxisTitle);
+
+    var axisTitles = first.axisTitles.map(function (a) {
+      var t = el("text", { class: "c-axistitle", x: a.x, y: a.y }, a.text);
+      gText.appendChild(t);
+      return t;
+    });
+
+    // x grid — never moves, drawn once
+    first.xTicks.forEach(function (t) {
+      gGrid.appendChild(el("line", {
+        class: "c-gridline", x1: t.x, x2: t.x, y1: first.plot.y - 10, y2: first.plot.y + first.plot.h,
+      }));
+      gGrid.appendChild(el("text", { class: "c-tick", x: t.x, y: first.plot.y + first.plot.h + 26 }, t.label));
+    });
+
+    var tickGroups = first.tickSets.map(function (ts) {
+      var g = el("g", {});
+      var parts = ts.ticks.map(function (t) {
+        var label = el("text", {
+          class: "c-tick", x: first.plot.x - 14, y: t.y, "text-anchor": "end",
+        }, t.label);
+        g.appendChild(label);
+        return { label: label };
+      });
+      gGrid.appendChild(g);
+      return { group: g, parts: parts };
+    });
+
+    var trend = el("path", { class: "c-trendline", fill: "none", "stroke-width": 3, d: first.trendPath });
+    gTrend.appendChild(trend);
+
+    var points = {};
+    first.points.forEach(function (pt) {
+      var c = el("circle", { class: "c-point", r: pt.r });
+      gPoints.appendChild(c);
+      points[pt.key] = c;
+    });
+
+    mount.appendChild(svg);
+
+    function update(progress) {
+      var m = L.slide09(data, progress, options);
+
+      set(trend, { d: m.trendPath, stroke: m.trendColor });
+      m.points.forEach(function (pt) {
+        set(points[pt.key], { cx: pt.x, cy: pt.y, fill: pt.color });
+      });
+
+      m.tickSets.forEach(function (ts, i) {
+        tickGroups[i].group.setAttribute("opacity", ts.ticks[0] ? ts.ticks[0].opacity.toFixed(3) : 0);
+        ts.ticks.forEach(function (t, j) {
+          var part = tickGroups[i].parts[j];
+          if (!part) return;
+          set(part.label, { y: t.y });
+          part.label.textContent = t.label;
+        });
+      });
+
+      m.axisTitles.forEach(function (a, i) { axisTitles[i].setAttribute("opacity", a.opacity.toFixed(3)); });
+      m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity.toFixed(3)); });
+    }
+
+    update(0);
+    return { svg: svg, update: update };
+  }
+
+  /* ------------------------------------------------- slide 12: reveal */
+
+  function slide12(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide12(data, 0, options);
+
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img",
+      "aria-label": "Monthly crashes and deaths with the Seven Dangerous Days windows shaded",
+    });
+
+    var gBands = el("g", { class: "c-bands" });
+    var gGrid = el("g", { class: "c-grid" });
+    var gLines = el("g", { class: "c-lines" });
+    var gText = el("g", { class: "c-text" });
+    svg.appendChild(gBands); svg.appendChild(gGrid); svg.appendChild(gLines); svg.appendChild(gText);
+
+    gText.appendChild(el("text", { class: "c-heading", x: 40, y: 50 }, first.heading));
+    gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 78 }, first.subtitle));
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 14, "text-anchor": "end",
+    }, first.source));
+    var summary = el("text", {
+      class: "c-summary", x: first.summary.x, y: first.summary.y, "text-anchor": "end",
+    }, first.summary.text);
+    gText.appendChild(summary);
+
+    first.xTicks.forEach(function (t) {
+      gGrid.appendChild(el("text", {
+        class: "c-tick", x: t.x, y: first.panels[1].y + first.panels[1].h + 24, "text-anchor": "middle",
+      }, t.label));
+    });
+
+    var panelNodes = first.panels.map(function (panel) {
+      gText.appendChild(el("text", {
+        class: "c-axistitle", x: first.plot.x, y: panel.y - 12,
+      }, panel.title));
+      var tickGroup = el("g", {});
+      var ticks = panel.ticks.map(function (t) {
+        var line = el("line", {
+          class: "c-gridline", x1: first.plot.x, x2: first.plot.x + first.plot.w, y1: t.y, y2: t.y,
+        });
+        var label = el("text", {
+          class: "c-tick", x: first.plot.x - 12, y: t.y, "text-anchor": "end",
+        }, t.label);
+        tickGroup.appendChild(line); tickGroup.appendChild(label);
+        return { line: line, label: label };
+      });
+      gGrid.appendChild(tickGroup);
+      var path = el("path", { class: "c-line", fill: "none", "stroke-width": 2.4, stroke: panel.color, d: panel.line.path });
+      gLines.appendChild(path);
+      return { path: path, ticks: ticks };
+    });
+
+    var bandNodes = first.bands.map(function () {
+      var rect = el("rect", { class: "c-band" });
+      gBands.appendChild(rect);
+      return { rect: rect };
+    });
+
+    mount.appendChild(svg);
+
+    function update(progress) {
+      var m = L.slide12(data, progress, options);
+
+      m.panels.forEach(function (panel, i) {
+        set(panelNodes[i].path, { d: panel.line.path });
+        panel.ticks.forEach(function (t, j) {
+          var part = panelNodes[i].ticks[j];
+          if (!part) return;
+          set(part.line, { y1: t.y, y2: t.y });
+          set(part.label, { y: t.y });
+        });
+      });
+
+      m.bands.forEach(function (b, i) {
+        var n = bandNodes[i];
+        set(n.rect, {
+          x: b.x, width: b.width, y: first.panels[0].y,
+          height: first.panels[1].y + first.panels[1].h - first.panels[0].y,
+          opacity: b.opacity.toFixed(3),
+        });
+      });
+
+      set(summary, { opacity: m.summary.opacity.toFixed(3) });
+    }
+
+    update(0);
+    return { svg: svg, update: update };
+  }
+
+  return { slide04: slide04, slide08: slide08, slide09: slide09, slide12: slide12 };
+});

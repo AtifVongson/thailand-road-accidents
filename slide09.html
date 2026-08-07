@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  Track 2 — Slide 9, the AADT scatter. Panel A (crashes) morphs into panel B
+  (fatality rate) on one shared, unmoving x-axis, so the trendline visibly
+  flattening is a real comparison rather than a rescaling artefact — the
+  ticket's explicit requirement. See the comment on slide09() in layout.js for
+  why the trendline's steepness is drawn from the reported correlation
+  coefficients rather than from the raw fitted values.
+
+  Needs a local server, not file://, because it fetches its data.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traffic volume predicts crashes, not fatality rate</title>
+<link rel="stylesheet" href="assets/css/charts.css">
+<style>
+  html, body { margin: 0; background: var(--surface); color: var(--ink);
+               font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
+  .scroll-section { height: 300vh; position: relative; }
+  .pin { position: sticky; top: 0; height: 100vh; display: grid;
+         place-items: center; padding: 0 clamp(16px, 4vw, 64px); }
+  .frame { width: min(1280px, 100%); }
+  .spacer { height: 40vh; display: grid; place-items: center; }
+  .spacer p { max-width: 46ch; font-size: clamp(16px, 1.5vw, 20px);
+              line-height: 1.6; color: var(--ink-2); text-align: center; }
+  .cue { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+         font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<div class="spacer">
+  <p>160 survey sections on the six main highway routes. Scroll to watch the
+     steep, positive relationship with crash count flatten into a weak,
+     slightly negative one with fatality rate.</p>
+</div>
+
+<section class="scroll-section" id="section">
+  <div class="pin"><div class="frame" id="mount"></div></div>
+</section>
+
+<div class="spacer">
+  <p>A busier road means more crashes. It does not mean a deadlier one.</p>
+</div>
+
+<div class="cue" id="cue">scroll</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/render.js"></script>
+<script>
+fetch("assets/data/charts/slide09_sections.json")
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    var chart = ChartRender.slide09(document.getElementById("mount"), data);
+    var section = document.getElementById("section");
+    var cue = document.getElementById("cue");
+
+    function tick() {
+      var r = section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      chart.update(p);
+      cue.style.opacity = p > 0.02 && p < 0.98 ? 0 : 1;
+    }
+
+    addEventListener("scroll", tick, { passive: true });
+    addEventListener("resize", tick);
+    tick();
+    window.__chart = chart;
+  });
+</script>
+</body>
+</html>

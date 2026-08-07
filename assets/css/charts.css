@@ -1,0 +1,55 @@
+/* Palette for the live scroll-driven charts.
+ *
+ * These hex values are the ones in analysis/scripts/theme.py, which every
+ * matplotlib figure imports. 12_qa_chart_layout.js asserts that this file,
+ * assets/js/layout.js and theme.py all carry the same values, so the two
+ * rendering paths cannot drift apart into two visual systems.
+ *
+ * Blue means volume, orange means severity. Without exception. */
+:root {
+  --surface:  #fcfcfb;
+  --ink:      #0b0b0b;
+  --ink-2:    #52514e;
+  --muted:    #898781;
+  --grid:     #e1e0d9;
+  --axis:     #c3c2b7;
+  --volume:   #2a78d6;
+  --severity: #eb6834;
+}
+
+/* Type is sized for a projector read from the back of a room, not for a laptop
+ * at arm's length. The chart scales with its viewBox, so these are viewBox
+ * units on a 1280x720 canvas, not CSS pixels. */
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart .c-heading   { font-size: 34px; font-weight: 640; fill: var(--ink);
+                      letter-spacing: -0.01em; }
+.chart .c-subtitle  { font-size: 17px; fill: var(--ink-2); }
+.chart .c-source    { font-size: 13px; fill: var(--muted); }
+.chart .c-rowlabel  { font-size: 17px; fill: var(--ink-2); text-anchor: end;
+                      dominant-baseline: middle; }
+.chart .c-rowlabel.is-both { fill: var(--muted); }
+.chart .c-value     { font-size: 16px; font-weight: 640; fill: var(--ink-2);
+                      dominant-baseline: middle; }
+.chart .c-tick      { font-size: 14px; fill: var(--muted); text-anchor: middle; }
+.chart .c-axistitle { font-size: 15px; font-weight: 640; fill: var(--ink-2); }
+.chart .c-gridline  { stroke: var(--grid); stroke-width: 1; }
+.chart .c-baseline  { stroke: var(--axis); stroke-width: 1.4; }
+
+.chart .c-point   { opacity: 0.72; }
+.chart .c-trendline { stroke-linecap: round; }
+.chart .c-line    { }
+.chart .c-band    { fill: var(--severity); }
+.chart .c-summary { font-size: 15px; font-weight: 640; fill: var(--ink-2); }
+
+/* No transitions here on purpose. Motion is driven by scroll position through
+ * the layout module, so a CSS transition would fight the scalar for control and
+ * leave the chart mid-flight whenever the presenter stopped moving. */
+.chart .c-bar { }

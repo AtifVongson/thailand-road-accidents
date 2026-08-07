@@ -1,0 +1,164 @@
+<!doctype html>
+<!--
+  Tab 2 — Slides 7-11 of the Final Outline. Own page so a presenter handoff
+  is a click; this tab never loads Tab 3's map data.
+
+  Copy is reproduced verbatim from analysis/scripts/06_build_deck.js. Slides
+  8 and 9 are live charts; the deck keeps their matplotlib versions, this
+  page does not repeat them as static images except for fig07/fig08 (both
+  AADT panels), kept as the pairSlide reference the outline calls for
+  alongside the live morph (ticket 11's "Watch for" note).
+
+  Needs a local server, not file://. python -m http.server 8789 --directory site
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tab 2 — Thai Highway Accidents 2021-2025</title>
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/charts.css">
+</head>
+<body>
+
+<div class="mobile-notice">
+  <h1>Thai Highway Accidents 2021&ndash;2025</h1>
+  <p>This site is built to be driven from a laptop onto a projector, not read on a phone.
+     A presenter is showing it live &mdash; ask to see the deck instead, or view this on a
+     larger screen.</p>
+  <a href="assets/Thailand_Road_Accidents_Analysis.pdf">Download the presentation deck</a>
+</div>
+
+<header class="topnav">
+  <div class="tabs">
+    <a class="tab" href="tab1.html">Tab 1 &middot; Slides 1&ndash;6</a>
+    <a class="tab current" href="tab2.html">Tab 2 &middot; Slides 7&ndash;11</a>
+    <a class="tab" href="tab3.html">Tab 3 &middot; Slides 12&ndash;16</a>
+  </div>
+  <button class="idxbtn" id="idxbtn">Sections &#9662;</button>
+</header>
+<nav class="secindex" id="secindex"></nav>
+
+<main>
+
+<!-- 7 — relationships -->
+<section class="section section-static" data-kicker="Part 1 &middot; Relationship" data-title="The strongest link, and a link that is not there">
+  <p class="kicker">Part 1 &middot; Relationship</p>
+  <h1>The strongest link, and a link that is not there</h1>
+  <div class="figwrap"><img src="assets/figures/fig16_relationship.svg" alt="Motorcycle vs non-motorcycle crashes by province, and deaths per crash by weather"></div>
+  <p class="takeaway">Left: motorcycle and non-motorcycle crashes rise together across all 77
+    provinces &mdash; r = +0.78, Spearman +0.71, p &lt; 0.001. Right: weather explains 0.2% of
+    the variation in deaths per crash (&eta; = 0.04), and rain is the less deadly of the two
+    large categories &mdash; 7.9 deaths per 100 against 13.1 for clear.</p>
+</section>
+
+<!-- 8 — hook (LIVE) -->
+<section class="section section-live" data-kicker="Part 1 &middot; The hook" data-title="Crash hot spots are not death hot spots">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; The hook</p>
+    <h1>Crash hot spots are not death hot spots</h1>
+  </div>
+  <div class="spacer">
+    <p>Enforcement resources get allocated by crash count. Scroll to see what happens when
+       the same provinces are ranked by deaths instead.</p>
+  </div>
+  <div class="scroll-section" id="sec-s8">
+    <div class="pin"><div class="frame" id="mount-s8"></div></div>
+  </div>
+  <div class="spacer">
+    <p>Only 8 of the 12 provinces appear on both lists. Bangkok has the most crashes
+       &mdash; 11,115 &mdash; but does not reach the top 12 for deaths. Allocating by crash
+       count sends people to the wrong four.</p>
+  </div>
+</section>
+
+<!-- 9 — exposure (static pair + LIVE morph) -->
+<section class="section section-static" data-kicker="Part 1 &middot; Exposure" data-title="Traffic volume predicts crashes, not deaths" style="min-height:auto;padding-bottom:0">
+  <p class="kicker">Part 1 &middot; Exposure</p>
+  <h1>Traffic volume predicts how many crashes, not how deadly</h1>
+  <div class="figpair">
+    <div class="figwrap"><img src="assets/figures/fig07_aadt_crashes.svg" alt="AADT against crash count, six main highway routes"></div>
+    <div class="figwrap"><img src="assets/figures/fig08_aadt_severity.svg" alt="AADT against deaths per crash, six main highway routes"></div>
+  </div>
+  <p class="takeaway">Left: AADT against crash count &mdash; Pearson +0.50, Spearman +0.28.
+    Positive, but weaker than expected: at the same traffic volume, crash counts differ by up
+    to 50&times;. Right: AADT against deaths per crash &mdash; &minus;0.17 and &minus;0.20,
+    reversed and very weak. This pair covers the six main Department of Highways routes only:
+    160 survey sections and 26,027 crashes, 23.6% of the file.</p>
+</section>
+<section class="section section-live" data-kicker="Part 1 &middot; Exposure" data-title="Watch the trendline flatten">
+  <div class="spacer">
+    <p>160 survey sections on the six main highway routes. Scroll to watch the steep,
+       positive relationship with crash count flatten into a weak, slightly negative one
+       with fatality rate.</p>
+  </div>
+  <div class="scroll-section" id="sec-s9">
+    <div class="pin"><div class="frame" id="mount-s9"></div></div>
+  </div>
+  <div class="spacer">
+    <p>A busier road means more crashes. It does not mean a deadlier one.</p>
+  </div>
+</section>
+
+<!-- 10 — clusters + excess -->
+<section class="section section-static" data-kicker="Part 1 &middot; Excess risk" data-title="Crashing more than traffic volume explains">
+  <p class="kicker">Part 1 &middot; Excess risk</p>
+  <h1>Crashing more than traffic volume explains</h1>
+  <div class="figwrap"><img src="assets/figures/fig10_excess.svg" alt="Sections ranked by observed crashes against a negative-binomial model's expectation"></div>
+  <div class="callout">
+    <h2>Five archetypes, one ranking</h2>
+    <p>k-means on traffic volume, heavy-vehicle share, crash rate and deaths per crash splits
+      the 160 sections into five kinds: freight corridors carry 29% of the deaths in this
+      sample and killer highways 25%, while urban motorways carry 14% and kill least per
+      crash. Ranked against a negative-binomial model that explains 48% of the variation in
+      crash counts, the worst section runs 12.9&times; the crashes it should.</p>
+  </div>
+  <div class="figwrap" style="margin-top:22px;max-width:760px">
+    <img src="assets/figures/fig09_clusters.svg" alt="The five section archetypes plotted by traffic volume and crash rate">
+  </div>
+</section>
+
+<!-- 11 — what they share -->
+<section class="section section-static" data-kicker="Part 1 &middot; Excess risk" data-title="What the worst sections have in common">
+  <p class="kicker">Part 1 &middot; Excess risk</p>
+  <h1>What the worst sections have in common</h1>
+  <div class="figwrap"><img src="assets/figures/fig11_outliers.svg" alt="Comparison of overshooting sections against the rest, by road type"></div>
+  <p class="takeaway">79% of the 14 biggest overshoots are motorway &mdash; Routes 7 and 9.
+    They carry 76,000 vehicles a day against 26,100 elsewhere and crash four times as often
+    (33.1 against 8.3 per 100 million vehicle-kilometres), yet kill 2.1 per 100 crashes
+    against 12.0. The worst sections share a road type; they are not a scatter of unlucky
+    places.</p>
+</section>
+
+</main>
+
+<div class="cue" id="cue">scroll</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/render.js"></script>
+<script>
+function wire(sectionId, mountId, dataUrl, layoutKey) {
+  fetch(dataUrl).then(function (r) { return r.json(); }).then(function (data) {
+    var chart = ChartRender[layoutKey](document.getElementById(mountId), data);
+    var section = document.getElementById(sectionId);
+    var cue = document.getElementById("cue");
+
+    function tick() {
+      var r = section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      chart.update(p);
+      var inChart = r.top < window.innerHeight && r.bottom > 0;
+      if (inChart) cue.style.opacity = p > 0.02 && p < 0.98 ? 0 : 1;
+    }
+    addEventListener("scroll", tick, { passive: true });
+    addEventListener("resize", tick);
+    tick();
+    window["__chart_" + mountId] = chart;
+  });
+}
+wire("sec-s8", "mount-s8", "assets/data/charts/slide08_provinces.json", "slide08");
+wire("sec-s9", "mount-s9", "assets/data/charts/slide09_sections.json", "slide09");
+</script>
+<script src="assets/js/transport.js"></script>
+</body>
+</html>

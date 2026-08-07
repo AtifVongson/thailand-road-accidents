@@ -1,0 +1,135 @@
+{
+ "total_crashes": 110434,
+ "total_deaths": 13901,
+ "base_death_rate": 12.6,
+ "threshold_crashes": 200,
+ "causes": [
+  {
+   "label": "Speeding",
+   "crashes": 78374,
+   "deaths": 9204,
+   "share": 70.97,
+   "death_rate": 11.7
+  },
+  {
+   "label": "Cut in / pulled out sharply",
+   "crashes": 8170,
+   "deaths": 1761,
+   "share": 7.4,
+   "death_rate": 21.6
+  },
+  {
+   "label": "Fell asleep at the wheel",
+   "crashes": 7637,
+   "deaths": 815,
+   "share": 6.92,
+   "death_rate": 10.7
+  },
+  {
+   "label": "Worn or blown tyre",
+   "crashes": 2159,
+   "deaths": 59,
+   "share": 1.96,
+   "death_rate": 2.7
+  },
+  {
+   "label": "Alcohol",
+   "crashes": 1565,
+   "deaths": 345,
+   "share": 1.42,
+   "death_rate": 22.0
+  },
+  {
+   "label": "Vehicle defect",
+   "crashes": 1311,
+   "deaths": 91,
+   "share": 1.19,
+   "death_rate": 6.9
+  },
+  {
+   "label": "Slippery road",
+   "crashes": 1142,
+   "deaths": 69,
+   "share": 1.03,
+   "death_rate": 6.0
+  },
+  {
+   "label": "Ran a signal or sign",
+   "crashes": 941,
+   "deaths": 200,
+   "share": 0.85,
+   "death_rate": 21.3
+  },
+  {
+   "label": "Unfamiliar route / inexperience",
+   "crashes": 735,
+   "deaths": 84,
+   "share": 0.67,
+   "death_rate": 11.4
+  },
+  {
+   "label": "Driving against traffic",
+   "crashes": 495,
+   "deaths": 222,
+   "share": 0.45,
+   "death_rate": 44.8
+  },
+  {
+   "label": "Lost control",
+   "crashes": 439,
+   "deaths": 44,
+   "share": 0.4,
+   "death_rate": 10.0
+  },
+  {
+   "label": "Illegal overtaking",
+   "crashes": 433,
+   "deaths": 141,
+   "share": 0.39,
+   "death_rate": 32.6
+  },
+  {
+   "label": "Debris or obstruction",
+   "crashes": 427,
+   "deaths": 26,
+   "share": 0.39,
+   "death_rate": 6.1
+  },
+  {
+   "label": "Slippery road (weather)",
+   "crashes": 402,
+   "deaths": 15,
+   "share": 0.36,
+   "death_rate": 3.7
+  },
+  {
+   "label": "Brake failure",
+   "crashes": 347,
+   "deaths": 65,
+   "share": 0.31,
+   "death_rate": 18.7
+  },
+  {
+   "label": "Overloaded vehicle",
+   "crashes": 285,
+   "deaths": 8,
+   "share": 0.26,
+   "death_rate": 2.8
+  },
+  {
+   "label": "Failed to signal",
+   "crashes": 260,
+   "deaths": 16,
+   "share": 0.24,
+   "death_rate": 6.2
+  },
+  {
+   "label": "Fatigue",
+   "crashes": 236,
+   "deaths": 28,
+   "share": 0.21,
+   "death_rate": 11.9
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

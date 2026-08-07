@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+  Site entry point. Three separate tab pages (ticket 08/11) — this page only
+  hands a presenter off to their own tab and lands them at its top. Not the
+  analysis/prototype/web/index.html prototype: no PROTOTYPE banner, no
+  A/B/C/D switcher, nothing to explain before the talk starts.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thai Highway Accidents 2021-2025</title>
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+  main.landing {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 0 clamp(20px, 6vw, 96px); max-width: 1180px; margin: 0 auto;
+  }
+  .landing .kicker { margin-top: 0; }
+  .landing h1 { font-size: clamp(28px, 4vw, 46px); font-weight: 680; letter-spacing: -.015em;
+    margin: 0 0 12px; }
+  .landing p.lead { font-size: 15px; color: var(--ink-2); max-width: 70ch; line-height: 1.6;
+    margin: 0 0 40px; }
+  .tabgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .tabcard { display: block; text-decoration: none; color: inherit; background: var(--paper);
+    border-radius: 12px; padding: 26px 24px; transition: transform .15s; }
+  .tabcard:hover { transform: translateY(-2px); }
+  .tabcard .n { font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--severity);
+    text-transform: uppercase; }
+  .tabcard h2 { font-size: 21px; margin: 8px 0 6px; font-weight: 660; }
+  .tabcard p { font-size: 13px; color: var(--ink-2); line-height: 1.5; margin: 0; }
+  .landing .fallback { margin-top: 36px; font-size: 12.5px; color: var(--muted); }
+  .landing .fallback a { color: inherit; }
+</style>
+</head>
+<body>
+<main class="landing">
+  <p class="kicker">DADT-D-0012-26-Evening &middot; Data Science &amp; Visualization</p>
+  <h1>Thai Highway Accidents 2021&ndash;2025</h1>
+  <p class="lead">When and where should checkpoint labor be positioned to prevent
+    alcohol-related road deaths? Three tabs, one per presenter &mdash; click yours to start
+    at its top. All three scroll.</p>
+  <div class="tabgrid">
+    <a class="tabcard" href="tab1.html">
+      <div class="n">Slides 1&ndash;6</div>
+      <h2>Tab 1 &middot; The problem</h2>
+      <p>Stakes, dataset and method, why alcohol, time of day, and crash conditions.</p>
+    </a>
+    <a class="tabcard" href="tab2.html">
+      <div class="n">Slides 7&ndash;11</div>
+      <h2>Tab 2 &middot; The hook</h2>
+      <p>Relationships, crash hot spots vs death hot spots, exposure, and excess risk.</p>
+    </a>
+    <a class="tabcard" href="tab3.html">
+      <div class="n">Slides 12&ndash;16</div>
+      <h2>Tab 3 &middot; The plan</h2>
+      <p>Seasonality, forecast, the deployment map, recommendation and references.</p>
+    </a>
+  </div>
+  <p class="fallback">Runs offline, from a laptop. No network required.
+    Deck (PDF fallback): <a href="assets/Thailand_Road_Accidents_Analysis.pdf">Thailand_Road_Accidents_Analysis.pdf</a></p>
+</main>
+</body>
+</html>

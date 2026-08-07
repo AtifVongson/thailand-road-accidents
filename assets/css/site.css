@@ -1,0 +1,215 @@
+/* Page chrome shared by tab1.html, tab2.html and tab3.html — the nav bar, the
+ * section index, slide sections, stat tiles and callouts. Tokens match
+ * assets/css/charts.css exactly (same --surface/--ink/--volume/--severity)
+ * plus the deck's paper/dark surfaces from analysis/scripts/06_build_deck.js,
+ * so a slide reads as the same object whether it's projected from the deck
+ * or scrolled past on the site. Blue means volume, orange means severity,
+ * without exception.
+ */
+:root {
+  --surface:  #fcfcfb;
+  --ink:      #0b0b0b;
+  --ink-2:    #52514e;
+  --muted:    #898781;
+  --grid:     #e1e0d9;
+  --axis:     #c3c2b7;
+  --volume:   #2a78d6;
+  --severity: #eb6834;
+  --paper:    #f2f1ec;
+  --dark:     #1a1a19;
+  --panel:    #232322;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-feature-settings: "tnum" 0;
+  scroll-behavior: auto; /* transport.js drives smooth scroll itself */
+}
+
+img { max-width: 100%; display: block; }
+
+/* ---------------------------------------------------------------- nav bar */
+.topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  height: 46px; display: flex; align-items: center; gap: 4px;
+  padding: 0 14px; background: rgba(252, 252, 251, .92);
+  border-bottom: 1px solid var(--grid); backdrop-filter: blur(6px);
+  font-size: 13px;
+}
+.topnav .tabs { display: flex; gap: 2px; margin-right: auto; }
+.topnav a.tab {
+  color: var(--ink-2); text-decoration: none; padding: 7px 12px;
+  border-radius: 6px; font-weight: 600; letter-spacing: .01em;
+}
+.topnav a.tab:hover { background: var(--paper); color: var(--ink); }
+.topnav a.tab.current { background: var(--ink); color: var(--surface); }
+.topnav .idxbtn {
+  background: none; border: 1px solid var(--axis); color: var(--ink-2);
+  font: inherit; font-weight: 600; padding: 6px 12px; border-radius: 999px;
+  cursor: pointer;
+}
+.topnav .idxbtn:hover { border-color: var(--ink-2); color: var(--ink); }
+
+/* section index — instant jump for Q&A, no animation through what precedes it */
+.secindex {
+  position: fixed; top: 46px; right: 14px; z-index: 21; width: 300px;
+  max-height: calc(100vh - 66px); overflow: auto; background: var(--surface);
+  border: 1px solid var(--grid); border-radius: 10px;
+  box-shadow: 0 12px 34px rgba(0,0,0,.14); padding: 8px;
+  display: none;
+}
+.secindex.open { display: block; }
+.secindex button {
+  display: block; width: 100%; text-align: left; background: none; border: 0;
+  font: inherit; font-size: 13px; color: var(--ink); padding: 9px 10px;
+  border-radius: 6px; cursor: pointer; line-height: 1.35;
+}
+.secindex button:hover { background: var(--paper); }
+.secindex .kicker {
+  font-size: 10px; color: var(--severity); font-weight: 700;
+  letter-spacing: .1em; display: block; margin-bottom: 1px;
+}
+
+/* -------------------------------------------------------- narrow viewport */
+.mobile-notice { display: none; }
+@media (max-width: 700px) {
+  .topnav, main { display: none; }
+  .mobile-notice {
+    display: flex; position: fixed; inset: 0; z-index: 30; background: var(--dark);
+    color: var(--surface); flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 32px; gap: 14px;
+  }
+  .mobile-notice h1 { font-size: 20px; margin: 0; }
+  .mobile-notice p { font-size: 14px; color: #c3c2b7; line-height: 1.6; max-width: 40ch; margin: 0; }
+  .mobile-notice a { color: var(--severity); font-weight: 700; }
+}
+
+/* -------------------------------------------------------------- sections
+ * `.section` is the common wrapper transport.js indexes and jumps between.
+ * `.section-static` is a full-viewport slide (deck-shaped copy, figures,
+ * stat tiles). `.section-live` holds one of the four scroll-driven charts —
+ * its own intro/spacer/pin markup, not the centred slide layout. */
+.section-static {
+  min-height: 100vh; padding: 92px clamp(20px, 6vw, 96px) 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-bottom: 1px solid var(--grid);
+}
+.section-static.dark { background: var(--dark); color: var(--surface); border-bottom-color: #000; }
+.section-static.dark .kicker { color: var(--severity); }
+.section-static.dark .ink-2 { color: #c3c2b7; }
+.section-static.dark .muted { color: #898781; }
+
+.kicker {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--severity); margin: 0 0 10px;
+}
+.section-static h1, .live-intro h1 {
+  font-size: clamp(26px, 3.4vw, 42px); font-weight: 680; letter-spacing: -.015em;
+  line-height: 1.12; margin: 0 0 18px; max-width: 26ch;
+}
+.section-static .takeaway {
+  font-size: clamp(14px, 1.15vw, 16.5px); color: var(--ink-2); line-height: 1.55;
+  max-width: 78ch; margin: 18px 0 0;
+}
+.section-static .body { max-width: 84ch; }
+.section-static .body p { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); }
+
+/* ---------------------------------------------------------------- live charts
+ * Same shape as the slide04/08/09/12.html reference pages: a 300/340vh
+ * scroll-section with a position:sticky pin, so scroll distance becomes
+ * animation progress. This block is the only thing ticket 08's transport
+ * decision replaced — the chart only ever receives a scalar. */
+.section-live { border-bottom: 1px solid var(--grid); }
+.live-intro { padding: 92px clamp(20px, 6vw, 96px) 0; max-width: 78ch; }
+.scroll-section { height: 300vh; position: relative; }
+.scroll-section.tall { height: 340vh; }
+.pin { position: sticky; top: 0; height: 100vh; display: grid; place-items: center;
+       padding: 0 clamp(16px, 4vw, 64px); }
+.frame { width: min(1280px, 100%); }
+.spacer { height: 40vh; display: grid; place-items: center; padding: 0 clamp(20px, 6vw, 96px); }
+.spacer p { max-width: 46ch; font-size: clamp(15px, 1.4vw, 19px); line-height: 1.6;
+            color: var(--ink-2); text-align: center; margin: 0 auto; }
+
+.figwrap { margin: 18px 0 0; max-width: 1180px; }
+.figwrap img { border: 1px solid var(--grid); border-radius: 6px; background: #fff; }
+.figpair { display: flex; gap: 24px; flex-wrap: wrap; margin: 18px 0 0; max-width: 1180px; }
+.figpair .figwrap { flex: 1 1 420px; margin: 0; }
+
+.stats { display: flex; gap: clamp(20px, 4vw, 48px); flex-wrap: wrap; margin: 8px 0 0; }
+.stat .v { font-size: clamp(26px, 2.6vw, 38px); font-weight: 680; line-height: 1; }
+.stat .l { font-size: 12px; color: var(--muted); margin-top: 8px; max-width: 20ch; line-height: 1.35; }
+.stat .v.volume { color: var(--volume); }
+.stat .v.severity { color: var(--severity); }
+.section-static.dark .stat .v { color: var(--surface); }
+.section-static.dark .stat .v.volume { color: #9ec5f4; }
+.section-static.dark .stat .v.severity { color: var(--severity); }
+.section-static.dark .stat .l { color: #898781; }
+
+.callout {
+  background: var(--paper); border-radius: 8px; padding: 18px 22px; margin-top: 22px;
+  max-width: 88ch;
+}
+.section-static.dark .callout { background: var(--panel); }
+.callout h2 { font-size: 13px; color: var(--severity); margin: 0 0 8px; font-weight: 700; }
+.callout p { font-size: 13.5px; line-height: 1.55; color: var(--ink); margin: 0 0 8px; }
+.section-static.dark .callout p { color: #e8e7e0; }
+.callout p:last-child { margin-bottom: 0; }
+.callout p b { font-weight: 680; }
+
+.refs h2 { font-size: 13px; color: var(--severity); margin: 22px 0 8px; font-weight: 700; }
+.refs ul { margin: 0 0 4px; padding-left: 18px; }
+.refs li { font-size: 12.5px; line-height: 1.55; color: var(--ink-2); margin-bottom: 6px; }
+.refs a { color: inherit; }
+
+.limits { font-size: 11.5px; color: var(--muted); line-height: 1.4; max-width: 78ch; margin-top: 18px; }
+
+/* -------------------------------------------------------------- map (14)
+ * Slide 14's map is one MapLibre instance, pinned like the four charts, but
+ * it is not part of layout.js — camera and paint are driven by the same
+ * scroll-position scalar via a small inline script instead (assets/js/map-tab3.js),
+ * because MapLibre expressions/camera calls are not pure-layout-testable the
+ * way SVG geometry is. scrollZoom/dragPan stay off by default so the wheel
+ * scrolls the *page*, which is what drives the C -> A transition — watched,
+ * not driven, until "Explore" is pressed. */
+.pin.mappin { padding: 0; display: block; }
+#map { position: absolute; inset: 0; background: var(--surface); }
+.maplibregl-ctrl-attrib { font-size: 10px; background: rgba(252,252,251,.85) !important; }
+
+.map-legend {
+  position: absolute; bottom: 24px; left: 24px; z-index: 4;
+  background: rgba(252,252,251,.94); border: 1px solid var(--grid); border-radius: 8px;
+  padding: 11px 13px; font-size: 11px; backdrop-filter: blur(6px);
+}
+.map-legend .t { font-weight: 650; margin-bottom: 8px; font-size: 11.5px; color: var(--ink-2); }
+.map-ramp { height: 9px; width: 172px; border-radius: 2px; }
+.map-ends { display: flex; justify-content: space-between; color: var(--muted); margin-top: 4px; }
+
+.map-caption {
+  position: absolute; top: 24px; left: 24px; right: 260px; z-index: 4;
+  background: rgba(252,252,251,.94); border: 1px solid var(--grid); border-radius: 8px;
+  padding: 14px 18px; backdrop-filter: blur(6px);
+}
+.map-caption h3 { margin: 0 0 4px; font-size: 16px; font-weight: 660; }
+.map-caption p { margin: 0; font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+
+.map-explore {
+  position: absolute; top: 24px; right: 24px; z-index: 5;
+  background: var(--ink); color: var(--surface); border: 0; border-radius: 999px;
+  padding: 9px 18px; font: inherit; font-weight: 650; font-size: 12.5px; cursor: pointer;
+}
+.map-explore.on { background: var(--severity); }
+.map-hover {
+  position: fixed; z-index: 7; background: var(--ink); color: var(--surface);
+  padding: 9px 12px; border-radius: 6px; font-size: 12.5px; pointer-events: none;
+  display: none; line-height: 1.6;
+}
+
+/* ---------------------------------------------------------- scroll cue */
+.cue { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+       font-size: 12px; color: var(--muted); letter-spacing: .04em; z-index: 5;
+       pointer-events: none; transition: opacity .3s; }
