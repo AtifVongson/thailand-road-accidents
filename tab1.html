@@ -114,21 +114,14 @@
     <p>Speeding is 71% of crashes. Scroll to see the same 18 causes reordered by how often
        they kill instead of how often they happen.</p>
   </div>
-  <div class="scroll-section zoom3" id="sec-s4">
-    <div class="pin">
-      <div class="frame" id="mount-s4"></div>
-      <div class="scene-explain" id="s4-explain">
-        <h3>Why alcohol, not the two higher-scoring causes?</h3>
-        <p>Two rarer causes score higher still &mdash; Driving against traffic (44.8) and
-           Illegal overtaking (32.6) &mdash; but on 400&ndash;500 crashes each. Alcohol's
-           1,565 crashes make its 22.0 estimate the more reliable one.</p>
-      </div>
-    </div>
+  <div class="scroll-section act3" id="sec-s4">
+    <div class="pin"><div class="frame" id="mount-s4"></div></div>
   </div>
   <div class="spacer">
     <p>Alcohol is 1.4% of recorded crashes but kills 22.0 per 100 &mdash; against 12.6 across
-       all crashes and 11.7 for speeding. Three other causes sit statistically level with it,
-       so the point is the magnitude, not the ranking.</p>
+       all crashes and 11.7 for speeding. Two rarer causes score higher on 400&ndash;500
+       crashes each; alcohol's rate rests on 1,565 &mdash; so the point is the magnitude,
+       not the ranking.</p>
   </div>
 </section>
 
@@ -171,66 +164,19 @@
 fetch("assets/data/charts/slide04_cause.json")
   .then(function (r) { return r.json(); })
   .then(function (data) {
-    var chart = ChartRender.slide04(document.getElementById("mount-s4"), data);
+    // Three acts, one scalar. Every bit of act arithmetic — including where
+    // act 3 starts — lives in layout.js's slide04Story() and is covered by
+    // 12_qa_chart_layout.js. Nothing in this page knows what an act is.
+    var chart = ChartRender.slide04Story(document.getElementById("mount-s4"), data);
     var section = document.getElementById("sec-s4");
     var cue = document.getElementById("cue");
-    var explain = document.getElementById("s4-explain");
-
-    // Scene 3, added on top of the existing scroll-driven reorder (scenes 1-2,
-    // unchanged, still layout.js's own progress). CHART_FRAC is how much of the
-    // taller section is spent on the reorder before the zoom act begins — same
-    // physical scroll distance as the original 300vh, so the reorder's pace is
-    // untouched; the extra 150vh is new.
-    var CHART_FRAC = 2 / 3;
-    var VBH = 720, ZOOM_PAD = 26, ZOOM_MAX = 2.4;
-    var zoomBBox = null;
-
-    // Reads the *rendered* bar positions rather than re-deriving layout.js's
-    // ranking logic — the top 3 rows at progress 1 are, by construction, the
-    // three highest death rates: Driving against traffic, Illegal overtaking,
-    // Alcohol. Bars keep the same DOM node per cause and just move (see
-    // render.js), so this is safe to read any time after chart.update(1).
-    function topRowsBBox() {
-      if (zoomBBox) return zoomBBox;
-      var bars = chart.svg.querySelectorAll(".c-bars > g > rect.c-bar");
-      if (!bars.length) return null;
-      var rows = Array.prototype.slice.call(bars).map(function (b) {
-        return { y: parseFloat(b.getAttribute("y")), h: parseFloat(b.getAttribute("height")) };
-      }).sort(function (a, b) { return a.y - b.y; }).slice(0, 3);
-      var minY = Math.min.apply(null, rows.map(function (b) { return b.y; }));
-      var maxY = Math.max.apply(null, rows.map(function (b) { return b.y + b.h; }));
-      zoomBBox = { minY: minY, maxY: maxY };
-      return zoomBBox;
-    }
-
-    function applyZoom(z) {
-      if (z <= 0) {
-        chart.svg.style.transform = "";
-        explain.style.opacity = 0;
-        explain.style.pointerEvents = "none";
-        return;
-      }
-      var box = topRowsBBox();
-      if (!box) return;
-      var e = z * z * (3 - 2 * z); // smoothstep — same ease the rest of the site uses
-      var bandH = (box.maxY - box.minY) + ZOOM_PAD * 2;
-      var scale = Math.min(ZOOM_MAX, VBH / bandH);
-      var originY = (100 * (box.minY + box.maxY) / 2 / VBH).toFixed(2);
-      chart.svg.style.transformOrigin = "50% " + originY + "%";
-      chart.svg.style.transform = "scale(" + (1 + (scale - 1) * e).toFixed(4) + ")";
-      explain.style.opacity = e.toFixed(3);
-      explain.style.pointerEvents = e > 0.5 ? "auto" : "none";
-    }
 
     function tick() {
       var r = section.getBoundingClientRect();
-      var rawP = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
-      var chartP = Math.min(1, rawP / CHART_FRAC);
-      var zoomP = Math.max(0, (rawP - CHART_FRAC) / (1 - CHART_FRAC));
-      chart.update(chartP);
-      applyZoom(zoomP);
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      chart.update(p);
       var inChart = r.top < window.innerHeight && r.bottom > 0;
-      cue.style.opacity = inChart && rawP > 0.02 && rawP < 0.98 ? 0 : 1;
+      cue.style.opacity = inChart && p > 0.02 && p < 0.98 ? 0 : 1;
     }
 
     addEventListener("scroll", tick, { passive: true });
@@ -238,12 +184,17 @@ fetch("assets/data/charts/slide04_cause.json")
     tick();
     window.__chart = chart;
 
-    // Arrow/PageDown steps between the 3 scenes with a deliberate 2s ease,
-    // instead of transport.js's default (jump straight to the next .section,
-    // which would skip over this chart's internal states entirely). Only
-    // engaged while this section's pin is actually stuck to the viewport;
-    // otherwise transport.js's own listener handles the key as normal.
-    var CHECKPOINTS = [0, CHART_FRAC, 1];
+    // Arrow/PageDown steps act by act with a deliberate 2s ease, instead of
+    // transport.js's default (jump straight to the next .section, which would
+    // skip this chart's middle and final states entirely). Only engaged while
+    // the pin is stuck to the viewport; at the first and last act the key falls
+    // through and transport.js moves to the neighbouring slide as normal.
+    //
+    // This is the one timed animation on the site, and it is scoped to a
+    // deliberate key press on one chart. Free scrolling remains the presenter's
+    // own clock, and chart progress remains a pure function of scroll position,
+    // because what the tween moves is the *scroll* — ticket 08's requirement.
+    var CHECKPOINTS = [0, ChartLayout.SLIDE04_ACT3_START, 1];
 
     function pinEngaged() {
       var r = section.getBoundingClientRect();

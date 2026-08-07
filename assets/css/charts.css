@@ -36,6 +36,11 @@
 .chart .c-rowlabel  { font-size: 17px; fill: var(--ink-2); text-anchor: end;
                       dominant-baseline: middle; }
 .chart .c-rowlabel.is-both { fill: var(--muted); }
+/* Slide 4 act 3 only: the death rate, kept on screen underneath the cause name
+ * while the bar itself switches to showing how many crashes that rate came
+ * from. Muted and smaller, because the bar is the argument and this is context. */
+.chart .c-sublabel  { font-size: 14px; fill: var(--muted); text-anchor: end;
+                      dominant-baseline: middle; }
 .chart .c-value     { font-size: 16px; font-weight: 640; fill: var(--ink-2);
                       dominant-baseline: middle; }
 .chart .c-tick      { font-size: 14px; fill: var(--muted); text-anchor: middle; }

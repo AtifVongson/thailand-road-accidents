@@ -355,6 +355,175 @@
     };
   }
 
+  /* ------------------------------- slide 4, act 3: the evidence behind a rate */
+
+  var SLIDE04_ACT3_DEFAULTS = {
+    focusCount: 3,
+    focusBarShare: 0.26,   // of a 3-row band, which is 6x taller than an 18-row one
+    bandTopPad: 22,        // band top -> bar top
+    subLabelGap: 30,       // bar bottom -> the muted "44.8 deaths per 100" line
+    loserFadeEnd: 0.4,     // losers are gone before the survivors start moving
+    expandStart: 0.3,
+  };
+
+  /* Acts 1 and 2 raise a question they cannot settle: the lethal ranking is led
+   * by two causes carrying a few hundred crashes each, so is alcohol's third
+   * place the real finding or a small-sample artefact? Act 3 answers it.
+   *
+   * The three survivors keep the vertical position the death-rate ranking gave
+   * them — position still means "how deadly" — while bar length crossfades to
+   * how many crashes each rate was computed from. Alcohol therefore finishes
+   * last in the list and longest on the page, and that mismatch is the whole
+   * argument: its 22.0 rests on 1,565 crashes against roughly 450 for the two
+   * ranked above it. Deliberately NOT a re-sort — re-sorting by crash count
+   * would read as "ranked by crashes" and throw the tension away.
+   *
+   * Built by interpolating away from slide04(data, 1) rather than re-deriving
+   * the ranking, so scene 2's end state and act 3's start state are the same
+   * geometry by construction and cannot drift apart.
+   */
+  function slide04Act3(data, progress, options) {
+    var o = Object.assign({}, SLIDE04_DEFAULTS, SLIDE04_ACT3_DEFAULTS, options || {});
+    var q = clamp(progress, 0, 1);
+    var base = slide04(data, 1, options);
+    var plot = base.plot;
+
+    // Losers clear the stage before the survivors expand into it. Doing both at
+    // once overlaps rows 1-3 with rows 4-18 mid-flight.
+    var leave = clamp(q / o.loserFadeEnd, 0, 1);
+    var grow = smoothstep(clamp((q - o.expandStart) / (1 - o.expandStart), 0, 1));
+
+    var byRate = data.causes.slice().sort(function (a, b) { return b.death_rate - a.death_rate; });
+    var focus = byRate.slice(0, o.focusCount);
+    var focusRank = {};
+    focus.forEach(function (c, i) { focusRank[c.label] = i; });
+    var maxCrashes = Math.max.apply(null, focus.map(function (c) { return c.crashes; }));
+
+    var bandH = plot.h / o.focusCount;
+    var focusBarH = bandH * o.focusBarShare;
+
+    var byLabel = {};
+    data.causes.forEach(function (c) { byLabel[c.label] = c; });
+
+    var rows = base.rows.map(function (r) {
+      var c = byLabel[r.key];
+      var isFocus = focusRank[r.key] !== undefined;
+
+      if (!isFocus) {
+        // Fades where it stands. A row on its way out that also moves reads as
+        // a fourth ranking rather than as an exit.
+        return Object.assign({}, r, {
+          opacity: 1 - leave,
+          // Its value label fades on the same schedule as the survivors', not
+          // on the row's own. Leaving it lit and relying on the row group's
+          // opacity to hide it would make the layout assert two contradictory
+          // things about one frame, and only the DOM would know which won.
+          values: r.values.map(function (v, k) {
+            return { text: v.text, opacity: k === 1 ? fadeOut(q) : 0 };
+          }).concat([{ text: fmt(c.crashes), opacity: 0 }]),
+          subLabel: { text: c.death_rate.toFixed(1) + " deaths per 100", opacity: 0,
+                      x: r.labelX, y: r.y + r.height + o.subLabelGap },
+        });
+      }
+
+      var i = focusRank[r.key];
+      var y = lerp(r.y, plot.y + i * bandH + o.bandTopPad, grow);
+      var h = lerp(r.height, focusBarH, grow);
+      var w = lerp(r.width, (c.crashes / maxCrashes) * plot.w, grow);
+      return Object.assign({}, r, {
+        y: y, height: h, width: w, opacity: 1, valueX: plot.x + w + 12,
+        // The same gapped crossfade acts 1-2 use: the rate is off the bar
+        // before the count arrives, because a number interpolated between
+        // 22.0 and 1,565 is true of neither.
+        values: r.values.map(function (v, k) {
+          return { text: v.text, opacity: k === 1 ? fadeOut(q) : 0 };
+        }).concat([{ text: fmt(c.crashes), opacity: fadeIn(q) }]),
+        subLabel: {
+          text: c.death_rate.toFixed(1) + " deaths per 100",
+          opacity: fadeIn(q), x: r.labelX, y: y + h + o.subLabelGap,
+        },
+      });
+    });
+
+    return Object.assign({}, base, {
+      rows: rows,
+      tickSets: [
+        { metric: "share", ticks: base.tickSets[0].ticks.map(function (t) {
+            return Object.assign({}, t, { opacity: 0 }); }) },
+        { metric: "death_rate", ticks: base.tickSets[1].ticks.map(function (t) {
+            return Object.assign({}, t, { opacity: fadeOut(q) }); }) },
+        { metric: "crashes", ticks: crashTicks(plot, maxCrashes, fadeIn(q)) },
+      ],
+      axisTitles: base.axisTitles.map(function (a, i) {
+        return Object.assign({}, a, { opacity: i === 1 ? swapOut(q) : 0 });
+      }).concat([{ text: "Crashes recorded", opacity: swapIn(q),
+                   x: plot.x, y: plot.y + plot.h + 52 }]),
+      headings: base.headings.map(function (hd, i) {
+        return Object.assign({}, hd, { opacity: i === 1 ? swapOut(q) : 0 });
+      }).concat([{ text: "The evidence behind each rate", opacity: swapIn(q) }]),
+      subtitle: q < 0.5 ? base.subtitle
+        : "Bar length is now how many crashes each rate was computed from — "
+          + fmt(focus[o.focusCount - 1].crashes) + " for "
+          + focus[o.focusCount - 1].label.toLowerCase() + ", against "
+          + focus.slice(0, o.focusCount - 1).map(function (c) { return fmt(c.crashes); }).join(" and ")
+          + " for the two ranked above it.",
+      progress: q,
+    });
+  }
+
+  // Tick count must not vary with progress: render.js builds one node per tick
+  // at mount time and only moves them afterwards.
+  function crashTicks(plot, maxCrashes, opacity) {
+    return niceTicks(maxCrashes, 4).map(function (v) {
+      return { value: v, x: plot.x + (v / maxCrashes) * plot.w, label: fmt(v), opacity: opacity };
+    });
+  }
+
+  /* The whole Slide 4 story as one scalar, so the page holds no act arithmetic
+   * and the seam between acts is covered by the check script rather than by a
+   * number typed into an HTML file. slide04() itself is untouched — it remains
+   * the two-act reorder, with its own invariants intact.
+   *
+   * Acts 1-2 are padded up to act 3's richer shape (a third value per row, a
+   * third tick set, axis title and heading, all at opacity 0) because render.js
+   * builds its DOM once, from the layout returned at progress 0.
+   */
+  var SLIDE04_ACT3_START = 2 / 3;
+
+  function slide04Story(data, progress, options) {
+    var p = clamp(progress, 0, 1);
+    if (p >= SLIDE04_ACT3_START) {
+      return slide04Act3(data, (p - SLIDE04_ACT3_START) / (1 - SLIDE04_ACT3_START), options);
+    }
+
+    var o = Object.assign({}, SLIDE04_DEFAULTS, SLIDE04_ACT3_DEFAULTS, options || {});
+    var m = slide04(data, p / SLIDE04_ACT3_START, options);
+    var byRate = data.causes.slice().sort(function (a, b) { return b.death_rate - a.death_rate; });
+    var maxCrashes = Math.max.apply(null, byRate.slice(0, o.focusCount)
+      .map(function (c) { return c.crashes; }));
+    var byLabel = {};
+    data.causes.forEach(function (c) { byLabel[c.label] = c; });
+
+    return Object.assign({}, m, {
+      rows: m.rows.map(function (r) {
+        var c = byLabel[r.key];
+        return Object.assign({}, r, {
+          values: r.values.concat([{ text: fmt(c.crashes), opacity: 0 }]),
+          subLabel: { text: c.death_rate.toFixed(1) + " deaths per 100", opacity: 0,
+                      x: r.labelX, y: r.y + r.height + o.subLabelGap },
+        });
+      }),
+      tickSets: m.tickSets.concat([
+        { metric: "crashes", ticks: crashTicks(m.plot, maxCrashes, 0) },
+      ]),
+      axisTitles: m.axisTitles.concat([
+        { text: "Crashes recorded", opacity: 0, x: m.plot.x, y: m.plot.y + m.plot.h + 52 },
+      ]),
+      headings: m.headings.concat([{ text: "The evidence behind each rate", opacity: 0 }]),
+      progress: p,
+    });
+  }
+
   /* ------------------------------------------------- slide 9: AADT scatter */
 
   var SLIDE09_DEFAULTS = {
@@ -669,6 +838,9 @@
     niceTicks: niceTicks,
     progressFor: progressFor,
     slide04: slide04,
+    slide04Act3: slide04Act3,
+    slide04Story: slide04Story,
+    SLIDE04_ACT3_START: SLIDE04_ACT3_START,
     slide08: slide08,
     slide09: slide09,
     slide12: slide12,

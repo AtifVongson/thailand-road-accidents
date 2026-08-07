@@ -55,7 +55,8 @@
       gText.appendChild(t);
       return t;
     });
-    gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle));
+    var subtitle = el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle);
+    gText.appendChild(subtitle);
     gText.appendChild(el("text", {
       class: "c-source", x: first.sourceX, y: first.viewBox.height - 18, "text-anchor": "end",
     }, first.source));
@@ -99,10 +100,17 @@
         g.appendChild(t);
         return t;
       });
+      // Optional second line under the row label — Slide 4's act 3 uses it to
+      // keep each cause's death rate on screen while the bar switches to
+      // showing how many crashes that rate came from. Layouts that never
+      // return `subLabel` (slide 8) create no node at all.
+      var sub = r.subLabel === undefined ? null
+        : el("text", { class: "c-sublabel" }, r.subLabel.text);
       g.insertBefore(bar, g.firstChild);
       g.appendChild(name);
+      if (sub) g.appendChild(sub);
       gBars.appendChild(g);
-      rows[r.key] = { g: g, bar: bar, name: name, values: values };
+      rows[r.key] = { g: g, bar: bar, name: name, values: values, sub: sub };
     });
 
     mount.appendChild(svg);
@@ -113,13 +121,23 @@
       m.rows.forEach(function (r) {
         var n = rows[r.key];
         n.g.setAttribute("opacity", r.opacity.toFixed(3));
-        set(n.bar, { y: r.y, width: Math.max(0, r.width), fill: r.color });
+        // height is animated too, not just position: act 3's three survivors
+        // grow into a plot that was carrying eighteen rows a moment earlier.
+        set(n.bar, { y: r.y, height: r.height, width: Math.max(0, r.width), fill: r.color });
         set(n.name, { x: r.labelX, y: r.y + r.height / 2 });
+        if (n.sub) {
+          set(n.sub, { x: r.subLabel.x, y: r.subLabel.y,
+                       opacity: r.subLabel.opacity.toFixed(3) });
+        }
         r.values.forEach(function (v, i) {
           set(n.values[i], { x: r.valueX, y: r.y + r.height / 2, opacity: v.opacity.toFixed(3) });
           n.values[i].textContent = v.text;
         });
       });
+
+      // Only written when it actually changes: this runs on every scroll frame,
+      // and assigning textContent unconditionally re-lays out the text node.
+      if (subtitle.textContent !== m.subtitle) subtitle.textContent = m.subtitle;
 
       m.tickSets.forEach(function (ts, i) {
         tickGroups[i].group.setAttribute("opacity", ts.ticks[0].opacity.toFixed(3));
@@ -144,6 +162,15 @@
     var L = getLayout();
     return mountBarChart(mount, L.slide04, data, options,
       "Highway crash causes, reordering from most common to most lethal");
+  }
+
+  // The three-act version: reorder, then the evidence behind the top three.
+  // Same mount, same DOM, one scalar — see slide04Story() in layout.js.
+  function slide04Story(mount, data, options) {
+    var L = getLayout();
+    return mountBarChart(mount, L.slide04Story, data, options,
+      "Highway crash causes reordering from most common to most lethal, then the "
+      + "number of crashes behind each of the three highest death rates");
   }
 
   function slide08(mount, data, options) {
@@ -343,5 +370,6 @@
     return { svg: svg, update: update };
   }
 
-  return { slide04: slide04, slide08: slide08, slide09: slide09, slide12: slide12 };
+  return { slide04: slide04, slide04Story: slide04Story, slide08: slide08,
+           slide09: slide09, slide12: slide12 };
 });
