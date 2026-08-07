@@ -1,0 +1,881 @@
+{
+ "k": 5,
+ "sections": 160,
+ "silhouette": 0.27,
+ "features": [
+  "log AADT",
+  "share of heavy vehicles",
+  "log crash rate per distance-traffic",
+  "deaths per crash"
+ ],
+ "clusters": [
+  {
+   "cluster": 4,
+   "label": "Freight corridor",
+   "note": "36% heavy vehicles — the deadliest group",
+   "sections": 40,
+   "aadt": 28934.6,
+   "pct_heavy": 36.15,
+   "crash_rate": 8.22,
+   "deaths_per_crash": 0.1222,
+   "crashes": 4780,
+   "deaths": 574,
+   "death_share": 29.3
+  },
+  {
+   "cluster": 1,
+   "label": "Quiet secondary road",
+   "note": "Little traffic, but crashes most often",
+   "sections": 38,
+   "aadt": 9136.3,
+   "pct_heavy": 11.58,
+   "crash_rate": 22.58,
+   "deaths_per_crash": 0.1206,
+   "crashes": 4201,
+   "deaths": 457,
+   "death_share": 23.3
+  },
+  {
+   "cluster": 0,
+   "label": "Safe highway",
+   "note": "The lowest crash rate",
+   "sections": 37,
+   "aadt": 29591.2,
+   "pct_heavy": 11.44,
+   "crash_rate": 4.23,
+   "deaths_per_crash": 0.0909,
+   "crashes": 1959,
+   "deaths": 166,
+   "death_share": 8.5
+  },
+  {
+   "cluster": 2,
+   "label": "Killer highway",
+   "note": "Crashes rarely, but kills most per crash",
+   "sections": 24,
+   "aadt": 28800.8,
+   "pct_heavy": 16.33,
+   "crash_rate": 7.15,
+   "deaths_per_crash": 0.2519,
+   "crashes": 1911,
+   "deaths": 481,
+   "death_share": 24.6
+  },
+  {
+   "cluster": 3,
+   "label": "Urban motorway",
+   "note": "Crashes constantly, kills almost nobody",
+   "sections": 21,
+   "aadt": 93431.4,
+   "pct_heavy": 23.94,
+   "crash_rate": 20.21,
+   "deaths_per_crash": 0.0234,
+   "crashes": 13176,
+   "deaths": 280,
+   "death_share": 14.3
+  }
+ ],
+ "points": [
+  {
+   "cluster": 1,
+   "crash_rate": 36.183,
+   "deaths_per_crash": 0.1153
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 31.509,
+   "deaths_per_crash": 0.123
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 1.354,
+   "deaths_per_crash": 0.0909
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 7.975,
+   "deaths_per_crash": 0.0758
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 6.766,
+   "deaths_per_crash": 0.0612
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 7.732,
+   "deaths_per_crash": 0.0909
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 4.945,
+   "deaths_per_crash": 0.1481
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 4.226,
+   "deaths_per_crash": 0.069
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 4.07,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 3.996,
+   "deaths_per_crash": 0.1905
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 15.902,
+   "deaths_per_crash": 0.1742
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 16.308,
+   "deaths_per_crash": 0.0561
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 15.486,
+   "deaths_per_crash": 0.1719
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 6.121,
+   "deaths_per_crash": 0.0943
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 7.797,
+   "deaths_per_crash": 0.1368
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 25.126,
+   "deaths_per_crash": 0.2672
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 17.505,
+   "deaths_per_crash": 0.1702
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.948,
+   "deaths_per_crash": 0.1667
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.238,
+   "deaths_per_crash": 0.1
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 2.876,
+   "deaths_per_crash": 0.5455
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 3.516,
+   "deaths_per_crash": 0.125
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 11.493,
+   "deaths_per_crash": 0.2167
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 1.569,
+   "deaths_per_crash": 0.2206
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 3.358,
+   "deaths_per_crash": 0.3081
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 4.957,
+   "deaths_per_crash": 0.0699
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 3.096,
+   "deaths_per_crash": 0.0441
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 6.469,
+   "deaths_per_crash": 0.2
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 4.926,
+   "deaths_per_crash": 0.1081
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 16.09,
+   "deaths_per_crash": 0.1339
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 13.459,
+   "deaths_per_crash": 0.2941
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 33.844,
+   "deaths_per_crash": 0.0536
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 60.091,
+   "deaths_per_crash": 0.1429
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 102.274,
+   "deaths_per_crash": 0.0825
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 25.806,
+   "deaths_per_crash": 0.1618
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 34.396,
+   "deaths_per_crash": 0.1636
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 27.465,
+   "deaths_per_crash": 0.0893
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 2.238,
+   "deaths_per_crash": 0.2174
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 16.357,
+   "deaths_per_crash": 0.1215
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 4.416,
+   "deaths_per_crash": 0.1111
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 4.989,
+   "deaths_per_crash": 0.0426
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 3.689,
+   "deaths_per_crash": 0.4211
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 5.613,
+   "deaths_per_crash": 0.2414
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 8.482,
+   "deaths_per_crash": 0.2537
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 13.297,
+   "deaths_per_crash": 0.2051
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 11.109,
+   "deaths_per_crash": 0.1087
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 9.302,
+   "deaths_per_crash": 0.1189
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 4.668,
+   "deaths_per_crash": 0.2316
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 1.144,
+   "deaths_per_crash": 0.2692
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 9.068,
+   "deaths_per_crash": 0.0408
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 23.823,
+   "deaths_per_crash": 0.0644
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 20.209,
+   "deaths_per_crash": 0.0408
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 9.519,
+   "deaths_per_crash": 0.1491
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 10.179,
+   "deaths_per_crash": 0.1148
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 6.389,
+   "deaths_per_crash": 0.0952
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 21.67,
+   "deaths_per_crash": 0.0683
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 11.054,
+   "deaths_per_crash": 0.0468
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.111,
+   "deaths_per_crash": 0.0667
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 9.759,
+   "deaths_per_crash": 0.0365
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 15.475,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 7.103,
+   "deaths_per_crash": 0.041
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 7.742,
+   "deaths_per_crash": 0.2078
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 1.671,
+   "deaths_per_crash": 0.0417
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 5.388,
+   "deaths_per_crash": 0.0602
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 5.965,
+   "deaths_per_crash": 0.075
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 3.044,
+   "deaths_per_crash": 0.0333
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 11.57,
+   "deaths_per_crash": 0.1235
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 10.534,
+   "deaths_per_crash": 0.0685
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 3.876,
+   "deaths_per_crash": 0.1154
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 7.175,
+   "deaths_per_crash": 0.1277
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.075,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 4.925,
+   "deaths_per_crash": 0.1786
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 3.592,
+   "deaths_per_crash": 0.3333
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 9.692,
+   "deaths_per_crash": 0.2437
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 1.977,
+   "deaths_per_crash": 0.0909
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 6.572,
+   "deaths_per_crash": 0.087
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 3.102,
+   "deaths_per_crash": 0.0682
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 6.318,
+   "deaths_per_crash": 0.2308
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.685,
+   "deaths_per_crash": 0.125
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 3.655,
+   "deaths_per_crash": 0.08
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 1.503,
+   "deaths_per_crash": 0.2941
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 7.378,
+   "deaths_per_crash": 0.0968
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 9.853,
+   "deaths_per_crash": 0.0317
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 16.434,
+   "deaths_per_crash": 0.2245
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 8.761,
+   "deaths_per_crash": 0.3077
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 14.298,
+   "deaths_per_crash": 0.2136
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 24.75,
+   "deaths_per_crash": 0.0798
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 40.049,
+   "deaths_per_crash": 0.1382
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 15.104,
+   "deaths_per_crash": 0.1786
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 7.375,
+   "deaths_per_crash": 0.25
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 1.66,
+   "deaths_per_crash": 0.1
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 3.679,
+   "deaths_per_crash": 0.1071
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 19.995,
+   "deaths_per_crash": 0.039
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 14.618,
+   "deaths_per_crash": 0.0545
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 15.208,
+   "deaths_per_crash": 0.125
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 6.009,
+   "deaths_per_crash": 0.05
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 9.448,
+   "deaths_per_crash": 0.1429
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 21.405,
+   "deaths_per_crash": 0.0513
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 17.067,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 36.233,
+   "deaths_per_crash": 0.0465
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 13.011,
+   "deaths_per_crash": 0.1
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 27.288,
+   "deaths_per_crash": 0.0682
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 33.574,
+   "deaths_per_crash": 0.0519
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 17.405,
+   "deaths_per_crash": 0.1071
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 20.636,
+   "deaths_per_crash": 0.0996
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 24.961,
+   "deaths_per_crash": 0.1672
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 2.446,
+   "deaths_per_crash": 0.4118
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 1.827,
+   "deaths_per_crash": 0.3333
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.474,
+   "deaths_per_crash": 0.1176
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 8.642,
+   "deaths_per_crash": 0.04
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 5.63,
+   "deaths_per_crash": 0.1026
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 17.898,
+   "deaths_per_crash": 0.1633
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 20.975,
+   "deaths_per_crash": 0.2738
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 1.987,
+   "deaths_per_crash": 0.1463
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 2.467,
+   "deaths_per_crash": 0.1569
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 4.103,
+   "deaths_per_crash": 0.1522
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 2.727,
+   "deaths_per_crash": 0.1667
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 5.036,
+   "deaths_per_crash": 0.1972
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 7.616,
+   "deaths_per_crash": 0.25
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 5.794,
+   "deaths_per_crash": 0.0517
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 29.958,
+   "deaths_per_crash": 0.1226
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 9.589,
+   "deaths_per_crash": 0.1374
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 8.474,
+   "deaths_per_crash": 0.0962
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 6.922,
+   "deaths_per_crash": 0.2597
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 7.525,
+   "deaths_per_crash": 0.1546
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 17.853,
+   "deaths_per_crash": 0.142
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 15.025,
+   "deaths_per_crash": 0.2911
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 24.28,
+   "deaths_per_crash": 0.1254
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 12.539,
+   "deaths_per_crash": 0.1235
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 23.858,
+   "deaths_per_crash": 0.1199
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 26.592,
+   "deaths_per_crash": 0.0885
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 29.941,
+   "deaths_per_crash": 0.1392
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 14.871,
+   "deaths_per_crash": 0.0746
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 7.887,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 23.752,
+   "deaths_per_crash": 0.0678
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 6.594,
+   "deaths_per_crash": 0.1176
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 10.118,
+   "deaths_per_crash": 0.2593
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 8.818,
+   "deaths_per_crash": 0.1875
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 12.774,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 2.62,
+   "deaths_per_crash": 0.2381
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 25.464,
+   "deaths_per_crash": 0.1783
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 44.838,
+   "deaths_per_crash": 0.25
+  },
+  {
+   "cluster": 0,
+   "crash_rate": 2.571,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 2,
+   "crash_rate": 11.21,
+   "deaths_per_crash": 0.2254
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 28.96,
+   "deaths_per_crash": 0.003
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 19.366,
+   "deaths_per_crash": 0.0129
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 26.435,
+   "deaths_per_crash": 0.0174
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 28.026,
+   "deaths_per_crash": 0.0198
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 24.89,
+   "deaths_per_crash": 0.006
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 27.314,
+   "deaths_per_crash": 0.0284
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 48.584,
+   "deaths_per_crash": 0.0153
+  },
+  {
+   "cluster": 1,
+   "crash_rate": 96.84,
+   "deaths_per_crash": 0.0226
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 183.69,
+   "deaths_per_crash": 0.0132
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 11.825,
+   "deaths_per_crash": 0.0361
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 8.053,
+   "deaths_per_crash": 0.0307
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 8.145,
+   "deaths_per_crash": 0.0234
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 11.519,
+   "deaths_per_crash": 0.0282
+  },
+  {
+   "cluster": 4,
+   "crash_rate": 7.274,
+   "deaths_per_crash": 0.0
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 7.933,
+   "deaths_per_crash": 0.0301
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 89.519,
+   "deaths_per_crash": 0.0069
+  },
+  {
+   "cluster": 3,
+   "crash_rate": 67.723,
+   "deaths_per_crash": 0.0138
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

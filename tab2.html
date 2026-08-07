@@ -41,15 +41,33 @@
 
 <main>
 
-<!-- 7 — relationships -->
-<section class="section section-static" data-kicker="Part 1 &middot; Relationship" data-title="The strongest link, and a link that is not there">
-  <p class="kicker">Part 1 &middot; Relationship</p>
-  <h1>The strongest link, and a link that is not there</h1>
-  <div class="figwrap"><img src="assets/figures/fig16_relationship.svg" alt="Motorcycle vs non-motorcycle crashes by province, and deaths per crash by weather"></div>
-  <p class="takeaway">Left: motorcycle and non-motorcycle crashes rise together across all 77
-    provinces &mdash; r = +0.78, Spearman +0.71, p &lt; 0.001. Right: weather explains 0.2% of
-    the variation in deaths per crash (&eta; = 0.04), and rain is the less deadly of the two
-    large categories &mdash; 7.9 deaths per 100 against 13.1 for clear.</p>
+<!-- 7 — relationships (LIVE)
+     fig16's right-hand panel was deaths per 100 by weather, which is now the
+     weather card of Tab 1's conditions carousel. Only the scatter is drawn here;
+     the weather result stays in the copy so the heading still delivers both
+     halves, and the deck keeps the two-panel figure unchanged. -->
+<section class="section section-live" data-kicker="Part 1 &middot; Relationship" data-title="The strongest link, and a link that is not there">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Relationship</p>
+    <h1>The strongest link, and a link that is not there</h1>
+  </div>
+  <div class="spacer">
+    <p>One point per province, all 77: crashes involving a motorcycle against crashes
+       that do not. Scroll to fit a line through them.</p>
+  </div>
+  <div class="scroll-section" id="sec-s7">
+    <div class="pin"><div class="frame" id="mount-s7"></div></div>
+  </div>
+  <div class="spacer">
+    <p>They rise together almost exactly &mdash; <b>r = +0.78</b>, Spearman +0.71,
+       p &lt; 0.001. A province with more motorcycle crashes has more of every other
+       kind too, so this is not a few places with a motorcycle problem: it scales with
+       traffic everywhere.</p>
+    <p class="limits">And the link that is not there: weather explains <b>0.2%</b> of the
+       variation in deaths per crash (&eta; = 0.04), and rain is the less deadly of the
+       two large categories &mdash; 7.9 deaths per 100 against 13.1 for clear. That
+       comparison is drawn on Tab 1's conditions carousel rather than repeated here.</p>
+  </div>
 </section>
 
 <!-- 8 — hook (LIVE) -->
@@ -128,21 +146,53 @@
       crash. Ranked against a negative-binomial model that explains 48% of the variation in
       crash counts, the worst section runs 12.9&times; the crashes it should.</p>
   </div>
-  <div class="figwrap" style="margin-top:22px;max-width:760px">
-    <img src="assets/figures/fig09_clusters.svg" alt="The five section archetypes plotted by traffic volume and crash rate">
+</section>
+
+<!-- 10b — the five archetypes (LIVE) -->
+<section class="section section-live" data-kicker="Part 1 &middot; Excess risk" data-title="Five kinds of road section">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Excess risk</p>
+    <h1>Five kinds of road section</h1>
+  </div>
+  <div class="spacer">
+    <p>k-means on four standardised variables &mdash; traffic volume, share of heavy
+       vehicles, crash rate per distance-traffic, and deaths per crash. Every panel
+       draws all 160 sections; each picks out one archetype. Scroll to step through
+       them.</p>
+  </div>
+  <div class="scroll-section clusters" id="sec-s10b">
+    <div class="pin"><div class="frame" id="mount-s10b"></div></div>
+  </div>
+  <div class="spacer">
+    <p>Freight corridors carry <b>29%</b> of the deaths in this sample and killer
+       highways <b>25%</b>, while urban motorways carry 14% and kill least per crash
+       &mdash; they crash constantly and almost nobody dies. The archetypes are named by
+       the variable each is extreme in, never by the cluster id, which k-means assigns
+       arbitrarily.</p>
   </div>
 </section>
 
-<!-- 11 — what they share -->
-<section class="section section-static" data-kicker="Part 1 &middot; Excess risk" data-title="What the worst sections have in common">
-  <p class="kicker">Part 1 &middot; Excess risk</p>
-  <h1>What the worst sections have in common</h1>
-  <div class="figwrap"><img src="assets/figures/fig11_outliers.svg" alt="Comparison of overshooting sections against the rest, by road type"></div>
-  <p class="takeaway">79% of the 14 biggest overshoots are motorway &mdash; Routes 7 and 9.
-    They carry 76,000 vehicles a day against 26,100 elsewhere and crash four times as often
-    (33.1 against 8.3 per 100 million vehicle-kilometres), yet kill 2.1 per 100 crashes
-    against 12.0. The worst sections share a road type; they are not a scatter of unlucky
-    places.</p>
+<!-- 11 — what they share (LIVE) -->
+<section class="section section-live" data-kicker="Part 1 &middot; Excess risk" data-title="What the worst sections have in common">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Excess risk</p>
+    <h1>What the worst sections have in common</h1>
+  </div>
+  <div class="spacer">
+    <p>Five measures, the 14 biggest overshoots against the other 146. The grey bar in
+       each panel is an ordinary section. Scroll to put the overshooting ones beside
+       them.</p>
+  </div>
+  <div class="scroll-section" id="sec-s11">
+    <div class="pin"><div class="frame" id="mount-s11"></div></div>
+  </div>
+  <div class="spacer">
+    <p><b>79% of the 14 biggest overshoots are motorway</b> &mdash; Routes 7 and 9. They
+       carry 76,000 vehicles a day against 26,100 elsewhere and crash four times as often
+       (33.1 against 8.3 per 100 million vehicle-kilometres), yet kill <b>2.1 per 100
+       crashes against 12.0</b>. The worst sections share a road type; they are not a
+       scatter of unlucky places.</p>
+  </div>
 </section>
 
 </main>
@@ -218,21 +268,29 @@
     cue.style.opacity = anyMid ? 0 : 1;
   }
 
+  // `stops` may be an array, or a function of the loaded data for charts whose
+  // stop count comes from the data itself — slide 10b has one per archetype.
   function wire(sectionId, mountId, dataUrl, layoutKey, stops) {
     return fetch(dataUrl).then(function (r) { return r.json(); }).then(function (data) {
       var section = document.getElementById(sectionId);
       live.push({
         section: section,
         chart: ChartRender[layoutKey](document.getElementById(mountId), data),
-        anchors: anchorsFor(section, stops),
+        anchors: anchorsFor(section, typeof stops === "function" ? stops(data) : stops),
       });
     });
   }
 
   Promise.all([
+    wire("sec-s7", "mount-s7", "assets/data/charts/slide07_relationship.json", "slide07", [0, 1]),
     wire("sec-s8", "mount-s8", "assets/data/charts/slide08_provinces.json", "slide08", [0, 1]),
     wire("sec-s9", "mount-s9", "assets/data/charts/slide09_sections.json", "slide09", [0, 1]),
     wire("sec-s10", "mount-s10", "assets/data/charts/slide10_excess.json", "slide10", [0, 1]),
+    // One stop per archetype. The layout module publishes where they sit, so the
+    // page never computes them and the two cannot disagree.
+    wire("sec-s10b", "mount-s10b", "assets/data/charts/slide10b_clusters.json", "slide10b",
+         function (d) { return ChartLayout.slide10b(d, 0).stops; }),
+    wire("sec-s11", "mount-s11", "assets/data/charts/slide11_outliers.json", "slide11", [0, 1]),
   ]).then(function () {
     // Document order, so the stepper tries charts in the order a presenter meets
     // them. Promise.all resolves in call order, but wire() pushes on completion,

@@ -753,6 +753,517 @@
     };
   }
 
+  /* ------------------------------- shared: a plot box from a margin object */
+
+  function plotBox(o) {
+    return { x: o.margin.left, y: o.margin.top,
+             w: o.width - o.margin.left - o.margin.right,
+             h: o.height - o.margin.top - o.margin.bottom };
+  }
+
+  /* Decade ticks for a log axis, as values that fall inside [lo, hi]. */
+  function decadeTicks(lo, hi) {
+    var out = [];
+    for (var e = Math.ceil(Math.log(lo) / Math.LN10); Math.pow(10, e) <= hi; e++) {
+      out.push(Math.pow(10, e));
+    }
+    return out;
+  }
+
+  /* ------------------------------------- slide 7: two counts rising together */
+
+  var SLIDE07_DEFAULTS = {
+    width: 1280, height: 720,
+    margin: { top: 148, right: 60, bottom: 96, left: 96 },
+    headroom: 1.08,
+    pointR: 5.2,
+  };
+
+  /* One point per province: crashes involving a motorcycle against crashes that
+   * do not. The two series partition each province's total exactly once, so the
+   * scatter is a decomposition rather than two loosely related counts.
+   *
+   * Act 1 is the cloud. Act 2 draws the least-squares fit across it and states
+   * the correlation. The fit is computed in Python and passed in — this module
+   * does no statistics — and it is drawn last because the claim being made is
+   * "these rise together", which the eye should reach before the line asserts it.
+   */
+  function slide07(data, progress, options) {
+    var o = Object.assign({}, SLIDE07_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var t = smoothstep(p);
+    var plot = plotBox(o);
+    var pts = data.points;
+
+    var xMax = o.headroom * pts.reduce(function (m, r) { return Math.max(m, r.with_mc); }, 0);
+    var yMax = o.headroom * pts.reduce(function (m, r) { return Math.max(m, r.without_mc); }, 0);
+    var sx = function (v) { return plot.x + (v / xMax) * plot.w; };
+    var sy = function (v) { return plot.y + plot.h - (v / yMax) * plot.h; };
+
+    // The fit is drawn only across the span the data actually covers, so it
+    // never implies a prediction outside the observed range.
+    var xLo = 0, xHi = pts.reduce(function (m, r) { return Math.max(m, r.with_mc); }, 0);
+    var fitY = function (x) { return data.fit.slope * x + data.fit.intercept; };
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, progress: p,
+      headings: [
+        { text: "Motorcycle and other crashes rise together", opacity: swapOut(p) },
+        { text: "The strongest relationship in the file", opacity: swapIn(p) },
+      ],
+      subtitle: "One point per province, all 77. Crashes involving a motorcycle "
+              + "against crashes that do not.",
+      points: pts.map(function (r, i) {
+        return { key: "p" + i, label: r.label, cx: sx(r.with_mc), cy: sy(r.without_mc),
+                 r: o.pointR, color: PALETTE.volume, opacity: 0.72 };
+      }),
+      fit: {
+        x1: sx(xLo), y1: sy(fitY(xLo)),
+        // Grows out across the cloud rather than appearing whole.
+        x2: sx(lerp(xLo, xHi, t)), y2: sy(fitY(lerp(xLo, xHi, t))),
+        opacity: t,
+      },
+      stat: {
+        // Only at rest: mid-draw the line is a partial claim and a correlation
+        // printed beside it would look like it belonged to the drawn part.
+        text: "Pearson r = " + data.pearson_r.toFixed(2)
+            + "   ·   Spearman ρ = " + data.spearman_r.toFixed(2)
+            + "   ·   p < 0.001",
+        x: plot.x + 20, y: plot.y + 30, opacity: atRestIn(p),
+      },
+      axisTitles: [
+        { text: data.axis_x, x: plot.x + plot.w / 2, y: plot.y + plot.h + 52,
+          anchor: "middle" },
+        { text: data.axis_y, x: plot.x, y: plot.y - 16, anchor: "start" },
+      ],
+      xTicks: niceTicks(xMax, 5).map(function (v) {
+        return { value: v, x: sx(v), label: fmt(v) };
+      }),
+      yTicks: niceTicks(yMax, 5).map(function (v) {
+        return { value: v, y: sy(v), label: fmt(v) };
+      }),
+      source: data.source, sourceX: o.width - 40,
+    };
+  }
+
+  /* --------------------------------- slide 10b: five kinds of road section */
+
+  var SLIDE10B_DEFAULTS = {
+    // Deep top margin: each panel stacks a name, a description and a count above
+    // it, and the shared y-axis label needs a band of its own above those. At 190
+    // the axis label and the first panel's caption were 4px apart and overstruck.
+    width: 1280, height: 720,
+    margin: { top: 210, right: 44, bottom: 96, left: 74 },
+    panelGap: 22,
+    pointR: 3.2,
+    focusR: 4.6,
+  };
+
+  /* Five small multiples over one shared scatter — crash rate against deaths per
+   * crash, log x — with every section drawn faintly in all five and one
+   * archetype picked out in each. Progress walks the focus across them, so a
+   * presenter steps through the five kinds rather than pointing at a wall of
+   * panels.
+   *
+   * Every panel shares one pair of scales. Giving each its own would let a
+   * cluster's spread look like a property of that cluster rather than of the
+   * axis it was drawn on, which is the whole failure mode small multiples exist
+   * to avoid.
+   */
+  function slide10b(data, progress, options) {
+    var o = Object.assign({}, SLIDE10B_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var plot = plotBox(o);
+    var k = data.clusters.length;
+
+    // Focus walks 0 -> k-1. Each whole number is a stop.
+    var focus = p * (k - 1);
+
+    var pts = data.points;
+    var rLo = pts.reduce(function (m, r) { return Math.min(m, r.crash_rate); }, Infinity) * 0.8;
+    var rHi = pts.reduce(function (m, r) { return Math.max(m, r.crash_rate); }, 0) * 1.2;
+    var sHi = pts.reduce(function (m, r) { return Math.max(m, r.deaths_per_crash); }, 0) * 1.12;
+    var logLo = Math.log(rLo), logHi = Math.log(rHi);
+
+    var panelW = (plot.w - o.panelGap * (k - 1)) / k;
+
+    var panels = data.clusters.map(function (c, i) {
+      var x = plot.x + i * (panelW + o.panelGap);
+      var sx = function (v) { return x + (Math.log(v) - logLo) / (logHi - logLo) * panelW; };
+      var sy = function (v) { return plot.y + plot.h - (v / sHi) * plot.h; };
+      // 1 on the focused panel, falling away either side, so neighbours stay
+      // legible instead of switching off.
+      var near = clamp(1 - Math.abs(focus - i), 0, 1);
+
+      return {
+        key: c.label, label: c.label, note: c.note,
+        cluster: c.cluster, x: x, y: plot.y, w: panelW, h: plot.h,
+        focus: near,
+        caption: c.sections + " sections · " + c.death_share.toFixed(0)
+               + "% of deaths in the sample",
+        points: pts.map(function (r, j) {
+          var mine = r.cluster === c.cluster;
+          return {
+            key: "c" + i + "-" + j,
+            cx: sx(r.crash_rate), cy: sy(r.deaths_per_crash),
+            r: mine ? lerp(o.pointR, o.focusR, near) : o.pointR,
+            color: mine ? PALETTE.volume : PALETTE.grid,
+            opacity: mine ? lerp(0.45, 0.9, near) : 0.5,
+            mine: mine,
+          };
+        }),
+        xTicks: decadeTicks(rLo, rHi).map(function (v) {
+          return { value: v, x: sx(v), label: fmt(v) };
+        }),
+      };
+    });
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, progress: p, focus: focus,
+      stops: data.clusters.map(function (_, i) { return i / (k - 1); }),
+      heading: "Five kinds of road section, separated by k-means on four variables",
+      subtitle: data.features.join(" · ") + "   (k = " + data.k
+              + ", silhouette " + data.silhouette + ")",
+      panels: panels,
+      axisTitles: [
+        { text: "Crash rate (per 100 million vehicle-km)",
+          x: plot.x + plot.w / 2, y: plot.y + plot.h + 50, anchor: "middle" },
+        // Above the per-panel label stack, not beside it: all five panels share
+        // this axis, so it reads as a header for the whole strip.
+        { text: "Deaths per crash", x: plot.x, y: plot.y - 96, anchor: "start" },
+      ],
+      yTicks: niceTicks(sHi, 4).map(function (v) {
+        return { value: v, y: plot.y + plot.h - (v / sHi) * plot.h,
+                 label: v.toFixed(2) };
+      }),
+      source: data.source, sourceX: o.width - 40,
+    };
+  }
+
+  /* ------------------------ slide 11: what the overshooting sections share */
+
+  var SLIDE11_DEFAULTS = {
+    width: 1280, height: 720,
+    margin: { top: 176, right: 44, bottom: 120, left: 74 },
+    panelGap: 34,
+    barShare: 0.34,       // of a panel's width, per bar
+    headroom: 1.26,
+  };
+
+  /* Five paired comparisons, each on its own scale.
+   *
+   * Deliberately five separate panels with no shared axis: thousands of vehicles
+   * a day, a percentage, a rate per 100 million vehicle-km and deaths per 100
+   * crashes have nothing in common to share an axis with, and forcing them onto
+   * one would invent a relationship — the rule volume_vs_severity states in
+   * 02_figs_descriptive.py. Each panel is therefore its own question, and only
+   * the pairing is comparable.
+   *
+   * Act 1 shows the 146 ordinary sections alone; act 2 grows the 14 overshooting
+   * ones beside them. Establishing normal before showing the exception is what
+   * makes the last two panels land — the overshooting sections crash four times
+   * as often and kill a sixth as much.
+   */
+  function slide11(data, progress, options) {
+    var o = Object.assign({}, SLIDE11_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var t = smoothstep(p);
+    var plot = plotBox(o);
+    var ms = data.measures;
+    var n = ms.length;
+    var panelW = (plot.w - o.panelGap * (n - 1)) / n;
+    var barW = panelW * o.barShare;
+
+    var panels = ms.map(function (m, i) {
+      var x = plot.x + i * (panelW + o.panelGap);
+      var top = Math.max(m.overshooting, m.others) * o.headroom;
+      var hOf = function (v) { return (v / top) * plot.h; };
+      // Others on the left as the baseline, overshooting on the right as the
+      // departure from it — the direction the sentence runs.
+      var gap = (panelW - barW * 2) / 3;
+      var bars = [
+        { key: m.label + "-others", which: "others", label: "All others",
+          x: x + gap, width: barW, value: m.others,
+          height: hOf(m.others), y: plot.y + plot.h - hOf(m.others),
+          color: PALETTE.axis, opacity: 1 },
+        { key: m.label + "-over", which: "overshooting", label: "Overshooting",
+          x: x + gap * 2 + barW, width: barW, value: m.overshooting,
+          height: hOf(m.overshooting) * t,
+          y: plot.y + plot.h - hOf(m.overshooting) * t,
+          color: PALETTE.severity, opacity: t },
+      ];
+      return {
+        key: m.label, title: m.label, unit: m.unit, ratio: m.ratio,
+        x: x, y: plot.y, w: panelW, h: plot.h, max: top,
+        bars: bars.map(function (b) {
+          return Object.assign(b, {
+            valueX: b.x + b.width / 2,
+            valueY: b.y - 10,
+            // The overshooting number only once its bar has stopped growing:
+            // a value label on a bar still in flight names a height, not a
+            // measurement.
+            valueOpacity: b.which === "others" ? 1 : atRestIn(p),
+          });
+        }),
+      };
+    });
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, progress: p,
+      headings: [
+        { text: "The ordinary sections, for comparison", opacity: swapOut(p) },
+        { text: "What the over-crashing sections have in common", opacity: swapIn(p) },
+      ],
+      subtitle: "The " + data.top_n + " biggest overshoots against the other "
+              + data.others + " — " + data.motorway_share.toFixed(0)
+              + "% of them are motorway, Routes 7 and 9",
+      panels: panels,
+      legend: [
+        { text: "All others", color: PALETTE.axis, opacity: 1 },
+        { text: "Overshooting", color: PALETTE.severity, opacity: t },
+      ],
+      source: data.source, sourceX: o.width - 40,
+    };
+  }
+
+  /* ---------------------------------------- slide 13: the forecast, and its test */
+
+  var SLIDE13_DEFAULTS = {
+    width: 1280, height: 760,
+    margin: { top: 150, right: 52, bottom: 92, left: 88 },
+    panelGap: 44,
+    headroom: 1.12,
+  };
+
+  /* Two stacked panels, crashes above deaths, sharing an x axis of 72 months —
+   * 60 observed and 12 forecast. Separate panels rather than one dual axis, the
+   * same rule slide 12 follows: different units, and overlaying them invents a
+   * relationship.
+   *
+   * The history is always fully drawn. What `progress` moves is the forecast:
+   * the central line extends month by month and its bands open behind it, so
+   * uncertainty is seen widening with distance rather than presented as a
+   * finished shape. The 95% band is drawn under the 80%, both from the same
+   * exported bounds, and a check asserts they nest.
+   */
+  function slide13(data, progress, options) {
+    var o = Object.assign({}, SLIDE13_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var t = smoothstep(p);
+    var plot = plotBox(o);
+    var kinds = ["crashes", "deaths"];
+    var panelH = (plot.h - o.panelGap) / 2;
+
+    var nHist = data.series.crashes.history.length;
+    var nFc = data.series.crashes.forecast.length;
+    var total = nHist + nFc;
+    var xOf = function (i) { return plot.x + (i / (total - 1)) * plot.w; };
+    var reveal = t * nFc;   // how many forecast months are on screen
+
+    var panels = kinds.map(function (kind, pi) {
+      var s = data.series[kind];
+      var y0 = plot.y + pi * (panelH + o.panelGap);
+      var top = o.headroom * Math.max(
+        s.history.reduce(function (m, r) { return Math.max(m, r.value); }, 0),
+        s.forecast.reduce(function (m, r) { return Math.max(m, r.hi95); }, 0));
+      var yOf = function (v) { return y0 + panelH - (v / top) * panelH; };
+
+      var hist = s.history.map(function (r, i) {
+        return [xOf(i), yOf(r.value)];
+      });
+
+      // The forecast is drawn from the last observed point so the two series
+      // meet rather than starting a gap the eye has to close.
+      var shown = Math.min(nFc, Math.floor(reveal));
+      var frac = reveal - shown;
+      var fc = [[xOf(nHist - 1), yOf(s.history[nHist - 1].value)]];
+      for (var i = 0; i < shown; i++) fc.push([xOf(nHist + i), yOf(s.forecast[i].value)]);
+      if (shown < nFc && frac > 0) {
+        var prev = shown === 0 ? s.history[nHist - 1].value : s.forecast[shown - 1].value;
+        fc.push([xOf(nHist - 1 + shown + frac),
+                 yOf(lerp(prev, s.forecast[shown].value, frac))]);
+      }
+
+      function band(loKey, hiKey) {
+        if (reveal <= 0) return "";
+        var up = [], down = [];
+        var last = Math.min(nFc, Math.ceil(reveal));
+        for (var i = 0; i < last; i++) {
+          var w = clamp(reveal - i, 0, 1);
+          var mid = s.forecast[i].value;
+          up.push([xOf(nHist + i), yOf(lerp(mid, s.forecast[i][hiKey], w))]);
+          down.unshift([xOf(nHist + i), yOf(lerp(mid, s.forecast[i][loKey], w))]);
+        }
+        var start = [xOf(nHist - 1), yOf(s.history[nHist - 1].value)];
+        var pts = [start].concat(up, down, [start]);
+        return "M " + pts.map(function (q) {
+          return q[0].toFixed(2) + "," + q[1].toFixed(2);
+        }).join(" L ") + " Z";
+      }
+
+      var path = function (ps) {
+        return "M " + ps.map(function (q) {
+          return q[0].toFixed(2) + "," + q[1].toFixed(2);
+        }).join(" L ");
+      };
+
+      return {
+        key: kind, y: y0, h: panelH, max: top,
+        title: kind === "crashes" ? "Crashes per month" : "Deaths per month",
+        color: kind === "crashes" ? PALETTE.volume : PALETTE.severity,
+        history: path(hist),
+        forecast: path(fc),
+        band95: band("lo95", "hi95"),
+        band80: band("lo80", "hi80"),
+        divider: { x: xOf(nHist - 1), y1: y0, y2: y0 + panelH },
+        ticks: niceTicks(top, 4).map(function (v) {
+          return { value: v, y: yOf(v), label: fmt(v) };
+        }),
+        // MAPE belongs to the backtest, not the forecast, so it is stated with
+        // the naive comparison it only means something against.
+        score: { text: "backtested at MAPE " + s.mape.toFixed(1) + "% against "
+                     + s.naive_mape.toFixed(1) + "% for assuming last year repeats",
+                 x: plot.x + plot.w, y: y0 - 10, opacity: atRestIn(p) },
+      };
+    });
+
+    var xTicks = [];
+    for (var i = 0; i < total; i += 12) {
+      var m = i < nHist ? data.series.crashes.history[i].month
+                        : data.series.crashes.forecast[i - nHist].month;
+      xTicks.push({ index: i, x: xOf(i), label: m.slice(0, 4) });
+    }
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, progress: p, reveal: reveal,
+      headings: [
+        { text: "Five years observed", opacity: swapOut(p) },
+        { text: "Planning next year's checkpoint capacity", opacity: swapIn(p) },
+      ],
+      subtitle: "SARIMA on log counts, twelve months ahead. Bands are 80% and 95% "
+              + "intervals, widening with distance.",
+      panels: panels, xTicks: xTicks,
+      callout: {
+        text: "April 2026: " + fmt(data.peak.value) + " crashes (80% interval "
+            + fmt(data.peak.lo80) + "–" + fmt(data.peak.hi80) + ") · September is "
+            + "the trough at " + fmt(data.trough.value),
+        x: 40, y: o.height - 44, opacity: atRestIn(p),
+      },
+      source: data.source, sourceX: o.width - 40,
+    };
+  }
+
+  /* ------------------------------------ slide 13b: testing the reporting lag */
+
+  var SLIDE13B_DEFAULTS = {
+    // Four rows stack below the plot — tick labels, an axis title, the verdict
+    // and the COVID caveat. At 92 the axis title and the caveat shared a
+    // baseline and the ticks ran into the verdict.
+    width: 1280, height: 660,
+    margin: { top: 150, right: 44, bottom: 150, left: 88 },
+    panelGap: 88,
+    panelSplit: 0.48,
+    pointR: 5,
+    barShare: 0.6,
+    headroom: 1.18,
+  };
+
+  /* The concern, tested rather than assumed: months late in the year have a much
+   * shorter window to be reported in, so if undercounting were real they would
+   * come out low.
+   *
+   * Left, every month against the length of its reporting window, log x because
+   * the windows span 24 to 551 days. Right, the five Decembers ordered by window
+   * length — the cleanest possible comparison, since it holds the month constant
+   * and varies only the window. Act 2 reveals the Decembers, because the scatter
+   * is the test and the Decembers are the verdict.
+   */
+  function slide13b(data, progress, options) {
+    var o = Object.assign({}, SLIDE13B_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var t = smoothstep(p);
+    var plot = plotBox(o);
+    var leftW = (plot.w - o.panelGap) * o.panelSplit;
+    var rightW = plot.w - o.panelGap - leftW;
+    var left = { x: plot.x, y: plot.y, w: leftW, h: plot.h };
+    var right = { x: plot.x + leftW + o.panelGap, y: plot.y, w: rightW, h: plot.h };
+
+    var pts = data.points;
+    var wLo = pts.reduce(function (m, r) { return Math.min(m, r.window); }, Infinity) * 0.75;
+    var wHi = pts.reduce(function (m, r) { return Math.max(m, r.window); }, 0) * 1.3;
+    var cHi = o.headroom * pts.reduce(function (m, r) { return Math.max(m, r.crashes); }, 0);
+    var logLo = Math.log(wLo), logHi = Math.log(wHi);
+    var sx = function (v) { return left.x + (Math.log(v) - logLo) / (logHi - logLo) * left.w; };
+    var sy = function (v) { return left.y + left.h - (v / cHi) * left.h; };
+
+    var decs = data.decembers;
+    var slotH = right.h / decs.length;
+    var barH = slotH * o.barShare;
+    var barMax = right.w - 190;
+    var decMax = o.headroom * decs.reduce(function (m, r) { return Math.max(m, r.crashes); }, 0);
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, left: left, right: right, progress: p,
+      headings: [
+        { text: "Testing the reporting-lag concern", opacity: swapOut(p) },
+        { text: "No undercount found — the correlation runs the wrong way",
+          opacity: swapIn(p) },
+      ],
+      subtitle: "Each yearly file closes at a different time, so months late in the "
+              + "year have far less time to be reported in.",
+      points: pts.map(function (r, i) {
+        return {
+          key: "m" + i, month: r.month, late: !!r.late,
+          cx: sx(r.window), cy: sy(r.crashes), r: o.pointR,
+          // November and December are the short-window months, so they are the
+          // ones the concern is actually about.
+          color: r.late ? PALETTE.severity : PALETTE.grid,
+          opacity: r.late ? 0.95 : 0.6,
+        };
+      }),
+      xTicks: decadeTicks(wLo, wHi).map(function (v) {
+        return { value: v, x: sx(v), label: fmt(v) };
+      }),
+      yTicks: niceTicks(cHi, 4).map(function (v) {
+        return { value: v, y: sy(v), label: fmt(v) };
+      }),
+      axisTitles: [
+        { text: data.axis_x, x: left.x + left.w / 2, y: left.y + left.h + 50,
+          anchor: "middle" },
+        { text: data.axis_y, x: left.x, y: left.y - 16, anchor: "start" },
+      ],
+      legend: { text: "November and December", color: PALETTE.severity,
+                x: left.x + 14, y: left.y + 24 },
+      rows: decs.map(function (r, i) {
+        var y = right.y + i * slotH + (slotH - barH) / 2;
+        return {
+          key: r.label, label: r.label + "  ·  " + r.window + "-day window",
+          y: y, height: barH, x: right.x + 190,
+          width: (r.crashes / decMax) * barMax * t,
+          labelX: right.x + 178,
+          valueX: right.x + 190 + (r.crashes / decMax) * barMax * t + 10,
+          value: fmt(r.crashes), opacity: t,
+        };
+      }),
+      rankTitle: { text: "Each December, ordered by reporting window",
+                   x: right.x, y: right.y - 16, opacity: t },
+      verdict: {
+        text: "Correlation between window length and monthly count = "
+            + (data.correlation > 0 ? "+" : "") + data.correlation.toFixed(2)
+            + " — negative, the opposite of what undercounting would produce, "
+            + "so no adjustment is applied.",
+        x: 40, y: o.height - 64, opacity: atRestIn(p),
+      },
+      caveat: { text: data.caveat, x: 40, y: o.height - 40, opacity: atRestIn(p) },
+      source: data.source, sourceX: o.width - 40,
+    };
+  }
+
   /* -------------------------------------------------- slide 8: the reorder */
 
   var SLIDE08_DEFAULTS = {
@@ -1203,7 +1714,9 @@
   var SLIDE09_DEFAULTS = {
     width: 1280,
     height: 720,
-    margin: { top: 132, right: 64, bottom: 86, left: 100 },
+    // Bottom margin carries tick labels, then the x-axis title, then the source
+    // line. At 86 the axis title and the source overlapped by a pixel.
+    margin: { top: 132, right: 64, bottom: 104, left: 100 },
     pointRadius: 5,
     trendSamples: 40,
     // Round AADT values worth a tick, filtered to what the data actually spans.
@@ -1339,7 +1852,10 @@
   var SLIDE12_DEFAULTS = {
     width: 1280,
     height: 720,
-    margin: { top: 108, right: 56, bottom: 60, left: 84 },
+    // Top margin stacks a heading, a subtitle, the campaign-window summary and
+    // then each panel's own title. At 108 the subtitle ran into the first panel
+    // title, and at full reveal the summary landed on the subtitle as well.
+    margin: { top: 150, right: 56, bottom: 60, left: 84 },
     panelGap: 44,
     headroom: 1.18,          // matches fig12_monthly_series's own ax.set_ylim(0, max*1.18)
     bandApproach: 2.2,       // months of lead-in before a campaign window shades in
@@ -1492,7 +2008,10 @@
             + "× an ordinary day · New Year " + data.campaign_windows.new_year_30dec_5jan.crash_multiple.toFixed(2)
             + "× — level with each other",
         opacity: summaryOpacity,
-        x: o.width - 40, y: panels.crashes.y - 12,
+        // Its own line between the subtitle and the panel titles, right-anchored.
+        // On the panel-title baseline it overlapped the subtitle, which runs most
+        // of the width.
+        x: o.width - 40, y: o.margin.top - 50,
       },
       source: "Highway accident records, Ministry of Transport, 2021–2025",
       sourceX: o.width - 40,
@@ -1524,9 +2043,19 @@
     slide06: slide06,
     SLIDE06_DEFAULTS: SLIDE06_DEFAULTS,
     SLIDE06_STOPS: SLIDE06_STOPS,
+    slide07: slide07,
+    SLIDE07_DEFAULTS: SLIDE07_DEFAULTS,
     slide08: slide08,
     slide10: slide10,
     SLIDE10_DEFAULTS: SLIDE10_DEFAULTS,
+    slide10b: slide10b,
+    SLIDE10B_DEFAULTS: SLIDE10B_DEFAULTS,
+    slide11: slide11,
+    SLIDE11_DEFAULTS: SLIDE11_DEFAULTS,
+    slide13: slide13,
+    SLIDE13_DEFAULTS: SLIDE13_DEFAULTS,
+    slide13b: slide13b,
+    SLIDE13B_DEFAULTS: SLIDE13B_DEFAULTS,
     slide09: slide09,
     slide12: slide12,
     SLIDE04_DEFAULTS: SLIDE04_DEFAULTS,

@@ -135,6 +135,8 @@ img { max-width: 100%; display: block; }
 .scroll-section.act3 { height: 450vh; }
 /* Four stops rather than three, so proportionally more scroll travel. */
 .scroll-section.carousel { height: 600vh; }
+/* Five archetypes, one stop each. */
+.scroll-section.clusters { height: 620vh; }
 /* A pinned chart is sized by width, so on a short screen it overflows the pin
  * and the bottom of the chart is simply cut off — on a 1366x660 laptop the
  * 1280x720 charts render 699px tall inside a 660px pin. Capping by height makes

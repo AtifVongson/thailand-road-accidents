@@ -1,0 +1,402 @@
+{
+ "correlation": -0.17,
+ "undercount_found": false,
+ "axis_x": "Time open for reporting before the file closed (days)",
+ "axis_y": "Crashes per month",
+ "caveat": "The long-window years are 2021–2022, the COVID period when traffic was already low. This rules out a large undercount, but not the absence of any.",
+ "points": [
+  {
+   "month": "2021-01",
+   "window": 885,
+   "crashes": 2254,
+   "late": false
+  },
+  {
+   "month": "2021-02",
+   "window": 854,
+   "crashes": 1628,
+   "late": false
+  },
+  {
+   "month": "2021-03",
+   "window": 826,
+   "crashes": 1808,
+   "late": false
+  },
+  {
+   "month": "2021-04",
+   "window": 795,
+   "crashes": 2789,
+   "late": false
+  },
+  {
+   "month": "2021-05",
+   "window": 765,
+   "crashes": 1435,
+   "late": false
+  },
+  {
+   "month": "2021-06",
+   "window": 734,
+   "crashes": 1288,
+   "late": false
+  },
+  {
+   "month": "2021-07",
+   "window": 704,
+   "crashes": 1259,
+   "late": false
+  },
+  {
+   "month": "2021-08",
+   "window": 673,
+   "crashes": 1233,
+   "late": false
+  },
+  {
+   "month": "2021-09",
+   "window": 642,
+   "crashes": 1268,
+   "late": false
+  },
+  {
+   "month": "2021-10",
+   "window": 612,
+   "crashes": 1490,
+   "late": false
+  },
+  {
+   "month": "2021-11",
+   "window": 581,
+   "crashes": 1388,
+   "late": true
+  },
+  {
+   "month": "2021-12",
+   "window": 551,
+   "crashes": 2222,
+   "late": true
+  },
+  {
+   "month": "2022-01",
+   "window": 758,
+   "crashes": 1947,
+   "late": false
+  },
+  {
+   "month": "2022-02",
+   "window": 727,
+   "crashes": 1551,
+   "late": false
+  },
+  {
+   "month": "2022-03",
+   "window": 699,
+   "crashes": 1680,
+   "late": false
+  },
+  {
+   "month": "2022-04",
+   "window": 668,
+   "crashes": 2294,
+   "late": false
+  },
+  {
+   "month": "2022-05",
+   "window": 638,
+   "crashes": 1560,
+   "late": false
+  },
+  {
+   "month": "2022-06",
+   "window": 607,
+   "crashes": 1340,
+   "late": false
+  },
+  {
+   "month": "2022-07",
+   "window": 577,
+   "crashes": 1680,
+   "late": false
+  },
+  {
+   "month": "2022-08",
+   "window": 546,
+   "crashes": 1555,
+   "late": false
+  },
+  {
+   "month": "2022-09",
+   "window": 515,
+   "crashes": 1436,
+   "late": false
+  },
+  {
+   "month": "2022-10",
+   "window": 485,
+   "crashes": 1640,
+   "late": false
+  },
+  {
+   "month": "2022-11",
+   "window": 454,
+   "crashes": 1630,
+   "late": true
+  },
+  {
+   "month": "2022-12",
+   "window": 424,
+   "crashes": 2253,
+   "late": true
+  },
+  {
+   "month": "2023-01",
+   "window": 687,
+   "crashes": 2309,
+   "late": false
+  },
+  {
+   "month": "2023-02",
+   "window": 656,
+   "crashes": 1612,
+   "late": false
+  },
+  {
+   "month": "2023-03",
+   "window": 628,
+   "crashes": 1751,
+   "late": false
+  },
+  {
+   "month": "2023-04",
+   "window": 597,
+   "crashes": 2768,
+   "late": false
+  },
+  {
+   "month": "2023-05",
+   "window": 567,
+   "crashes": 1709,
+   "late": false
+  },
+  {
+   "month": "2023-06",
+   "window": 536,
+   "crashes": 1701,
+   "late": false
+  },
+  {
+   "month": "2023-07",
+   "window": 506,
+   "crashes": 1705,
+   "late": false
+  },
+  {
+   "month": "2023-08",
+   "window": 475,
+   "crashes": 1540,
+   "late": false
+  },
+  {
+   "month": "2023-09",
+   "window": 444,
+   "crashes": 1656,
+   "late": false
+  },
+  {
+   "month": "2023-10",
+   "window": 414,
+   "crashes": 1535,
+   "late": false
+  },
+  {
+   "month": "2023-11",
+   "window": 383,
+   "crashes": 1533,
+   "late": true
+  },
+  {
+   "month": "2023-12",
+   "window": 353,
+   "crashes": 2320,
+   "late": true
+  },
+  {
+   "month": "2024-01",
+   "window": 359,
+   "crashes": 2585,
+   "late": false
+  },
+  {
+   "month": "2024-02",
+   "window": 328,
+   "crashes": 1845,
+   "late": false
+  },
+  {
+   "month": "2024-03",
+   "window": 299,
+   "crashes": 2176,
+   "late": false
+  },
+  {
+   "month": "2024-04",
+   "window": 268,
+   "crashes": 3088,
+   "late": false
+  },
+  {
+   "month": "2024-05",
+   "window": 238,
+   "crashes": 2012,
+   "late": false
+  },
+  {
+   "month": "2024-06",
+   "window": 207,
+   "crashes": 1633,
+   "late": false
+  },
+  {
+   "month": "2024-07",
+   "window": 177,
+   "crashes": 1660,
+   "late": false
+  },
+  {
+   "month": "2024-08",
+   "window": 146,
+   "crashes": 1555,
+   "late": false
+  },
+  {
+   "month": "2024-09",
+   "window": 115,
+   "crashes": 1589,
+   "late": false
+  },
+  {
+   "month": "2024-10",
+   "window": 85,
+   "crashes": 1529,
+   "late": false
+  },
+  {
+   "month": "2024-11",
+   "window": 54,
+   "crashes": 1721,
+   "late": true
+  },
+  {
+   "month": "2024-12",
+   "window": 24,
+   "crashes": 2559,
+   "late": true
+  },
+  {
+   "month": "2025-01",
+   "window": 362,
+   "crashes": 2547,
+   "late": false
+  },
+  {
+   "month": "2025-02",
+   "window": 331,
+   "crashes": 1799,
+   "late": false
+  },
+  {
+   "month": "2025-03",
+   "window": 303,
+   "crashes": 1915,
+   "late": false
+  },
+  {
+   "month": "2025-04",
+   "window": 272,
+   "crashes": 2940,
+   "late": false
+  },
+  {
+   "month": "2025-05",
+   "window": 242,
+   "crashes": 1987,
+   "late": false
+  },
+  {
+   "month": "2025-06",
+   "window": 211,
+   "crashes": 1658,
+   "late": false
+  },
+  {
+   "month": "2025-07",
+   "window": 181,
+   "crashes": 1724,
+   "late": false
+  },
+  {
+   "month": "2025-08",
+   "window": 150,
+   "crashes": 1677,
+   "late": false
+  },
+  {
+   "month": "2025-09",
+   "window": 119,
+   "crashes": 1529,
+   "late": false
+  },
+  {
+   "month": "2025-10",
+   "window": 89,
+   "crashes": 1706,
+   "late": false
+  },
+  {
+   "month": "2025-11",
+   "window": 58,
+   "crashes": 1673,
+   "late": true
+  },
+  {
+   "month": "2025-12",
+   "window": 28,
+   "crashes": 2560,
+   "late": true
+  }
+ ],
+ "decembers": [
+  {
+   "label": "Dec 2024",
+   "year": 2024,
+   "window": 24,
+   "crashes": 2559
+  },
+  {
+   "label": "Dec 2025",
+   "year": 2025,
+   "window": 28,
+   "crashes": 2560
+  },
+  {
+   "label": "Dec 2023",
+   "year": 2023,
+   "window": 353,
+   "crashes": 2320
+  },
+  {
+   "label": "Dec 2022",
+   "year": 2022,
+   "window": 424,
+   "crashes": 2253
+  },
+  {
+   "label": "Dec 2021",
+   "year": 2021,
+   "window": 551,
+   "crashes": 2222
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

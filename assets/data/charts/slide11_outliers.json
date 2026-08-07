@@ -1,0 +1,49 @@
+{
+ "top_n": 14,
+ "others": 146,
+ "motorway_share": 78.6,
+ "routes": [
+  1,
+  4,
+  7,
+  9
+ ],
+ "measures": [
+  {
+   "label": "Traffic",
+   "unit": "thousand vehicles/day",
+   "overshooting": 76.0,
+   "others": 26.1,
+   "ratio": 2.91
+  },
+  {
+   "label": "Heavy vehicles",
+   "unit": "%",
+   "overshooting": 26.0,
+   "others": 17.8,
+   "ratio": 1.46
+  },
+  {
+   "label": "Crash rate",
+   "unit": "per 100M vehicle-km",
+   "overshooting": 33.1,
+   "others": 8.3,
+   "ratio": 3.98
+  },
+  {
+   "label": "Deaths per 100 crashes",
+   "unit": "per 100 crashes",
+   "overshooting": 2.1,
+   "others": 12.0,
+   "ratio": 0.18
+  },
+  {
+   "label": "Happening at night",
+   "unit": "% 20:00–04:00",
+   "overshooting": 23.1,
+   "others": 27.0,
+   "ratio": 0.85
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

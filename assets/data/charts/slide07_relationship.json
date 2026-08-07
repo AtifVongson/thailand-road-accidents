@@ -1,0 +1,554 @@
+{
+ "provinces": 77,
+ "pearson_r": 0.778,
+ "spearman_r": 0.706,
+ "p_value": 8.44e-17,
+ "fit": {
+  "slope": 3.2132,
+  "intercept": 172.06
+ },
+ "axis_x": "Crashes involving a motorcycle",
+ "axis_y": "Crashes not involving a motorcycle",
+ "points": [
+  {
+   "label": "Krabi",
+   "with_mc": 145,
+   "without_mc": 601,
+   "crashes": 746,
+   "deaths": 107
+  },
+  {
+   "label": "Bangkok Metropolis",
+   "with_mc": 2052,
+   "without_mc": 9063,
+   "crashes": 11115,
+   "deaths": 235
+  },
+  {
+   "label": "Kanchanaburi",
+   "with_mc": 344,
+   "without_mc": 1104,
+   "crashes": 1448,
+   "deaths": 287
+  },
+  {
+   "label": "Kalasin",
+   "with_mc": 127,
+   "without_mc": 693,
+   "crashes": 820,
+   "deaths": 145
+  },
+  {
+   "label": "Kamphaeng Phet",
+   "with_mc": 169,
+   "without_mc": 896,
+   "crashes": 1065,
+   "deaths": 217
+  },
+  {
+   "label": "Khon Kaen",
+   "with_mc": 169,
+   "without_mc": 1264,
+   "crashes": 1433,
+   "deaths": 232
+  },
+  {
+   "label": "Chanthaburi",
+   "with_mc": 389,
+   "without_mc": 1405,
+   "crashes": 1794,
+   "deaths": 423
+  },
+  {
+   "label": "Chachoengsao",
+   "with_mc": 183,
+   "without_mc": 1768,
+   "crashes": 1951,
+   "deaths": 220
+  },
+  {
+   "label": "Chon Buri",
+   "with_mc": 548,
+   "without_mc": 5729,
+   "crashes": 6277,
+   "deaths": 336
+  },
+  {
+   "label": "Chai Nat",
+   "with_mc": 254,
+   "without_mc": 641,
+   "crashes": 895,
+   "deaths": 171
+  },
+  {
+   "label": "Chaiyaphum",
+   "with_mc": 93,
+   "without_mc": 559,
+   "crashes": 652,
+   "deaths": 113
+  },
+  {
+   "label": "Chumphon",
+   "with_mc": 169,
+   "without_mc": 1383,
+   "crashes": 1552,
+   "deaths": 167
+  },
+  {
+   "label": "Trang",
+   "with_mc": 399,
+   "without_mc": 925,
+   "crashes": 1324,
+   "deaths": 136
+  },
+  {
+   "label": "Trat",
+   "with_mc": 223,
+   "without_mc": 482,
+   "crashes": 705,
+   "deaths": 135
+  },
+  {
+   "label": "Tak",
+   "with_mc": 503,
+   "without_mc": 1841,
+   "crashes": 2344,
+   "deaths": 274
+  },
+  {
+   "label": "Nakhon Nayok",
+   "with_mc": 109,
+   "without_mc": 345,
+   "crashes": 454,
+   "deaths": 67
+  },
+  {
+   "label": "Nakhon Pathom",
+   "with_mc": 130,
+   "without_mc": 676,
+   "crashes": 806,
+   "deaths": 96
+  },
+  {
+   "label": "Nakhon Phanom",
+   "with_mc": 108,
+   "without_mc": 463,
+   "crashes": 571,
+   "deaths": 109
+  },
+  {
+   "label": "Nakhon Ratchasima",
+   "with_mc": 508,
+   "without_mc": 4325,
+   "crashes": 4833,
+   "deaths": 470
+  },
+  {
+   "label": "Nakhon Si Thammarat",
+   "with_mc": 584,
+   "without_mc": 1698,
+   "crashes": 2282,
+   "deaths": 352
+  },
+  {
+   "label": "Nakhon Sawan",
+   "with_mc": 476,
+   "without_mc": 1205,
+   "crashes": 1681,
+   "deaths": 289
+  },
+  {
+   "label": "Nonthaburi",
+   "with_mc": 297,
+   "without_mc": 508,
+   "crashes": 805,
+   "deaths": 116
+  },
+  {
+   "label": "Narathiwat",
+   "with_mc": 237,
+   "without_mc": 384,
+   "crashes": 621,
+   "deaths": 94
+  },
+  {
+   "label": "Nan",
+   "with_mc": 184,
+   "without_mc": 780,
+   "crashes": 964,
+   "deaths": 70
+  },
+  {
+   "label": "Bueng Kan",
+   "with_mc": 137,
+   "without_mc": 455,
+   "crashes": 592,
+   "deaths": 112
+  },
+  {
+   "label": "Buri Ram",
+   "with_mc": 68,
+   "without_mc": 418,
+   "crashes": 486,
+   "deaths": 95
+  },
+  {
+   "label": "Pathum Thani",
+   "with_mc": 275,
+   "without_mc": 2140,
+   "crashes": 2415,
+   "deaths": 310
+  },
+  {
+   "label": "Prachuap Khiri Khan",
+   "with_mc": 180,
+   "without_mc": 1515,
+   "crashes": 1695,
+   "deaths": 264
+  },
+  {
+   "label": "Prachin Buri",
+   "with_mc": 165,
+   "without_mc": 917,
+   "crashes": 1082,
+   "deaths": 170
+  },
+  {
+   "label": "Pattani",
+   "with_mc": 139,
+   "without_mc": 392,
+   "crashes": 531,
+   "deaths": 49
+  },
+  {
+   "label": "Phayao",
+   "with_mc": 254,
+   "without_mc": 483,
+   "crashes": 737,
+   "deaths": 145
+  },
+  {
+   "label": "Phangnga",
+   "with_mc": 82,
+   "without_mc": 441,
+   "crashes": 523,
+   "deaths": 65
+  },
+  {
+   "label": "Phatthalung",
+   "with_mc": 274,
+   "without_mc": 1037,
+   "crashes": 1311,
+   "deaths": 178
+  },
+  {
+   "label": "Phichit",
+   "with_mc": 62,
+   "without_mc": 236,
+   "crashes": 298,
+   "deaths": 65
+  },
+  {
+   "label": "Phitsanulok",
+   "with_mc": 218,
+   "without_mc": 684,
+   "crashes": 902,
+   "deaths": 214
+  },
+  {
+   "label": "Phuket",
+   "with_mc": 211,
+   "without_mc": 328,
+   "crashes": 539,
+   "deaths": 44
+  },
+  {
+   "label": "Maha Sarakham",
+   "with_mc": 187,
+   "without_mc": 959,
+   "crashes": 1146,
+   "deaths": 209
+  },
+  {
+   "label": "Mukdahan",
+   "with_mc": 282,
+   "without_mc": 477,
+   "crashes": 759,
+   "deaths": 220
+  },
+  {
+   "label": "Yala",
+   "with_mc": 141,
+   "without_mc": 448,
+   "crashes": 589,
+   "deaths": 50
+  },
+  {
+   "label": "Yasothon",
+   "with_mc": 152,
+   "without_mc": 477,
+   "crashes": 629,
+   "deaths": 135
+  },
+  {
+   "label": "Ranong",
+   "with_mc": 58,
+   "without_mc": 189,
+   "crashes": 247,
+   "deaths": 33
+  },
+  {
+   "label": "Rayong",
+   "with_mc": 175,
+   "without_mc": 1023,
+   "crashes": 1198,
+   "deaths": 140
+  },
+  {
+   "label": "Ratchaburi",
+   "with_mc": 195,
+   "without_mc": 492,
+   "crashes": 687,
+   "deaths": 142
+  },
+  {
+   "label": "Roi Et",
+   "with_mc": 246,
+   "without_mc": 753,
+   "crashes": 999,
+   "deaths": 213
+  },
+  {
+   "label": "Lop Buri",
+   "with_mc": 307,
+   "without_mc": 1240,
+   "crashes": 1547,
+   "deaths": 270
+  },
+  {
+   "label": "Lampang",
+   "with_mc": 122,
+   "without_mc": 1016,
+   "crashes": 1138,
+   "deaths": 148
+  },
+  {
+   "label": "Lamphun",
+   "with_mc": 227,
+   "without_mc": 577,
+   "crashes": 804,
+   "deaths": 110
+  },
+  {
+   "label": "Si Sa Ket",
+   "with_mc": 170,
+   "without_mc": 715,
+   "crashes": 885,
+   "deaths": 163
+  },
+  {
+   "label": "Sakon Nakhon",
+   "with_mc": 304,
+   "without_mc": 827,
+   "crashes": 1131,
+   "deaths": 244
+  },
+  {
+   "label": "Songkhla",
+   "with_mc": 195,
+   "without_mc": 1165,
+   "crashes": 1360,
+   "deaths": 177
+  },
+  {
+   "label": "Satun",
+   "with_mc": 130,
+   "without_mc": 210,
+   "crashes": 340,
+   "deaths": 60
+  },
+  {
+   "label": "Samut Prakan",
+   "with_mc": 627,
+   "without_mc": 2365,
+   "crashes": 2992,
+   "deaths": 243
+  },
+  {
+   "label": "Samut Songkhram",
+   "with_mc": 106,
+   "without_mc": 385,
+   "crashes": 491,
+   "deaths": 63
+  },
+  {
+   "label": "Samut Sakhon",
+   "with_mc": 219,
+   "without_mc": 1516,
+   "crashes": 1735,
+   "deaths": 99
+  },
+  {
+   "label": "Saraburi",
+   "with_mc": 260,
+   "without_mc": 1016,
+   "crashes": 1276,
+   "deaths": 224
+  },
+  {
+   "label": "Sa Kaeo",
+   "with_mc": 129,
+   "without_mc": 716,
+   "crashes": 845,
+   "deaths": 125
+  },
+  {
+   "label": "Sing Buri",
+   "with_mc": 238,
+   "without_mc": 462,
+   "crashes": 700,
+   "deaths": 120
+  },
+  {
+   "label": "Suphan Buri",
+   "with_mc": 1234,
+   "without_mc": 2333,
+   "crashes": 3567,
+   "deaths": 422
+  },
+  {
+   "label": "Surat Thani",
+   "with_mc": 499,
+   "without_mc": 2177,
+   "crashes": 2676,
+   "deaths": 485
+  },
+  {
+   "label": "Surin",
+   "with_mc": 245,
+   "without_mc": 783,
+   "crashes": 1028,
+   "deaths": 244
+  },
+  {
+   "label": "Sukhothai",
+   "with_mc": 637,
+   "without_mc": 713,
+   "crashes": 1350,
+   "deaths": 132
+  },
+  {
+   "label": "Nong Khai",
+   "with_mc": 75,
+   "without_mc": 206,
+   "crashes": 281,
+   "deaths": 59
+  },
+  {
+   "label": "Nong Bua Lam Phu",
+   "with_mc": 109,
+   "without_mc": 320,
+   "crashes": 429,
+   "deaths": 66
+  },
+  {
+   "label": "Phra Nakhon Si Ayutthaya",
+   "with_mc": 425,
+   "without_mc": 1617,
+   "crashes": 2042,
+   "deaths": 212
+  },
+  {
+   "label": "Amnat Charoen",
+   "with_mc": 47,
+   "without_mc": 220,
+   "crashes": 267,
+   "deaths": 52
+  },
+  {
+   "label": "Udon Thani",
+   "with_mc": 350,
+   "without_mc": 943,
+   "crashes": 1293,
+   "deaths": 277
+  },
+  {
+   "label": "Uttaradit",
+   "with_mc": 188,
+   "without_mc": 964,
+   "crashes": 1152,
+   "deaths": 127
+  },
+  {
+   "label": "Uthai Thani",
+   "with_mc": 168,
+   "without_mc": 479,
+   "crashes": 647,
+   "deaths": 119
+  },
+  {
+   "label": "Ubon Ratchathani",
+   "with_mc": 156,
+   "without_mc": 931,
+   "crashes": 1087,
+   "deaths": 174
+  },
+  {
+   "label": "Ang Thong",
+   "with_mc": 319,
+   "without_mc": 769,
+   "crashes": 1088,
+   "deaths": 152
+  },
+  {
+   "label": "Chiang Rai",
+   "with_mc": 206,
+   "without_mc": 999,
+   "crashes": 1205,
+   "deaths": 183
+  },
+  {
+   "label": "Chiang Mai",
+   "with_mc": 1447,
+   "without_mc": 2233,
+   "crashes": 3680,
+   "deaths": 348
+  },
+  {
+   "label": "Phetchaburi",
+   "with_mc": 214,
+   "without_mc": 1031,
+   "crashes": 1245,
+   "deaths": 164
+  },
+  {
+   "label": "Phetchabun",
+   "with_mc": 536,
+   "without_mc": 1449,
+   "crashes": 1985,
+   "deaths": 265
+  },
+  {
+   "label": "Loei",
+   "with_mc": 154,
+   "without_mc": 929,
+   "crashes": 1083,
+   "deaths": 195
+  },
+  {
+   "label": "Phrae",
+   "with_mc": 536,
+   "without_mc": 1735,
+   "crashes": 2271,
+   "deaths": 171
+  },
+  {
+   "label": "Mae Hong Son",
+   "with_mc": 124,
+   "without_mc": 238,
+   "crashes": 362,
+   "deaths": 54
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

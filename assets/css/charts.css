@@ -53,6 +53,10 @@
 .chart .c-value     { font-size: 16px; font-weight: 640; fill: var(--ink-2);
                       dominant-baseline: middle; }
 .chart .c-tick      { font-size: 14px; fill: var(--muted); text-anchor: middle; }
+/* A CSS rule beats a presentation attribute, so `text-anchor="end"` on a tick
+ * node is silently ignored and the label centres on the axis with half of it
+ * over the plot. Y-axis ticks must carry this class instead. */
+.chart .c-tick.c-tick-y { text-anchor: end; }
 .chart .c-axistitle { font-size: 15px; font-weight: 640; fill: var(--ink-2); }
 .chart .c-gridline  { stroke: var(--grid); stroke-width: 1; }
 .chart .c-baseline  { stroke: var(--axis); stroke-width: 1.4; }
@@ -85,6 +89,21 @@
  * than as data: everything above it is the finding. */
 .chart .c-parity      { stroke: var(--ink-2); stroke-width: 1.4; }
 .chart .c-paritylabel { font-size: 13px; fill: var(--ink); font-weight: 640; }
+
+/* Slides 7, 10b, 11, 13, 13b. */
+.chart .c-fit         { stroke: var(--ink-2); stroke-width: 2; stroke-linecap: round; }
+.chart .c-stat        { font-size: 15px; font-weight: 640; fill: var(--ink); }
+.chart .c-panelnote   { font-size: 12.5px; fill: var(--muted); }
+.chart .c-value-mid   { text-anchor: middle; }
+.chart .c-legendlabel { font-size: 13px; font-weight: 640; }
+/* Bands are the same hue as their series, so uncertainty reads as belonging to
+ * that line rather than as a separate quantity. The 95% sits under the 80%. */
+.chart .c-band95      { opacity: 0.13; }
+.chart .c-band80      { opacity: 0.24; }
+/* Where observation stops and forecast begins. Dashed, because the line that
+ * crosses it changes status there. */
+.chart .c-divider     { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.chart .c-forecast    { stroke-dasharray: 7 5; }
 
 .chart .c-point   { opacity: 0.72; }
 .chart .c-trendline { stroke-linecap: round; }

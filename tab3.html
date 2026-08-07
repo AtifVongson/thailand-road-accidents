@@ -67,19 +67,52 @@
   </div>
 </section>
 
-<!-- 13 — forecast -->
-<section class="section section-static" data-kicker="Part 2 &middot; Forecast" data-title="Planning next year's checkpoint capacity">
-  <p class="kicker">Part 2 &middot; Forecast</p>
-  <h1>Planning next year's checkpoint capacity</h1>
-  <div class="figwrap"><img src="assets/figures/fig15_forecast.svg" alt="SARIMA forecast of monthly crashes and deaths through 2026"></div>
-  <p class="takeaway">SARIMA on log counts, backtested against the last 12 months at MAPE
-    3.6% for crashes and 8.6% for deaths &mdash; better than assuming the same as last year.
-    April 2026 is forecast at 2,924 crashes (80% interval 2,550&ndash;3,352) and 346 deaths
-    (283&ndash;422); September is the trough at 1,539. Reporting lag was tested and rejected:
-    December 2021 had 551 days to be reported and 2,222 crashes, December 2025 had 28 days
-    and 2,560.</p>
-  <div class="figwrap" style="margin-top:22px;max-width:760px">
-    <img src="assets/figures/fig14_reporting_lag.svg" alt="Reporting lag against monthly crash count, testing for undercount">
+<!-- 13 — forecast (LIVE) -->
+<section class="section section-live" data-kicker="Part 2 &middot; Forecast" data-title="Planning next year's checkpoint capacity">
+  <div class="live-intro">
+    <p class="kicker">Part 2 &middot; Forecast</p>
+    <h1>Planning next year's checkpoint capacity</h1>
+  </div>
+  <div class="spacer">
+    <p>Sixty months observed, crashes above deaths. Scroll to extend twelve months past
+       the end of the data and open the intervals behind them.</p>
+  </div>
+  <div class="scroll-section" id="sec-s13">
+    <div class="pin"><div class="frame frame-tall" id="mount-s13"></div></div>
+  </div>
+  <div class="spacer">
+    <p>SARIMA on log counts, backtested against the last 12 months at <b>MAPE 3.6% for
+       crashes and 8.6% for deaths</b> &mdash; better than assuming the same as last year
+       (4.5% and 14.6%). <b>April 2026</b> is forecast at 2,924 crashes (80% interval
+       2,550&ndash;3,352) and 346 deaths (283&ndash;422); September is the trough at
+       1,539.</p>
+  </div>
+</section>
+
+<!-- 13b — the reporting-lag test (LIVE) -->
+<section class="section section-live" data-kicker="Part 2 &middot; Forecast" data-title="Testing the reporting-lag concern">
+  <div class="live-intro">
+    <p class="kicker">Part 2 &middot; Forecast</p>
+    <h1>Testing the reporting-lag concern</h1>
+  </div>
+  <div class="spacer">
+    <p>Each yearly file closes at a different time, so a month late in the year has far
+       less time to be reported in than one early in it. If that were suppressing counts,
+       the short-window months would come out low. Scroll for the cleanest test: the same
+       month, five different windows.</p>
+  </div>
+  <div class="scroll-section" id="sec-s13b">
+    <div class="pin"><div class="frame" id="mount-s13b"></div></div>
+  </div>
+  <div class="spacer">
+    <p>December 2021 had <b>551 days</b> to be reported and recorded 2,222 crashes.
+       December 2025 had <b>28 days</b> and recorded 2,560 &mdash; more, on a window
+       twenty times shorter. The correlation between window length and monthly count is
+       &minus;0.17: negative, the opposite of what undercounting would produce, so no
+       adjustment is applied.</p>
+    <p class="limits">Caveat: the long-window years are 2021&ndash;2022, the COVID period
+       when traffic was already low. This rules out a large undercount, not the absence
+       of any.</p>
   </div>
 </section>
 
@@ -179,25 +212,89 @@
 <script src="assets/js/layout.js"></script>
 <script src="assets/js/render.js"></script>
 <script>
-fetch("assets/data/charts/slide12_monthly.json")
-  .then(function (r) { return r.json(); })
-  .then(function (data) {
-    var chart = ChartRender.slide12(document.getElementById("mount-s12"), data);
-    var section = document.getElementById("sec-s12");
-    var cue = document.getElementById("cue");
+(function () {
+  "use strict";
 
-    function tick() {
-      var r = section.getBoundingClientRect();
-      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
-      chart.update(p);
-      var inChart = r.top < window.innerHeight && r.bottom > 0;
-      if (inChart) cue.style.opacity = p > 0.02 && p < 0.98 ? 0 : 1;
+  var cue = document.getElementById("cue");
+  var live = [];
+  var TOL = 12;
+
+  function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+
+  function animateScrollTo(targetY, duration) {
+    var startY = window.scrollY, delta = targetY - startY, t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var t = Math.min(1, (ts - t0) / duration);
+      window.scrollTo(0, startY + delta * easeInOutQuad(t));
+      if (t < 1) requestAnimationFrame(step);
     }
+    requestAnimationFrame(step);
+  }
+
+  /* Same stepper tabs 1 and 2 use, on the same tested ChartLayout.nextStop().
+   * Tab 3 also carries the MapLibre section, which is driven by map-tab3.js on
+   * its own scroll scalar and is deliberately not registered here — its states
+   * are a camera move, not stops a key should jump between. */
+  addEventListener("keydown", function (e) {
+    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+    var down = ["ArrowDown", "PageDown"].indexOf(e.key) !== -1;
+    var up = ["ArrowUp", "PageUp"].indexOf(e.key) !== -1;
+    if (!down && !up) return;
+    for (var i = 0; i < live.length; i++) {
+      var target = ChartLayout.nextStop(live[i].anchors(), window.scrollY,
+                                        down ? 1 : -1, TOL);
+      if (target === null) continue;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      animateScrollTo(target, 2000);
+      return;
+    }
+  }, true);
+
+  function anchorsFor(section, fractions) {
+    return function () {
+      var travel = section.offsetHeight - window.innerHeight;
+      var chartTop = section.getBoundingClientRect().top + window.scrollY;
+      var outerTop = section.closest(".section").getBoundingClientRect().top + window.scrollY;
+      return [outerTop].concat(fractions.map(function (f) { return chartTop + f * travel; }));
+    };
+  }
+
+  function tick() {
+    var anyMid = false;
+    live.forEach(function (item) {
+      var r = item.section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      item.chart.update(p);
+      if (r.top < window.innerHeight && r.bottom > 0 && p > 0.02 && p < 0.98) anyMid = true;
+    });
+    cue.style.opacity = anyMid ? 0 : 1;
+  }
+
+  function wire(sectionId, mountId, dataUrl, layoutKey, stops) {
+    return fetch(dataUrl).then(function (r) { return r.json(); }).then(function (data) {
+      var section = document.getElementById(sectionId);
+      live.push({
+        section: section,
+        chart: ChartRender[layoutKey](document.getElementById(mountId), data),
+        anchors: anchorsFor(section, stops),
+      });
+    });
+  }
+
+  Promise.all([
+    wire("sec-s12", "mount-s12", "assets/data/charts/slide12_monthly.json", "slide12", [0, 1]),
+    wire("sec-s13", "mount-s13", "assets/data/charts/slide13_forecast.json", "slide13", [0, 1]),
+    wire("sec-s13b", "mount-s13b", "assets/data/charts/slide13b_lag.json", "slide13b", [0, 1]),
+  ]).then(function () {
+    live.sort(function (a, b) { return a.section.offsetTop - b.section.offsetTop; });
     addEventListener("scroll", tick, { passive: true });
     addEventListener("resize", tick);
     tick();
-    window.__chart_s12 = chart;
+    window.__charts = live;
   });
+})();
 </script>
 <script src="assets/js/map-tab3.js"></script>
 <script src="assets/js/transport.js"></script>

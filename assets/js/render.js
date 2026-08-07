@@ -240,7 +240,7 @@
           class: "c-gridline", x1: panel.x, x2: panel.x + panel.w, y1: tk.y, y2: tk.y,
         }));
         gGrid.appendChild(el("text", {
-          class: "c-tick", x: panel.x - 10, y: tk.y + 5, "text-anchor": "end",
+          class: "c-tick c-tick-y", x: panel.x - 10, y: tk.y + 5, "text-anchor": "end",
         }, tk.label));
       });
 
@@ -479,7 +479,7 @@
         x2: first.scatter.x + first.scatter.w, y1: d.y, y2: d.y }));
       gGrid.appendChild(el("text", { class: "c-tick", x: d.x,
         y: first.scatter.y + first.scatter.h + 22 }, d.label));
-      gGrid.appendChild(el("text", { class: "c-tick", x: first.scatter.x - 10,
+      gGrid.appendChild(el("text", { class: "c-tick c-tick-y", x: first.scatter.x - 10,
         y: d.y + 5, "text-anchor": "end" }, d.label));
     });
     gGrid.appendChild(el("line", { class: "c-parity",
@@ -538,6 +538,332 @@
     return { svg: svg, update: update };
   }
 
+  /* ---------------------------- shared chrome: heading pair, subtitle, source */
+
+  function mountFrame(first, ariaLabel, headingY, subtitleY) {
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img", "aria-label": ariaLabel,
+    });
+    var gGrid = el("g", { class: "c-grid" });
+    var gMain = el("g", { class: "c-main" });
+    var gText = el("g", { class: "c-text" });
+    [gGrid, gMain, gText].forEach(function (g) { svg.appendChild(g); });
+
+    var headings = (first.headings || []).map(function (h) {
+      var t = el("text", { class: "c-heading", x: 40, y: headingY || 56 }, h.text);
+      gText.appendChild(t);
+      return t;
+    });
+    if (first.heading) {
+      gText.appendChild(el("text", { class: "c-heading", x: 40, y: headingY || 56 },
+        first.heading));
+    }
+    if (first.subtitle) {
+      gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: subtitleY || 88 },
+        first.subtitle));
+    }
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 16,
+      "text-anchor": "end",
+    }, first.source));
+
+    return { svg: svg, gGrid: gGrid, gMain: gMain, gText: gText, headings: headings };
+  }
+
+  function axisTitles(f, first) {
+    (first.axisTitles || []).forEach(function (a) {
+      f.gText.appendChild(el("text", { class: "c-axistitle", x: a.x, y: a.y,
+        "text-anchor": a.anchor }, a.text));
+    });
+  }
+
+  function swapHeadings(f, m) {
+    (m.headings || []).forEach(function (h, i) {
+      f.headings[i].setAttribute("opacity", h.opacity);
+    });
+  }
+
+  /* ---------------------------------- slide 7: two counts rising together */
+
+  function slide07(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide07(data, 0, options);
+    var f = mountFrame(first, "Crashes involving a motorcycle against crashes that do "
+      + "not, one point per province, with a least-squares fit", 56, 88);
+
+    first.xTicks.forEach(function (t) {
+      f.gGrid.appendChild(el("line", { class: "c-gridline", x1: t.x, x2: t.x,
+        y1: first.plot.y, y2: first.plot.y + first.plot.h }));
+      f.gGrid.appendChild(el("text", { class: "c-tick", x: t.x,
+        y: first.plot.y + first.plot.h + 24 }, t.label));
+    });
+    first.yTicks.forEach(function (t) {
+      f.gGrid.appendChild(el("line", { class: "c-gridline", x1: first.plot.x,
+        x2: first.plot.x + first.plot.w, y1: t.y, y2: t.y }));
+      f.gGrid.appendChild(el("text", { class: "c-tick c-tick-y", x: first.plot.x - 10,
+        y: t.y + 5, "text-anchor": "end" }, t.label));
+    });
+    axisTitles(f, first);
+
+    var points = first.points.map(function (pt) {
+      var c = el("circle", { class: "c-point", cx: pt.cx, cy: pt.cy, r: pt.r,
+        fill: pt.color, opacity: pt.opacity });
+      f.gMain.appendChild(c);
+      return c;
+    });
+    var fit = el("line", { class: "c-fit", x1: first.fit.x1, y1: first.fit.y1 });
+    f.gMain.appendChild(fit);
+    var stat = el("text", { class: "c-stat", x: first.stat.x, y: first.stat.y },
+      first.stat.text);
+    f.gText.appendChild(stat);
+
+    mount.appendChild(f.svg);
+
+    function update(progress) {
+      var m = L.slide07(data, progress, options);
+      set(fit, { x2: m.fit.x2, y2: m.fit.y2, opacity: m.fit.opacity.toFixed(3) });
+      set(stat, { opacity: m.stat.opacity.toFixed(3) });
+      swapHeadings(f, m);
+    }
+    update(0);
+    return { svg: f.svg, update: update };
+  }
+
+  /* ------------------------------- slide 10b: five kinds of road section */
+
+  function slide10b(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide10b(data, 0, options);
+    var f = mountFrame(first, "Five road-section archetypes as small multiples over "
+      + "crash rate against deaths per crash", 56, 88);
+
+    first.yTicks.forEach(function (t) {
+      f.gGrid.appendChild(el("line", { class: "c-gridline", x1: first.plot.x,
+        x2: first.plot.x + first.plot.w, y1: t.y, y2: t.y }));
+      f.gGrid.appendChild(el("text", { class: "c-tick c-tick-y", x: first.plot.x - 10,
+        y: t.y + 5, "text-anchor": "end" }, t.label));
+    });
+    axisTitles(f, first);
+
+    var panels = first.panels.map(function (panel) {
+      var g = el("g", {});
+      f.gMain.appendChild(g);
+      var pts = panel.points.map(function (pt) {
+        var c = el("circle", { class: "c-point", cx: pt.cx, cy: pt.cy });
+        g.appendChild(c);
+        return c;
+      });
+      var title = el("text", { class: "c-cardtitle", x: panel.x, y: panel.y - 58 },
+        panel.label);
+      var note = el("text", { class: "c-panelnote", x: panel.x, y: panel.y - 38 },
+        panel.note);
+      var cap = el("text", { class: "c-panelnote", x: panel.x, y: panel.y - 20 },
+        panel.caption);
+      [title, note, cap].forEach(function (n) { f.gText.appendChild(n); });
+      panel.xTicks.forEach(function (t) {
+        f.gGrid.appendChild(el("text", { class: "c-tick", x: t.x,
+          y: panel.y + panel.h + 24 }, t.label));
+      });
+      return { g: g, pts: pts, title: title, note: note, cap: cap };
+    });
+
+    mount.appendChild(f.svg);
+
+    function update(progress) {
+      var m = L.slide10b(data, progress, options);
+      m.panels.forEach(function (panel, i) {
+        var n = panels[i];
+        panel.points.forEach(function (pt, j) {
+          set(n.pts[j], { r: pt.r, fill: pt.color, opacity: pt.opacity.toFixed(3) });
+        });
+        // The focused archetype's own labels come forward with its points.
+        var o = (0.45 + 0.55 * panel.focus).toFixed(3);
+        [n.title, n.note, n.cap].forEach(function (t) { t.setAttribute("opacity", o); });
+      });
+    }
+    update(0);
+    return { svg: f.svg, update: update };
+  }
+
+  /* -------------------- slide 11: what the overshooting sections share */
+
+  function slide11(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide11(data, 0, options);
+    var f = mountFrame(first, "Five paired comparisons between the fourteen "
+      + "overshooting sections and the other 146", 56, 88);
+    axisTitles(f, first);
+
+    var panels = first.panels.map(function (panel) {
+      f.gText.appendChild(el("text", { class: "c-paneltitle", x: panel.x + panel.w / 2,
+        y: panel.y - 16, "text-anchor": "middle" }, panel.title));
+      f.gText.appendChild(el("text", { class: "c-panelnote", x: panel.x + panel.w / 2,
+        y: panel.y + panel.h + 26, "text-anchor": "middle" }, panel.unit));
+      f.gGrid.appendChild(el("line", { class: "c-baseline", x1: panel.x,
+        x2: panel.x + panel.w, y1: panel.y + panel.h, y2: panel.y + panel.h }));
+      return panel.bars.map(function (b) {
+        var rect = el("rect", { class: "c-bar", rx: 2, x: b.x, width: b.width,
+          fill: b.color });
+        var val = el("text", { class: "c-value c-value-mid", x: b.valueX }, "");
+        var nm = el("text", { class: "c-tick", x: b.x + b.width / 2,
+          y: panel.y + panel.h + 44 }, b.label);
+        f.gMain.appendChild(rect); f.gText.appendChild(val); f.gText.appendChild(nm);
+        return { rect: rect, val: val };
+      });
+    });
+
+    mount.appendChild(f.svg);
+
+    function update(progress) {
+      var m = L.slide11(data, progress, options);
+      m.panels.forEach(function (panel, i) {
+        panel.bars.forEach(function (b, j) {
+          var n = panels[i][j];
+          set(n.rect, { y: b.y, height: Math.max(0, b.height),
+                        opacity: b.opacity.toFixed(3) });
+          set(n.val, { y: b.valueY, opacity: b.valueOpacity.toFixed(3) });
+          var txt = b.value.toLocaleString("en-US", { maximumFractionDigits: 1 });
+          if (n.val.textContent !== txt) n.val.textContent = txt;
+        });
+      });
+      swapHeadings(f, m);
+    }
+    update(0);
+    return { svg: f.svg, update: update };
+  }
+
+  /* ------------------------------- slide 13: the forecast, and its backtest */
+
+  function slide13(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide13(data, 0, options);
+    var f = mountFrame(first, "Monthly crashes and deaths, five years observed and "
+      + "twelve months forecast with 80% and 95% intervals", 56, 88);
+
+    var panels = first.panels.map(function (panel) {
+      var g = el("g", {});
+      f.gMain.appendChild(g);
+      var b95 = el("path", { class: "c-band95", fill: panel.color, d: "" });
+      var b80 = el("path", { class: "c-band80", fill: panel.color, d: "" });
+      var hist = el("path", { class: "c-line", fill: "none", "stroke-width": 2.2,
+        stroke: panel.color, d: panel.history });
+      var fc = el("path", { class: "c-line c-forecast", fill: "none",
+        "stroke-width": 2.2, stroke: panel.color, d: "" });
+      [b95, b80, hist, fc].forEach(function (n) { g.appendChild(n); });
+
+      f.gGrid.appendChild(el("line", { class: "c-divider", x1: panel.divider.x,
+        x2: panel.divider.x, y1: panel.divider.y1, y2: panel.divider.y2 }));
+      panel.ticks.forEach(function (t) {
+        f.gGrid.appendChild(el("line", { class: "c-gridline", x1: first.plot.x,
+          x2: first.plot.x + first.plot.w, y1: t.y, y2: t.y }));
+        f.gGrid.appendChild(el("text", { class: "c-tick c-tick-y", x: first.plot.x - 10,
+          y: t.y + 5, "text-anchor": "end" }, t.label));
+      });
+      f.gText.appendChild(el("text", { class: "c-paneltitle", x: first.plot.x,
+        y: panel.y - 10 }, panel.title));
+      var score = el("text", { class: "c-panelnote", x: panel.score.x, y: panel.score.y,
+        "text-anchor": "end" }, panel.score.text);
+      f.gText.appendChild(score);
+      return { b95: b95, b80: b80, fc: fc, score: score };
+    });
+
+    first.xTicks.forEach(function (t) {
+      f.gGrid.appendChild(el("text", { class: "c-tick", x: t.x,
+        y: first.plot.y + first.plot.h + 26 }, t.label));
+    });
+    var callout = el("text", { class: "c-limitation", x: first.callout.x,
+      y: first.callout.y }, first.callout.text);
+    f.gText.appendChild(callout);
+
+    mount.appendChild(f.svg);
+
+    function update(progress) {
+      var m = L.slide13(data, progress, options);
+      m.panels.forEach(function (panel, i) {
+        var n = panels[i];
+        set(n.b95, { d: panel.band95 });
+        set(n.b80, { d: panel.band80 });
+        set(n.fc, { d: panel.forecast });
+        set(n.score, { opacity: panel.score.opacity.toFixed(3) });
+      });
+      set(callout, { opacity: m.callout.opacity.toFixed(3) });
+      swapHeadings(f, m);
+    }
+    update(0);
+    return { svg: f.svg, update: update };
+  }
+
+  /* ---------------------------- slide 13b: testing the reporting-lag concern */
+
+  function slide13b(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide13b(data, 0, options);
+    var f = mountFrame(first, "Monthly crash counts against the length of their "
+      + "reporting window, and each December ordered by window", 56, 88);
+
+    first.xTicks.forEach(function (t) {
+      f.gGrid.appendChild(el("line", { class: "c-gridline", x1: t.x, x2: t.x,
+        y1: first.left.y, y2: first.left.y + first.left.h }));
+      f.gGrid.appendChild(el("text", { class: "c-tick", x: t.x,
+        y: first.left.y + first.left.h + 24 }, t.label));
+    });
+    first.yTicks.forEach(function (t) {
+      f.gGrid.appendChild(el("line", { class: "c-gridline", x1: first.left.x,
+        x2: first.left.x + first.left.w, y1: t.y, y2: t.y }));
+      f.gGrid.appendChild(el("text", { class: "c-tick c-tick-y", x: first.left.x - 10,
+        y: t.y + 5, "text-anchor": "end" }, t.label));
+    });
+    axisTitles(f, first);
+    f.gText.appendChild(el("text", { class: "c-legendlabel", x: first.legend.x,
+      y: first.legend.y, fill: first.legend.color }, "■ " + first.legend.text));
+
+    first.points.forEach(function (pt) {
+      f.gMain.appendChild(el("circle", { class: "c-point", cx: pt.cx, cy: pt.cy,
+        r: pt.r, fill: pt.color, opacity: pt.opacity }));
+    });
+
+    var rankTitle = el("text", { class: "c-paneltitle", x: first.rankTitle.x,
+      y: first.rankTitle.y }, first.rankTitle.text);
+    f.gText.appendChild(rankTitle);
+    var rows = first.rows.map(function (r) {
+      var g = el("g", {});
+      var bar = el("rect", { class: "c-bar", rx: 2, x: r.x, y: r.y, height: r.height,
+        fill: getLayout().PALETTE.severity });
+      var name = el("text", { class: "c-rowlabel", x: r.labelX, y: r.y + r.height / 2 },
+        r.label);
+      var val = el("text", { class: "c-value", y: r.y + r.height / 2 }, r.value);
+      [bar, name, val].forEach(function (n) { g.appendChild(n); });
+      f.gMain.appendChild(g);
+      return { g: g, bar: bar, val: val };
+    });
+
+    var verdict = el("text", { class: "c-limitation", x: first.verdict.x,
+      y: first.verdict.y }, first.verdict.text);
+    var caveat = el("text", { class: "c-panelnote", x: first.caveat.x,
+      y: first.caveat.y }, first.caveat.text);
+    f.gText.appendChild(verdict); f.gText.appendChild(caveat);
+
+    mount.appendChild(f.svg);
+
+    function update(progress) {
+      var m = L.slide13b(data, progress, options);
+      m.rows.forEach(function (r, i) {
+        var n = rows[i];
+        n.g.setAttribute("opacity", r.opacity.toFixed(3));
+        set(n.bar, { width: Math.max(0, r.width) });
+        set(n.val, { x: r.valueX });
+      });
+      set(rankTitle, { opacity: m.rankTitle.opacity.toFixed(3) });
+      set(verdict, { opacity: m.verdict.opacity.toFixed(3) });
+      set(caveat, { opacity: m.caveat.opacity.toFixed(3) });
+      swapHeadings(f, m);
+    }
+    update(0);
+    return { svg: f.svg, update: update };
+  }
+
   /* --------------------------------------------------- slide 9: scatter */
 
   function slide09(mount, data, options) {
@@ -589,7 +915,7 @@
       var g = el("g", {});
       var parts = ts.ticks.map(function (t) {
         var label = el("text", {
-          class: "c-tick", x: first.plot.x - 14, y: t.y, "text-anchor": "end",
+          class: "c-tick c-tick-y", x: first.plot.x - 14, y: t.y, "text-anchor": "end",
         }, t.label);
         g.appendChild(label);
         return { label: label };
@@ -681,7 +1007,7 @@
           class: "c-gridline", x1: first.plot.x, x2: first.plot.x + first.plot.w, y1: t.y, y2: t.y,
         });
         var label = el("text", {
-          class: "c-tick", x: first.plot.x - 12, y: t.y, "text-anchor": "end",
+          class: "c-tick c-tick-y", x: first.plot.x - 12, y: t.y, "text-anchor": "end",
         }, t.label);
         tickGroup.appendChild(line); tickGroup.appendChild(label);
         return { line: line, label: label };
@@ -730,6 +1056,7 @@
   }
 
   return { slide04: slide04, slide04Story: slide04Story, slide05: slide05,
-           slide06: slide06, slide08: slide08, slide09: slide09, slide10: slide10,
-           slide12: slide12 };
+           slide06: slide06, slide07: slide07, slide08: slide08, slide09: slide09,
+           slide10: slide10, slide10b: slide10b, slide11: slide11,
+           slide12: slide12, slide13: slide13, slide13b: slide13b };
 });
