@@ -72,31 +72,31 @@
   </div>
 </section>
 
-<!-- 9 — exposure (static pair + LIVE morph) -->
-<section class="section section-static" data-kicker="Part 1 &middot; Exposure" data-title="Traffic volume predicts crashes, not deaths" style="min-height:auto;padding-bottom:0">
-  <p class="kicker">Part 1 &middot; Exposure</p>
-  <h1>Traffic volume predicts how many crashes, not how deadly</h1>
-  <div class="figpair">
-    <div class="figwrap"><img src="assets/figures/fig07_aadt_crashes.svg" alt="AADT against crash count, six main highway routes"></div>
-    <div class="figwrap"><img src="assets/figures/fig08_aadt_severity.svg" alt="AADT against deaths per crash, six main highway routes"></div>
+<!-- 9 — exposure (LIVE)
+     The static fig07/fig08 pair that used to sit above this was the same 160
+     sections and the same two relationships this chart morphs between, so it was
+     the same picture twice. Its heading and its correlation figures moved here;
+     the figures themselves stay in analysis/figures/ for the deck, which keeps
+     the static version as it does for every other live chart. -->
+<section class="section section-live" data-kicker="Part 1 &middot; Exposure" data-title="Traffic volume predicts crashes, not deaths">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Exposure</p>
+    <h1>Traffic volume predicts how many crashes, not how deadly</h1>
   </div>
-  <p class="takeaway">Left: AADT against crash count &mdash; Pearson +0.50, Spearman +0.28.
-    Positive, but weaker than expected: at the same traffic volume, crash counts differ by up
-    to 50&times;. Right: AADT against deaths per crash &mdash; &minus;0.17 and &minus;0.20,
-    reversed and very weak. This pair covers the six main Department of Highways routes only:
-    160 survey sections and 26,027 crashes, 23.6% of the file.</p>
-</section>
-<section class="section section-live" data-kicker="Part 1 &middot; Exposure" data-title="Watch the trendline flatten">
   <div class="spacer">
-    <p>160 survey sections on the six main highway routes. Scroll to watch the steep,
-       positive relationship with crash count flatten into a weak, slightly negative one
-       with fatality rate.</p>
+    <p>160 survey sections on the six main Department of Highways routes &mdash; 26,027
+       crashes, 23.6% of the file. Against crash count the relationship is positive but
+       weaker than you would expect: <b>Pearson +0.50, Spearman +0.28</b>, and at the same
+       traffic volume crash counts still differ by up to 50&times;. Scroll to watch that
+       trendline flatten.</p>
   </div>
   <div class="scroll-section" id="sec-s9">
     <div class="pin"><div class="frame" id="mount-s9"></div></div>
   </div>
   <div class="spacer">
-    <p>A busier road means more crashes. It does not mean a deadlier one.</p>
+    <p>Against deaths per crash the same 160 sections give <b>&minus;0.17 and &minus;0.20</b>
+       &mdash; reversed, and very weak. A busier road means more crashes. It does not mean
+       a deadlier one.</p>
   </div>
 </section>
 
