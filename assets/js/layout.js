@@ -364,6 +364,12 @@
     subLabelGap: 30,       // bar bottom -> the muted "44.8 deaths per 100" line
     loserFadeEnd: 0.4,     // losers are gone before the survivors start moving
     expandStart: 0.3,
+    // The cause the surrounding slide is actually about. Named rather than
+    // inferred: alcohol is the deck's headline cause and finishes *last* of the
+    // three by rate, so nothing about its position marks it out — which is the
+    // whole reason act 3 exists, and the reason it needs enclosing by hand.
+    emphasisLabel: "Alcohol",
+    haloPad: 10,
   };
 
   /* Acts 1 and 2 raise a question they cannot settle: the lethal ranking is led
@@ -423,6 +429,8 @@
           }).concat([{ text: fmt(c.crashes), opacity: 0 }]),
           subLabel: { text: c.death_rate.toFixed(1) + " deaths per 100", opacity: 0,
                       x: r.labelX, y: r.y + r.height + o.subLabelGap },
+          halo: haloFor(r, o, 0),
+          emphasis: false,
         });
       }
 
@@ -430,8 +438,13 @@
       var y = lerp(r.y, plot.y + i * bandH + o.bandTopPad, grow);
       var h = lerp(r.height, focusBarH, grow);
       var w = lerp(r.width, (c.crashes / maxCrashes) * plot.w, grow);
+      var isEmph = r.key === o.emphasisLabel;
       return Object.assign({}, r, {
         y: y, height: h, width: w, opacity: 1, valueX: plot.x + w + 12,
+        // Enclosure and bold type arrive with the count they are pointing at,
+        // so nothing is marked out before there is a reason to look at it.
+        halo: haloFor({ x: r.x, y: y, width: w, height: h }, o, isEmph ? fadeIn(q) : 0),
+        emphasis: isEmph && q >= 0.5,
         // The same gapped crossfade acts 1-2 use: the rate is off the bar
         // before the count arrives, because a number interpolated between
         // 22.0 and 1,565 is true of neither.
@@ -469,6 +482,19 @@
           + " for the two ranked above it.",
       progress: q,
     });
+  }
+
+  // The enclosure drawn round an emphasised bar. Returned for every row at
+  // every progress (opacity 0 where it should not show) because render.js
+  // builds its nodes once, at progress 0 — a shape that appears later would
+  // never get one.
+  function haloFor(bar, o, opacity) {
+    return {
+      x: bar.x - o.haloPad, y: bar.y - o.haloPad,
+      width: Math.max(0, bar.width) + o.haloPad * 2,
+      height: bar.height + o.haloPad * 2,
+      opacity: opacity,
+    };
   }
 
   // Tick count must not vary with progress: render.js builds one node per tick
@@ -511,6 +537,8 @@
           values: r.values.concat([{ text: fmt(c.crashes), opacity: 0 }]),
           subLabel: { text: c.death_rate.toFixed(1) + " deaths per 100", opacity: 0,
                       x: r.labelX, y: r.y + r.height + o.subLabelGap },
+          halo: haloFor(r, o, 0),
+          emphasis: false,
         });
       }),
       tickSets: m.tickSets.concat([

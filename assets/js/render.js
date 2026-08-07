@@ -106,11 +106,15 @@
       // return `subLabel` (slide 8) create no node at all.
       var sub = r.subLabel === undefined ? null
         : el("text", { class: "c-sublabel" }, r.subLabel.text);
+      // Stroke-only enclosure, drawn in front of its bar but behind the text,
+      // so it can never obscure a number.
+      var halo = r.halo === undefined ? null : el("rect", { class: "c-halo", rx: 6 });
       g.insertBefore(bar, g.firstChild);
+      if (halo) g.insertBefore(halo, bar.nextSibling);
       g.appendChild(name);
       if (sub) g.appendChild(sub);
       gBars.appendChild(g);
-      rows[r.key] = { g: g, bar: bar, name: name, values: values, sub: sub };
+      rows[r.key] = { g: g, bar: bar, name: name, values: values, sub: sub, halo: halo };
     });
 
     mount.appendChild(svg);
@@ -128,6 +132,13 @@
         if (n.sub) {
           set(n.sub, { x: r.subLabel.x, y: r.subLabel.y,
                        opacity: r.subLabel.opacity.toFixed(3) });
+        }
+        if (n.halo) {
+          set(n.halo, { x: r.halo.x, y: r.halo.y, width: r.halo.width,
+                        height: r.halo.height, opacity: r.halo.opacity.toFixed(3) });
+        }
+        if (r.emphasis !== undefined) {
+          n.g.classList.toggle("is-emphasis", !!r.emphasis);
         }
         r.values.forEach(function (v, i) {
           set(n.values[i], { x: r.valueX, y: r.y + r.height / 2, opacity: v.opacity.toFixed(3) });

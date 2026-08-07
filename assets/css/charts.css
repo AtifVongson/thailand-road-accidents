@@ -41,6 +41,15 @@
  * from. Muted and smaller, because the bar is the argument and this is context. */
 .chart .c-sublabel  { font-size: 14px; fill: var(--muted); text-anchor: end;
                       dominant-baseline: middle; }
+
+/* The enclosure round the cause the slide is actually arguing for. Alcohol
+ * finishes LAST of the three by death rate, so its position marks it out as
+ * the least interesting row when it is in fact the point — the box and the
+ * bold type are what say "this one". Stroke only, so no number is covered. */
+.chart .c-halo { fill: none; stroke: var(--severity); stroke-width: 2.5; }
+.chart .is-emphasis .c-rowlabel { fill: var(--ink); font-weight: 700; }
+.chart .is-emphasis .c-value    { fill: var(--ink); font-weight: 700; }
+.chart .is-emphasis .c-sublabel { fill: var(--ink-2); font-weight: 640; }
 .chart .c-value     { font-size: 16px; font-weight: 640; fill: var(--ink-2);
                       dominant-baseline: middle; }
 .chart .c-tick      { font-size: 14px; fill: var(--muted); text-anchor: middle; }

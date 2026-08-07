@@ -194,18 +194,25 @@ fetch("assets/data/charts/slide04_cause.json")
     // deliberate key press on one chart. Free scrolling remains the presenter's
     // own clock, and chart progress remains a pure function of scroll position,
     // because what the tween moves is the *scroll* — ticket 08's requirement.
-    var CHECKPOINTS = [0, ChartLayout.SLIDE04_ACT3_START, 1];
+    // Absolute scroll positions, not chart-progress fractions. transport.js
+    // lands a presenter at the top of the *outer* section, where the intro and
+    // lead-in fill the screen and the chart has not pinned yet — so a stepper
+    // keyed to the pinned region never engaged there and the first press
+    // skipped the whole chart. These anchors span the section end to end:
+    // the intro, then one per act.
+    var outer = section.closest(".section");
 
-    function pinEngaged() {
-      var r = section.getBoundingClientRect();
-      return r.top <= 0 && r.bottom >= window.innerHeight;
+    function anchors() {
+      var travel = section.offsetHeight - window.innerHeight;
+      var chartTop = section.getBoundingClientRect().top + window.scrollY;
+      return [
+        outer.getBoundingClientRect().top + window.scrollY,  // intro / lead-in
+        chartTop,                                            // act 1  most common
+        chartTop + ChartLayout.SLIDE04_ACT3_START * travel,  // act 2  most lethal
+        chartTop + travel,                                   // act 3  the evidence
+      ];
     }
-    function checkpointScrollY(frac) {
-      var r = section.getBoundingClientRect();
-      var travel = r.height - window.innerHeight;
-      var topAbs = window.scrollY + r.top;
-      return topAbs + frac * travel;
-    }
+
     function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
     function animateScrollTo(targetY, duration) {
       var startY = window.scrollY, delta = targetY - startY, t0 = null;
@@ -220,32 +227,29 @@ fetch("assets/data/charts/slide04_cause.json")
 
     addEventListener("keydown", function (e) {
       if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
-      if (!pinEngaged()) return; // not on this chart — let transport.js handle it
       var down = ["ArrowDown", "PageDown"].indexOf(e.key) !== -1;
       var up = ["ArrowUp", "PageUp"].indexOf(e.key) !== -1;
       if (!down && !up) return;
 
-      var r = section.getBoundingClientRect();
-      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
-      // Tolerance wide enough to absorb scrollTo's clamping at the very top/
-      // bottom of the page (landing at p=0.9998 instead of exactly 1 there is
-      // normal), but far tighter than the 0.33 gap between checkpoints.
-      var EPS = 0.01;
+      // Generous in px because a browser's own scroll lands a pixel or two off
+      // a target, and because the page clamps at its very bottom — but far
+      // smaller than the gap between any two acts.
+      var TOL = 12;
+      var a = anchors();
+      var y = window.scrollY;
+      if (y < a[0] - TOL || y > a[a.length - 1] + TOL) return; // another slide owns this key
+
       var target = null;
       if (down) {
-        for (var i = 0; i < CHECKPOINTS.length; i++) {
-          if (CHECKPOINTS[i] > p + EPS) { target = CHECKPOINTS[i]; break; }
-        }
+        for (var i = 0; i < a.length; i++) if (a[i] > y + TOL) { target = a[i]; break; }
       } else {
-        for (var j = CHECKPOINTS.length - 1; j >= 0; j--) {
-          if (CHECKPOINTS[j] < p - EPS) { target = CHECKPOINTS[j]; break; }
-        }
+        for (var j = a.length - 1; j >= 0; j--) if (a[j] < y - TOL) { target = a[j]; break; }
       }
-      if (target === null) return; // already at the first/last scene — fall through
+      if (target === null) return; // at the first or last act — fall through to the next slide
 
       e.preventDefault();
       e.stopImmediatePropagation(); // pre-empt transport.js's own keydown handler
-      animateScrollTo(checkpointScrollY(target), 2000);
+      animateScrollTo(target, 2000);
     }, true); // capture phase — runs before transport.js's listener
   });
 </script>
