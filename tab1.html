@@ -114,8 +114,16 @@
     <p>Speeding is 71% of crashes. Scroll to see the same 18 causes reordered by how often
        they kill instead of how often they happen.</p>
   </div>
-  <div class="scroll-section" id="sec-s4">
-    <div class="pin"><div class="frame" id="mount-s4"></div></div>
+  <div class="scroll-section zoom3" id="sec-s4">
+    <div class="pin">
+      <div class="frame" id="mount-s4"></div>
+      <div class="scene-explain" id="s4-explain">
+        <h3>Why alcohol, not the two higher-scoring causes?</h3>
+        <p>Two rarer causes score higher still &mdash; Driving against traffic (44.8) and
+           Illegal overtaking (32.6) &mdash; but on 400&ndash;500 crashes each. Alcohol's
+           1,565 crashes make its 22.0 estimate the more reliable one.</p>
+      </div>
+    </div>
   </div>
   <div class="spacer">
     <p>Alcohol is 1.4% of recorded crashes but kills 22.0 per 100 &mdash; against 12.6 across
@@ -166,19 +174,128 @@ fetch("assets/data/charts/slide04_cause.json")
     var chart = ChartRender.slide04(document.getElementById("mount-s4"), data);
     var section = document.getElementById("sec-s4");
     var cue = document.getElementById("cue");
+    var explain = document.getElementById("s4-explain");
+
+    // Scene 3, added on top of the existing scroll-driven reorder (scenes 1-2,
+    // unchanged, still layout.js's own progress). CHART_FRAC is how much of the
+    // taller section is spent on the reorder before the zoom act begins — same
+    // physical scroll distance as the original 300vh, so the reorder's pace is
+    // untouched; the extra 150vh is new.
+    var CHART_FRAC = 2 / 3;
+    var VBH = 720, ZOOM_PAD = 26, ZOOM_MAX = 2.4;
+    var zoomBBox = null;
+
+    // Reads the *rendered* bar positions rather than re-deriving layout.js's
+    // ranking logic — the top 3 rows at progress 1 are, by construction, the
+    // three highest death rates: Driving against traffic, Illegal overtaking,
+    // Alcohol. Bars keep the same DOM node per cause and just move (see
+    // render.js), so this is safe to read any time after chart.update(1).
+    function topRowsBBox() {
+      if (zoomBBox) return zoomBBox;
+      var bars = chart.svg.querySelectorAll(".c-bars > g > rect.c-bar");
+      if (!bars.length) return null;
+      var rows = Array.prototype.slice.call(bars).map(function (b) {
+        return { y: parseFloat(b.getAttribute("y")), h: parseFloat(b.getAttribute("height")) };
+      }).sort(function (a, b) { return a.y - b.y; }).slice(0, 3);
+      var minY = Math.min.apply(null, rows.map(function (b) { return b.y; }));
+      var maxY = Math.max.apply(null, rows.map(function (b) { return b.y + b.h; }));
+      zoomBBox = { minY: minY, maxY: maxY };
+      return zoomBBox;
+    }
+
+    function applyZoom(z) {
+      if (z <= 0) {
+        chart.svg.style.transform = "";
+        explain.style.opacity = 0;
+        explain.style.pointerEvents = "none";
+        return;
+      }
+      var box = topRowsBBox();
+      if (!box) return;
+      var e = z * z * (3 - 2 * z); // smoothstep — same ease the rest of the site uses
+      var bandH = (box.maxY - box.minY) + ZOOM_PAD * 2;
+      var scale = Math.min(ZOOM_MAX, VBH / bandH);
+      var originY = (100 * (box.minY + box.maxY) / 2 / VBH).toFixed(2);
+      chart.svg.style.transformOrigin = "50% " + originY + "%";
+      chart.svg.style.transform = "scale(" + (1 + (scale - 1) * e).toFixed(4) + ")";
+      explain.style.opacity = e.toFixed(3);
+      explain.style.pointerEvents = e > 0.5 ? "auto" : "none";
+    }
 
     function tick() {
       var r = section.getBoundingClientRect();
-      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
-      chart.update(p);
+      var rawP = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      var chartP = Math.min(1, rawP / CHART_FRAC);
+      var zoomP = Math.max(0, (rawP - CHART_FRAC) / (1 - CHART_FRAC));
+      chart.update(chartP);
+      applyZoom(zoomP);
       var inChart = r.top < window.innerHeight && r.bottom > 0;
-      cue.style.opacity = inChart && p > 0.02 && p < 0.98 ? 0 : 1;
+      cue.style.opacity = inChart && rawP > 0.02 && rawP < 0.98 ? 0 : 1;
     }
 
     addEventListener("scroll", tick, { passive: true });
     addEventListener("resize", tick);
     tick();
     window.__chart = chart;
+
+    // Arrow/PageDown steps between the 3 scenes with a deliberate 2s ease,
+    // instead of transport.js's default (jump straight to the next .section,
+    // which would skip over this chart's internal states entirely). Only
+    // engaged while this section's pin is actually stuck to the viewport;
+    // otherwise transport.js's own listener handles the key as normal.
+    var CHECKPOINTS = [0, CHART_FRAC, 1];
+
+    function pinEngaged() {
+      var r = section.getBoundingClientRect();
+      return r.top <= 0 && r.bottom >= window.innerHeight;
+    }
+    function checkpointScrollY(frac) {
+      var r = section.getBoundingClientRect();
+      var travel = r.height - window.innerHeight;
+      var topAbs = window.scrollY + r.top;
+      return topAbs + frac * travel;
+    }
+    function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function animateScrollTo(targetY, duration) {
+      var startY = window.scrollY, delta = targetY - startY, t0 = null;
+      function step(ts) {
+        if (t0 === null) t0 = ts;
+        var t = Math.min(1, (ts - t0) / duration);
+        window.scrollTo(0, startY + delta * easeInOutQuad(t));
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    addEventListener("keydown", function (e) {
+      if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+      if (!pinEngaged()) return; // not on this chart — let transport.js handle it
+      var down = ["ArrowDown", "PageDown"].indexOf(e.key) !== -1;
+      var up = ["ArrowUp", "PageUp"].indexOf(e.key) !== -1;
+      if (!down && !up) return;
+
+      var r = section.getBoundingClientRect();
+      var p = ChartLayout.progressFor(r.top, r.height, window.innerHeight);
+      // Tolerance wide enough to absorb scrollTo's clamping at the very top/
+      // bottom of the page (landing at p=0.9998 instead of exactly 1 there is
+      // normal), but far tighter than the 0.33 gap between checkpoints.
+      var EPS = 0.01;
+      var target = null;
+      if (down) {
+        for (var i = 0; i < CHECKPOINTS.length; i++) {
+          if (CHECKPOINTS[i] > p + EPS) { target = CHECKPOINTS[i]; break; }
+        }
+      } else {
+        for (var j = CHECKPOINTS.length - 1; j >= 0; j--) {
+          if (CHECKPOINTS[j] < p - EPS) { target = CHECKPOINTS[j]; break; }
+        }
+      }
+      if (target === null) return; // already at the first/last scene — fall through
+
+      e.preventDefault();
+      e.stopImmediatePropagation(); // pre-empt transport.js's own keydown handler
+      animateScrollTo(checkpointScrollY(target), 2000);
+    }, true); // capture phase — runs before transport.js's listener
   });
 </script>
 <script src="assets/js/transport.js"></script>

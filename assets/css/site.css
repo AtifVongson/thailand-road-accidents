@@ -128,9 +128,22 @@ img { max-width: 100%; display: block; }
 .live-intro { padding: 92px clamp(20px, 6vw, 96px) 0; max-width: 78ch; }
 .scroll-section { height: 300vh; position: relative; }
 .scroll-section.tall { height: 340vh; }
+/* Slide 4's third scene (zoom + explanation) — 150vh added on top of the
+ * original 300vh reorder, so the reorder's own pace is untouched. */
+.scroll-section.zoom3 { height: 450vh; }
 .pin { position: sticky; top: 0; height: 100vh; display: grid; place-items: center;
        padding: 0 clamp(16px, 4vw, 64px); }
-.frame { width: min(1280px, 100%); }
+.frame { width: min(1280px, 100%); overflow: hidden; }
+.frame svg { transition: none; } /* driven per-frame from scroll, never a CSS timer */
+
+.scene-explain {
+  position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%);
+  width: min(640px, 84%); background: var(--surface); border: 1px solid var(--grid);
+  border-radius: 10px; padding: 18px 22px; box-shadow: 0 14px 38px rgba(0,0,0,.16);
+  opacity: 0; z-index: 3;
+}
+.scene-explain h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 660; }
+.scene-explain p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--ink-2); }
 .spacer { height: 40vh; display: grid; place-items: center; padding: 0 clamp(20px, 6vw, 96px); }
 .spacer p { max-width: 46ch; font-size: clamp(15px, 1.4vw, 19px); line-height: 1.6;
             color: var(--ink-2); text-align: center; margin: 0 auto; }
