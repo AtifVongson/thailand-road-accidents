@@ -343,6 +343,268 @@
     };
   }
 
+  /* ------------------------------------- slide 6: the conditions carousel */
+
+  // Where each stop sits on the slide's single scalar. Stop 0 -> 1 is the metric
+  // flip with no rotation; 1 -> 2 and 2 -> 3 are the two rotations.
+  var SLIDE06_STOPS = [0, 1 / 3, 2 / 3, 1];
+
+  var SLIDE06_DEFAULTS = {
+    width: 1280,
+    height: 840,
+    // Every card is laid out in this local space and then placed by a transform,
+    // so one scale factor carries bar geometry and type size together. Without
+    // it, text would have to be re-sized per position and would drift out of
+    // proportion with the bars it labels.
+    cardWidth: 1280,
+    cardHeight: 380,
+    smallWidth: 620,
+    // Ellipse, not a circle: three positions on a true circle 660px across need
+    // over 900px of vertical travel, which does not fit above the source line.
+    // The path is still one closed loop and still reads as rotation.
+    centre: { x: 640, y: 533 },
+    radius: { x: 381, y: 223 },
+    // 12 o'clock, 4 o'clock, 8 o'clock, measured clockwise from the top.
+    baseAngles: [0, 120, 240],
+    // The vertical strip cards may occupy: clear of the heading above and the
+    // limitation line and source below.
+    band: { top: 100, bottom: 770 },
+    labelGutter: 300,
+    panelGap: 50,
+    headerH: 70,
+    // Bars are scaled to the panel MINUS this, so the value label sitting past
+    // the end of the longest bar still fits. The severity panel ends flush with
+    // the card's right edge, so without it every card's longest bar — 32.0 on
+    // vehicle, 52.4 on weather — pushed its own label off the canvas.
+    valueRoom: 58,
+    barShare: 0.6,
+    headroom: 1.05,
+    restBand: 0.02,
+    dimOffTop: 0.55,      // opacity of a card away from the top position
+    labelGate: 0.6,       // prominence below which value labels are suppressed
+  };
+
+  /* Three cards on one ellipse, rotating counter-clockwise, with the left-hand
+   * metric flipping once before the first rotation.
+   *
+   * Counter-clockwise, not clockwise: leftward is where finished things go in a
+   * left-to-right reading order, so the card being explained descends to the
+   * bottom-left and the next one rises from the bottom-right. Clockwise would
+   * send the just-covered card into the position an audience reads as "next".
+   *
+   * Cards stay upright — only their position and scale change. A tilted bar
+   * chart is unreadable, so nothing here rotates about its own centre.
+   *
+   * The same card is drawn at every position rather than a placard that becomes
+   * a chart on arrival. If the thing at the bottom were a different artefact
+   * from the thing that arrives at the top, the audience would be watching
+   * content get swapped and the circular motion would be a lie about what is
+   * happening. What changes with prominence is detail density, not identity:
+   * value labels switch off below `labelGate`, because a label too small to read
+   * is noise rather than information.
+   *
+   * Both panels use a domain fixed across both metrics, for the reason slide 5
+   * documents at length: re-normalising per act cancels the change being shown.
+   * The severity panel does not move at all under the flip — a death rate is the
+   * same number under either framing — and that stillness is worth seeing.
+   */
+  function slide06(data, progress, options) {
+    var o = Object.assign({}, SLIDE06_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);
+    var S = SLIDE06_STOPS;
+
+    // The metric flip owns the first segment; the two rotations own the rest.
+    // Each segment eases independently so a card settles at each stop rather
+    // than sweeping through it.
+    var mp = clamp((p - S[0]) / (S[1] - S[0]), 0, 1);
+    var metricT = smoothstep(mp);
+    var rot = smoothstep(clamp((p - S[1]) / (S[2] - S[1]), 0, 1))
+            + smoothstep(clamp((p - S[2]) / (S[3] - S[2]), 0, 1));
+    var phi = -120 * rot;   // negative = counter-clockwise
+
+    var RAD = Math.PI / 180;
+    var cards = data.cards.map(function (src, ci) {
+      var theta = (o.baseAngles[ci] + phi) * RAD;
+      // 1 at the top, 0 at either bottom position, smooth in between.
+      var prom = clamp((Math.cos(theta) + 0.5) / 1.5, 0, 1);
+      var cx = o.centre.x + o.radius.x * Math.sin(theta);
+      var cy = o.centre.y - o.radius.y * Math.cos(theta);
+
+      /* A card is as wide as prominence wants, or as wide as fits where it
+       * currently is, whichever is smaller.
+       *
+       * The second clause is not defensive padding — without it the carousel is
+       * broken in the middle of every rotation. Prominence rises with cos(theta)
+       * while the card is still far from centre, so at 10 o'clock a card wants
+       * 83% scale at cx = 310 and hangs 220px off the left edge. Capping width
+       * at twice the distance to the nearer edge makes a card grow as it
+       * approaches the top rather than on its way there, which is also what the
+       * motion should look like. */
+      var room = 2 * Math.min(cx, o.width - cx);
+      var width = Math.min(lerp(o.smallWidth, o.cardWidth, prom), room);
+      var scale = width / o.cardWidth;
+
+      /* The three stops sit at 12, 4 and 8 o'clock, but a card rotating between
+       * the two bottom stops passes through 6 o'clock, which is 111px lower than
+       * either of them — far enough to land on the limitation line. Clamping the
+       * centre into the card band flattens that dip without moving any stop,
+       * since no stop is near the clamp. */
+      var halfH = o.cardHeight * scale / 2;
+      cy = clamp(cy, o.band.top + halfH, o.band.bottom - halfH);
+
+      var rows = src.categories;
+      var n = rows.length;
+      // Fixed across both metrics, so a bar that grows really did grow.
+      var volMax = o.headroom * rows.reduce(function (m, r) {
+        return Math.max(m, r.pc_crash, r.pc_death);
+      }, 0);
+      var sevMax = o.headroom * rows.reduce(function (m, r) {
+        return Math.max(m, r.death_rate);
+      }, 0);
+
+      var panelW = (o.cardWidth - o.labelGutter - o.panelGap) / 2;
+      var barSpan = panelW - o.valueRoom;
+      var volX = o.labelGutter;
+      var sevX = o.labelGutter + panelW + o.panelGap;
+      var rowsTop = o.headerH;
+      var slotH = (o.cardHeight - rowsTop) / n;
+      var barH = slotH * o.barShare;
+
+      // Value labels are the one thing that must not survive the flip on the
+      // volume side: mid-morph a bar is between share-of-crashes and
+      // share-of-deaths and is a share of neither. The severity panel is exempt
+      // because its number does not change — only its row's slot does.
+      var gate = clamp((prom - o.labelGate) / (1 - o.labelGate), 0, 1);
+      var outOp = atRestOut(mp) * gate;
+      var inOp = atRestIn(mp) * gate;
+
+      var laidRows = rows.map(function (r) {
+        var slot = lerp(r.rank_crashes - 1, r.rank_deaths - 1, metricT);
+        var y = rowsTop + slot * slotH + (slotH - barH) / 2;
+        var volValue = lerp(r.pc_crash, r.pc_death, metricT);
+        return {
+          key: src.key + "-" + r.label,
+          label: r.label,
+          thin: !!r.thin,
+          y: y, height: barH,
+          labelX: o.labelGutter - 14,
+          vol: {
+            x: volX, width: (volValue / volMax) * barSpan,
+            color: mixHex(PALETTE.volume, PALETTE.severity, metricT),
+            values: [
+              { text: r.pc_crash.toFixed(1) + "%", opacity: outOp },
+              { text: r.pc_death.toFixed(1) + "%", opacity: inOp },
+            ],
+            valueX: volX + (volValue / volMax) * barSpan + 10,
+          },
+          sev: {
+            x: sevX, width: (r.death_rate / sevMax) * barSpan,
+            // Thin categories are drawn in axis grey, never in severity orange:
+            // overcast's 52.4 per 100 would otherwise be the longest bar on the
+            // card, off 248 crashes. Shown, but never as evidence.
+            color: r.thin ? PALETTE.axis : PALETTE.severity,
+            values: [{ text: r.death_rate.toFixed(1), opacity: gate }],
+            valueX: sevX + (r.death_rate / sevMax) * barSpan + 10,
+          },
+        };
+      });
+
+      return {
+        key: src.key,
+        title: src.title,
+        note: src.note,
+        prominence: prom,
+        opacity: lerp(o.dimOffTop, 1, prom),
+        // One transform per card carries position and scale together, so bars
+        // and type stay in proportion at every point on the loop.
+        transform: { x: cx - o.cardWidth * scale / 2,
+                     y: cy - o.cardHeight * scale / 2, scale: scale },
+        centre: { x: cx, y: cy },
+        width: o.cardWidth * scale, height: o.cardHeight * scale,
+        panelTitleY: 44,
+        panels: [
+          { key: "volume", x: volX, width: panelW, max: volMax,
+            titles: [
+              { text: "% of all crashes", opacity: swapOut(mp) },
+              { text: "% of all deaths", opacity: swapIn(mp) },
+            ] },
+          { key: "severity", x: sevX, width: panelW, max: sevMax,
+            titles: [{ text: "Deaths per 100 crashes", opacity: 1 }],
+            // Below the panel title's baseline, not level with it: the all-crash
+            // rule falls at x≈968 on the vehicle card, which is inside the run of
+            // the title text above it.
+            baseline: { value: data.base_death_rate, labelY: rowsTop - 8,
+                        x: sevX + (data.base_death_rate / sevMax) * barSpan,
+                        label: "all crashes " + data.base_death_rate.toFixed(1) } },
+        ],
+        rows: laidRows,
+        rowsTop: rowsTop, slotH: slotH,
+      };
+    });
+
+    /* One heading per card, hard-swapped on whichever card is nearest the top.
+     * Not a crossfade: mid-rotation the outgoing and incoming cards both sit at
+     * 0.67 prominence, so a prominence-weighted fade would render two different
+     * headings at two-thirds opacity on the same baseline — the overstrike the
+     * comment on swapOut/swapIn describes. Exactly one is visible at any p. */
+    var leadIdx = 0;
+    for (var ci2 = 1; ci2 < cards.length; ci2++) {
+      if (cards[ci2].prominence > cards[leadIdx].prominence) leadIdx = ci2;
+    }
+    var COPY = {
+      vehicle: {
+        heading: "Motorcycles are a seventh of crashes and over a third of deaths",
+        subtitle: "The left panel counts crashes, then deaths. The right panel is a "
+                + "rate and does not move.",
+      },
+      road: {
+        heading: "Straight road is where crashes are both most common and most deadly",
+        subtitle: "Not curves, as is usually assumed.",
+      },
+      weather: {
+        heading: "Clear weather is most crashes — and deadlier per crash than rain",
+        subtitle: null,   // falls back to the card's own note from the export
+      },
+    };
+
+    var mi = data.motorcycle_involvement;
+    return {
+      viewBox: { width: o.width, height: o.height },
+      progress: p, rotation: phi, metric: metricT,
+      stops: S, leadCard: cards[leadIdx].key,
+      headings: cards.map(function (c, i) {
+        return { key: c.key, text: (COPY[c.key] || {}).heading || c.title,
+                 opacity: i === leadIdx ? 1 : 0 };
+      }),
+      subtitles: cards.map(function (c, i) {
+        return { key: c.key,
+                 text: (COPY[c.key] || {}).subtitle || c.note || "",
+                 opacity: i === leadIdx ? 1 : 0 };
+      }),
+      cards: cards,
+      /* The strongest motorcycle number in the file is the one no bar here can
+       * carry, so it is stated instead of omitted. Tied to the vehicle card's
+       * prominence, because it is a caveat about that card and would be
+       * confusing floating under the weather card. */
+      // Two lines, not one: as a single string this runs about 2,000px on a
+      // 1,280px canvas. The fuller wording lives in the page below the chart.
+      limitation: {
+        lines: [
+          { text: "A motorcycle is involved in crashes accounting for " + mi.pc_death
+                + "% of deaths — the largest single fact in this file.",
+            x: 40, y: o.height - 58 },
+          { text: "Involvement overlaps — per-type shares sum to " + mi.share_sum_pc
+                + "% — so it is not a share of a whole. This card counts each crash "
+                + "once, by first vehicle.",
+            x: 40, y: o.height - 36 },
+        ],
+        opacity: cards[0].prominence,
+      },
+      source: data.source,
+      sourceX: o.width - 40,
+    };
+  }
+
   /* -------------------------------------------------- slide 8: the reorder */
 
   var SLIDE08_DEFAULTS = {
@@ -1111,6 +1373,9 @@
     SLIDE04_ACT3_START: SLIDE04_ACT3_START,
     slide05: slide05,
     SLIDE05_DEFAULTS: SLIDE05_DEFAULTS,
+    slide06: slide06,
+    SLIDE06_DEFAULTS: SLIDE06_DEFAULTS,
+    SLIDE06_STOPS: SLIDE06_STOPS,
     slide08: slide08,
     slide09: slide09,
     slide12: slide12,

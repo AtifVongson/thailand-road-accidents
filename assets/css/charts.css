@@ -68,6 +68,19 @@
                        text-anchor: middle; }
 .chart .c-note.is-start { text-anchor: start; }
 
+/* Slide 6's carousel. Cards are placed by a transform, so these sizes are in
+ * the layout module's local card space and shrink with the card — a bottom card
+ * is the same chart at 48%, not a different one. Value labels are switched off
+ * down there by opacity, because type at 48% is noise rather than information. */
+.chart .c-cardtitle  { font-size: 20px; font-weight: 640; fill: var(--ink); }
+.chart .c-limitation { font-size: 14px; fill: var(--ink-2); }
+.chart .c-baserule   { stroke: var(--muted); stroke-width: 1.2; }
+.chart .c-baselabel  { font-size: 12px; fill: var(--muted); text-anchor: middle; }
+/* Under 1% of crashes: shown so the category is not hidden, greyed so it is
+ * never read as evidence. Overcast is 248 crashes at 52.4 deaths per 100. */
+.chart .is-thin .c-rowlabel { fill: var(--muted); }
+.chart .is-thin .c-value    { fill: var(--muted); }
+
 .chart .c-point   { opacity: 0.72; }
 .chart .c-trendline { stroke-linecap: round; }
 .chart .c-line    { }

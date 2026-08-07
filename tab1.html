@@ -149,21 +149,31 @@
   </div>
 </section>
 
-<!-- 6 — conditions -->
-<section class="section section-static" data-kicker="Part 1 &middot; Descriptive" data-title="Motorcycles kill far more per crash">
-  <p class="kicker">Part 1 &middot; Descriptive</p>
-  <h1>Motorcycles crash less often and kill far more per crash</h1>
-  <div class="figwrap"><img src="assets/figures/fig03_vehicle.svg" alt="Crashes and deaths per 100 crashes by vehicle type"></div>
-  <div class="callout">
-    <p><b>Pickups are 37% of crashes and kill 9.0 per 100. Motorcycles are 14% of crashes
-      and kill 32.0 &mdash; 3.6&times; more per crash.</b></p>
-    <p>Road alignment and weather point the same way: straight road is 71.5% of crashes at
-      12.3 deaths per 100, no safer than a curve; and 86% of crashes happen in clear weather,
-      which is deadlier per crash than rain &mdash; 13.1 against 7.9.</p>
+<!-- 6 — conditions (LIVE) -->
+<section class="section section-live" data-kicker="Part 1 &middot; Descriptive" data-title="Motorcycles are over a third of deaths">
+  <div class="live-intro">
+    <p class="kicker">Part 1 &middot; Descriptive</p>
+    <h1>Motorcycles are a seventh of crashes and over a third of deaths</h1>
   </div>
-  <div class="figpair" style="margin-top:26px">
-    <div class="figwrap"><img src="assets/figures/fig03b_roadtype.svg" alt="Crashes and deaths per 100 crashes by road alignment"></div>
-    <div class="figwrap"><img src="assets/figures/fig03c_weather.svg" alt="Crashes and deaths per 100 crashes by weather"></div>
+  <div class="spacer">
+    <p>Pickups are 37% of crashes and kill 9.0 per 100. Motorcycles are 14% of crashes
+       and kill 32.0 &mdash; 3.6&times; more per crash. Scroll to count deaths instead of
+       crashes, then to turn the carousel through road alignment and weather.</p>
+  </div>
+  <div class="scroll-section carousel" id="sec-s6">
+    <div class="pin"><div class="frame" id="mount-s6"></div></div>
+  </div>
+  <div class="spacer">
+    <p>Counted by deaths the order inverts: motorcycles are <b>36% of all highway
+       deaths</b>, ahead of pickups at 27%. Road alignment barely moves &mdash; straight
+       road is 71.5% of crashes and 70.0% of deaths, at 12.3 per 100, no safer than a
+       curve. Weather moves the other way: rain is 12% of crashes but only 8% of deaths,
+       and clear weather is deadlier per crash &mdash; 13.1 against 7.9.</p>
+    <p class="limits">A motorcycle is <i>involved</i> in crashes accounting for 55.6% of
+       deaths &mdash; the largest single fact in this file. It is not drawn as a bar
+       because involvement overlaps: 31.5% of crashes involve more than one vehicle type
+       and the per-type shares sum to 159%, so they are not slices of a whole. The chart
+       counts each crash once, by first vehicle recorded.</p>
   </div>
 </section>
 
@@ -253,8 +263,9 @@
   Promise.all([
     fetch("assets/data/charts/slide04_cause.json").then(function (r) { return r.json(); }),
     fetch("assets/data/charts/slide05_when.json").then(function (r) { return r.json(); }),
+    fetch("assets/data/charts/slide06_conditions.json").then(function (r) { return r.json(); }),
   ]).then(function (loaded) {
-    var cause = loaded[0], when = loaded[1];
+    var cause = loaded[0], when = loaded[1], conditions = loaded[2];
 
     // Three acts, one scalar. Every bit of act arithmetic — including where act 3
     // starts — lives in layout.js's slide04Story() and is covered by
@@ -272,6 +283,16 @@
       section: s5,
       chart: ChartRender.slide05(document.getElementById("mount-s5"), when),
       anchors: anchorsFor(s5, [0, 1]),
+    });
+
+    // Four stops: the metric flip, then two counter-clockwise rotations. Where
+    // each sits on the scalar is SLIDE06_STOPS in layout.js — this page does not
+    // know what a stop means, only that the module publishes where they are.
+    var s6 = document.getElementById("sec-s6");
+    live.push({
+      section: s6,
+      chart: ChartRender.slide06(document.getElementById("mount-s6"), conditions),
+      anchors: anchorsFor(s6, ChartLayout.SLIDE06_STOPS),
     });
 
     addEventListener("scroll", tick, { passive: true });

@@ -298,6 +298,144 @@
     return { svg: svg, update: update };
   }
 
+  /* ------------------------------------ slide 6: the conditions carousel */
+
+  /* Each card is drawn once in the layout module's local card space and then
+   * placed by a single transform, so one scale factor moves bars and type
+   * together. Nothing here knows where on the loop a card is. */
+  function slide06(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide06(data, 0, options);
+
+    var svg = el("svg", {
+      class: "chart",
+      viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
+      role: "img",
+      "aria-label": "Vehicle type, road alignment and weather, each as crash share "
+        + "against deaths per 100 crashes, rotating through a carousel",
+    });
+
+    var gText = el("g", { class: "c-text" });
+    var gCards = el("g", { class: "c-cards" });
+    svg.appendChild(gCards); svg.appendChild(gText);
+
+    var headings = first.headings.map(function (h) {
+      var t = el("text", { class: "c-heading", x: 40, y: 54 }, h.text);
+      gText.appendChild(t);
+      return t;
+    });
+    var subtitles = first.subtitles.map(function (s) {
+      var t = el("text", { class: "c-subtitle", x: 40, y: 84 }, s.text);
+      gText.appendChild(t);
+      return t;
+    });
+    var limitation = first.limitation.lines.map(function (ln) {
+      var t = el("text", { class: "c-limitation", x: ln.x, y: ln.y }, ln.text);
+      gText.appendChild(t);
+      return t;
+    });
+    gText.appendChild(el("text", {
+      class: "c-source", x: first.sourceX, y: first.viewBox.height - 16, "text-anchor": "end",
+    }, first.source));
+
+    var cards = {};
+    first.cards.forEach(function (card) {
+      var g = el("g", {});
+      gCards.appendChild(g);
+
+      g.appendChild(el("text", { class: "c-cardtitle", x: 0, y: 26 }, card.title));
+
+      var panelTitles = [];
+      card.panels.forEach(function (panel) {
+        panel.titles.forEach(function (pt) {
+          var t = el("text", { class: "c-paneltitle", x: panel.x, y: card.panelTitleY },
+                     pt.text);
+          g.appendChild(t);
+          panelTitles.push(t);
+        });
+        if (panel.baseline) {
+          g.appendChild(el("line", {
+            class: "c-baserule", x1: panel.baseline.x, x2: panel.baseline.x,
+            y1: card.rowsTop - 2, y2: card.rowsTop + card.slotH * card.rows.length,
+          }));
+          g.appendChild(el("text", {
+            class: "c-baselabel", x: panel.baseline.x, y: panel.baseline.labelY,
+          }, panel.baseline.label));
+        }
+      });
+
+      var rows = {};
+      card.rows.forEach(function (r) {
+        var rg = el("g", { class: r.thin ? "is-thin" : "" });
+        var volBar = el("rect", { class: "c-bar", rx: 2, x: r.vol.x, height: r.height });
+        var sevBar = el("rect", { class: "c-bar", rx: 2, x: r.sev.x, height: r.height,
+                                  fill: r.sev.color });
+        var name = el("text", { class: "c-rowlabel", x: r.labelX }, r.label);
+        rg.appendChild(volBar); rg.appendChild(sevBar); rg.appendChild(name);
+        var volValues = r.vol.values.map(function (v) {
+          var t = el("text", { class: "c-value" }, v.text);
+          rg.appendChild(t);
+          return t;
+        });
+        var sevValues = r.sev.values.map(function (v) {
+          var t = el("text", { class: "c-value" }, v.text);
+          rg.appendChild(t);
+          return t;
+        });
+        g.appendChild(rg);
+        rows[r.key] = { g: rg, volBar: volBar, sevBar: sevBar, name: name,
+                        volValues: volValues, sevValues: sevValues };
+      });
+
+      cards[card.key] = { g: g, rows: rows, panelTitles: panelTitles };
+    });
+
+    mount.appendChild(svg);
+
+    function update(progress) {
+      var m = L.slide06(data, progress, options);
+
+      m.cards.forEach(function (card) {
+        var node = cards[card.key];
+        var tr = card.transform;
+        set(node.g, {
+          transform: "translate(" + tr.x.toFixed(2) + "," + tr.y.toFixed(2)
+                   + ") scale(" + tr.scale.toFixed(4) + ")",
+          opacity: card.opacity.toFixed(3),
+        });
+        var ti = 0;
+        card.panels.forEach(function (panel) {
+          panel.titles.forEach(function (pt) {
+            node.panelTitles[ti++].setAttribute("opacity", pt.opacity);
+          });
+        });
+        card.rows.forEach(function (r) {
+          var n = node.rows[r.key];
+          set(n.volBar, { y: r.y, width: Math.max(0, r.vol.width), fill: r.vol.color });
+          set(n.sevBar, { y: r.y, width: Math.max(0, r.sev.width) });
+          set(n.name, { y: r.y + r.height / 2 });
+          r.vol.values.forEach(function (v, i) {
+            set(n.volValues[i], { x: r.vol.valueX, y: r.y + r.height / 2,
+                                  opacity: v.opacity.toFixed(3) });
+          });
+          r.sev.values.forEach(function (v, i) {
+            set(n.sevValues[i], { x: r.sev.valueX, y: r.y + r.height / 2,
+                                  opacity: v.opacity.toFixed(3) });
+          });
+        });
+      });
+
+      m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity); });
+      m.subtitles.forEach(function (s, i) { subtitles[i].setAttribute("opacity", s.opacity); });
+      limitation.forEach(function (t) {
+        t.setAttribute("opacity", m.limitation.opacity.toFixed(3));
+      });
+    }
+
+    update(0);
+    return { svg: svg, update: update };
+  }
+
   /* --------------------------------------------------- slide 9: scatter */
 
   function slide09(mount, data, options) {
@@ -490,5 +628,5 @@
   }
 
   return { slide04: slide04, slide04Story: slide04Story, slide05: slide05,
-           slide08: slide08, slide09: slide09, slide12: slide12 };
+           slide06: slide06, slide08: slide08, slide09: slide09, slide12: slide12 };
 });

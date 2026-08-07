@@ -1,0 +1,248 @@
+{
+ "total_crashes": 110434,
+ "total_deaths": 13901,
+ "base_death_rate": 12.6,
+ "thin_threshold_pct": 1.0,
+ "metrics": [
+  {
+   "key": "pc_crash",
+   "axis": "% of all crashes"
+  },
+  {
+   "key": "pc_death",
+   "axis": "% of all deaths"
+  }
+ ],
+ "cards": [
+  {
+   "key": "vehicle",
+   "title": "First vehicle involved",
+   "note": null,
+   "categories": [
+    {
+     "label": "Pickup (4-wheel)",
+     "crashes": 40968,
+     "deaths": 3688,
+     "pc_crash": 37.1,
+     "pc_death": 26.53,
+     "death_rate": 9.0,
+     "rank_crashes": 1,
+     "rank_deaths": 2,
+     "thin": false
+    },
+    {
+     "label": "Passenger car",
+     "crashes": 28433,
+     "deaths": 2397,
+     "pc_crash": 25.75,
+     "pc_death": 17.24,
+     "death_rate": 8.4,
+     "rank_crashes": 2,
+     "rank_deaths": 3,
+     "thin": false
+    },
+    {
+     "label": "Motorcycle",
+     "crashes": 15705,
+     "deaths": 5024,
+     "pc_crash": 14.22,
+     "pc_death": 36.14,
+     "death_rate": 32.0,
+     "rank_crashes": 3,
+     "rank_deaths": 1,
+     "thin": false
+    },
+    {
+     "label": "Truck >10 wheels / trailer",
+     "crashes": 9214,
+     "deaths": 896,
+     "pc_crash": 8.34,
+     "pc_death": 6.45,
+     "death_rate": 9.7,
+     "rank_crashes": 4,
+     "rank_deaths": 4,
+     "thin": false
+    },
+    {
+     "label": "Truck (6-wheel)",
+     "crashes": 4539,
+     "deaths": 485,
+     "pc_crash": 4.11,
+     "pc_death": 3.49,
+     "death_rate": 10.7,
+     "rank_crashes": 5,
+     "rank_deaths": 5,
+     "thin": false
+    },
+    {
+     "label": "Truck (6–10 wheel)",
+     "crashes": 3401,
+     "deaths": 355,
+     "pc_crash": 3.08,
+     "pc_death": 2.55,
+     "death_rate": 10.4,
+     "rank_crashes": 6,
+     "rank_deaths": 6,
+     "thin": false
+    },
+    {
+     "label": "Other",
+     "crashes": 3363,
+     "deaths": 147,
+     "pc_crash": 3.05,
+     "pc_death": 1.06,
+     "death_rate": 4.4,
+     "rank_crashes": 7,
+     "rank_deaths": 8,
+     "thin": false
+    },
+    {
+     "label": "Van",
+     "crashes": 1425,
+     "deaths": 221,
+     "pc_crash": 1.29,
+     "pc_death": 1.59,
+     "death_rate": 15.5,
+     "rank_crashes": 8,
+     "rank_deaths": 7,
+     "thin": false
+    }
+   ]
+  },
+  {
+   "key": "road",
+   "title": "Road alignment",
+   "note": null,
+   "categories": [
+    {
+     "label": "Straight",
+     "crashes": 78971,
+     "deaths": 9727,
+     "pc_crash": 71.51,
+     "pc_death": 69.97,
+     "death_rate": 12.3,
+     "rank_crashes": 1,
+     "rank_deaths": 1,
+     "thin": false
+    },
+    {
+     "label": "Wide curve",
+     "crashes": 13274,
+     "deaths": 1673,
+     "pc_crash": 12.02,
+     "pc_death": 12.04,
+     "death_rate": 12.6,
+     "rank_crashes": 2,
+     "rank_deaths": 2,
+     "thin": false
+    },
+    {
+     "label": "Normal curve",
+     "crashes": 2890,
+     "deaths": 293,
+     "pc_crash": 2.62,
+     "pc_death": 2.11,
+     "death_rate": 10.1,
+     "rank_crashes": 3,
+     "rank_deaths": 3,
+     "thin": false
+    },
+    {
+     "label": "Junction",
+     "crashes": 2248,
+     "deaths": 265,
+     "pc_crash": 2.04,
+     "pc_death": 1.91,
+     "death_rate": 11.8,
+     "rank_crashes": 4,
+     "rank_deaths": 4,
+     "thin": false
+    },
+    {
+     "label": "Public / commercial access",
+     "crashes": 854,
+     "deaths": 173,
+     "pc_crash": 0.77,
+     "pc_death": 1.24,
+     "death_rate": 20.3,
+     "rank_crashes": 5,
+     "rank_deaths": 5,
+     "thin": true
+    },
+    {
+     "label": "Sharp curve",
+     "crashes": 597,
+     "deaths": 64,
+     "pc_crash": 0.54,
+     "pc_death": 0.46,
+     "death_rate": 10.7,
+     "rank_crashes": 6,
+     "rank_deaths": 6,
+     "thin": true
+    }
+   ]
+  },
+  {
+   "key": "weather",
+   "title": "Weather",
+   "note": "Fog and overcast are under 1% of crashes between them and are greyed: overcast is recorded on 248 crashes and falling every year, which is a reporting pattern, not a hazard.",
+   "categories": [
+    {
+     "label": "Clear",
+     "crashes": 95474,
+     "deaths": 12492,
+     "pc_crash": 86.45,
+     "pc_death": 89.86,
+     "death_rate": 13.1,
+     "rank_crashes": 1,
+     "rank_deaths": 1,
+     "thin": false
+    },
+    {
+     "label": "Rain",
+     "crashes": 13471,
+     "deaths": 1060,
+     "pc_crash": 12.2,
+     "pc_death": 7.63,
+     "death_rate": 7.9,
+     "rank_crashes": 2,
+     "rank_deaths": 2,
+     "thin": false
+    },
+    {
+     "label": "Fog / smoke / dust",
+     "crashes": 377,
+     "deaths": 60,
+     "pc_crash": 0.34,
+     "pc_death": 0.43,
+     "death_rate": 15.9,
+     "rank_crashes": 3,
+     "rank_deaths": 4,
+     "thin": true
+    },
+    {
+     "label": "Overcast",
+     "crashes": 248,
+     "deaths": 130,
+     "pc_crash": 0.22,
+     "pc_death": 0.94,
+     "death_rate": 52.4,
+     "rank_crashes": 4,
+     "rank_deaths": 3,
+     "thin": true
+    }
+   ]
+  }
+ ],
+ "motorcycle_involvement": {
+  "crashes": 23130,
+  "deaths": 7729,
+  "pc_crash": 20.9,
+  "pc_death": 55.6,
+  "death_rate": 33.4,
+  "multi_type_pc": 31.5,
+  "share_sum_pc": 159.1,
+  "note": "Involvement overlaps, so it cannot be drawn as a share of a whole; the chart counts each crash once, by first vehicle."
+ },
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

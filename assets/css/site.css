@@ -133,6 +133,17 @@ img { max-width: 100%; display: block; }
  * evidence act is the addition. Everything inside is SVG: there is no overlay
  * card and no CSS transform, because the chart makes its own argument now. */
 .scroll-section.act3 { height: 450vh; }
+/* Four stops rather than three, so proportionally more scroll travel. */
+.scroll-section.carousel { height: 600vh; }
+/* A pinned chart is sized by width, so on a short screen it overflows the pin
+ * and the bottom of the chart is simply cut off — on a 1366x660 laptop the
+ * 1280x720 charts render 699px tall inside a 660px pin. Capping by height makes
+ * the chart shrink to fit and letterbox horizontally instead. Binds only when
+ * the viewport is too short; on a projector nothing changes.
+ *
+ * This applies to every chart frame, not just the carousel: slide 4 has had the
+ * same clipping since it was built, and the fix is the same one line. */
+.frame svg { max-height: 88vh; }
 .pin { position: sticky; top: 0; height: 100vh; display: grid; place-items: center;
        padding: 0 clamp(16px, 4vw, 64px); }
 .frame { width: min(1280px, 100%); }
