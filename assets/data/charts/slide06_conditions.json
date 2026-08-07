@@ -185,7 +185,7 @@
   {
    "key": "weather",
    "title": "Weather",
-   "note": "Fog and overcast are under 1% of crashes between them and are greyed: overcast is recorded on 248 crashes and falling every year, which is a reporting pattern, not a hazard.",
+   "note": "Fog and overcast are greyed: together under 1% of crashes, and 248 overcast crashes is a reporting pattern, not a hazard.",
    "categories": [
     {
      "label": "Clear",
