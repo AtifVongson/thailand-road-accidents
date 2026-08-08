@@ -692,7 +692,7 @@
   function slide11(mount, data, options) {
     var L = getLayout();
     var first = L.slide11(data, 0, options);
-    var f = mountFrame(first, "Five paired comparisons between the fourteen "
+    var f = mountFrame(first, "Six paired comparisons between the fourteen "
       + "overshooting sections and the other 146", 56, 88);
     axisTitles(f, first);
 

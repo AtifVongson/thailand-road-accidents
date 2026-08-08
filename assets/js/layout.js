@@ -952,14 +952,20 @@
     headroom: 1.26,
   };
 
-  /* Five paired comparisons, each on its own scale.
+  /* Six paired comparisons, each on its own scale.
    *
-   * Deliberately five separate panels with no shared axis: thousands of vehicles
+   * Deliberately six separate panels with no shared axis: thousands of vehicles
    * a day, a percentage, a rate per 100 million vehicle-km and deaths per 100
    * crashes have nothing in common to share an axis with, and forcing them onto
    * one would invent a relationship — the rule volume_vs_severity states in
    * 02_figs_descriptive.py. Each panel is therefore its own question, and only
    * the pairing is comparable.
+   *
+   * Panel order is an argument, not a list. Traffic, heavy vehicles and crash
+   * rate all run high; then motorcycle involvement and deaths per crash both
+   * collapse. The motorcycle panel sits immediately left of the deaths panel
+   * because it is the mechanism for it — a third the motorcycle involvement,
+   * a sixth the deaths per crash — and the eye reads left to right.
    *
    * Act 1 shows the 146 ordinary sections alone; act 2 grows the 14 overshooting
    * ones beside them. Establishing normal before showing the exception is what

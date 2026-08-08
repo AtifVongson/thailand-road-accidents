@@ -31,6 +31,13 @@
    "ratio": 3.98
   },
   {
+   "label": "Motorcycle crashes",
+   "unit": "% of crashes",
+   "overshooting": 2.7,
+   "others": 8.1,
+   "ratio": 0.33
+  },
+  {
    "label": "Deaths per 100 crashes",
    "unit": "per 100 crashes",
    "overshooting": 2.1,
