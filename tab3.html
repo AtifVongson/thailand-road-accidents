@@ -147,6 +147,86 @@
   </div>
 </section>
 
+<!-- 14b — recommendation, part 1 continued: checkpoint placement (STATIC) -->
+<section class="section section-static" data-kicker="Part 3 &middot; Recommendation, part 1" data-title="Entry points, not mid-stretch">
+  <p class="kicker">Part 3 &middot; Recommendation, part 1</p>
+  <h1>Stage checkpoints at the entry points, not mid-stretch</h1>
+  <div class="body">
+    <p><b>Our recommendation, not something the crash data directly tests:</b> place
+       checkpoints at the on-ramps and entry points to the 14 sections above, not partway
+       along the dangerous stretch itself. Three reasons follow from the findings already
+       shown, rather than from a separate test of where on a stretch a checkpoint works
+       best:</p>
+    <ul>
+      <li>An entry-point checkpoint catches an impaired driver before the highest-risk
+          kilometres, instead of only recording a crash after it happens.</li>
+      <li>A checkpoint mid-stretch, on a section carrying <b>76,000 vehicles a day</b> on
+          average &mdash; the measured mean traffic on these 14 sections &mdash; risks
+          becoming a crash site of its own: vehicles braking suddenly in high-speed
+          traffic.</li>
+      <li>Traffic enters a dangerous stretch from both directions, so covering both means
+          a checkpoint at each end, not one checkpoint on one side.</li>
+    </ul>
+  </div>
+  <span class="diagram-badge">Our recommendation &mdash; reasoning, not a tested result</span>
+  <div class="diagram">
+    <svg viewBox="0 0 1180 300" role="img"
+         aria-label="A road section with checkpoints placed at both entry points, and an
+           X over a checkpoint drawn mid-stretch to show the discouraged placement.
+           Arrows show traffic entering from both directions.">
+      <defs>
+        <marker id="d-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7"
+                markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-2)"></path>
+        </marker>
+      </defs>
+
+      <text x="590" y="80" class="d-road-label">Dangerous stretch</text>
+
+      <rect x="90" y="140" width="1000" height="30" rx="4" fill="var(--grid)"></rect>
+      <line x1="95" y1="155" x2="1085" y2="155" stroke="var(--axis)" stroke-width="2.5"
+            stroke-dasharray="16 12"></line>
+
+      <line x1="18" y1="155" x2="76" y2="155" stroke="var(--ink-2)" stroke-width="3"
+            marker-end="url(#d-arrow)"></line>
+      <line x1="1162" y1="155" x2="1104" y2="155" stroke="var(--ink-2)" stroke-width="3"
+            marker-end="url(#d-arrow)"></line>
+
+      <!-- Entry point A — recommended -->
+      <rect x="136" y="118" width="8" height="74" rx="2" fill="var(--ink)"></rect>
+      <circle cx="140" cy="110" r="13" fill="var(--ink)"></circle>
+      <path d="M133,110 L138,115 L148,101" stroke="var(--surface)" stroke-width="2.6"
+            fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+      <text x="140" y="216" class="d-label">Checkpoint</text>
+      <text x="140" y="230" class="d-label">entry point</text>
+
+      <!-- Entry point B — recommended -->
+      <rect x="1036" y="118" width="8" height="74" rx="2" fill="var(--ink)"></rect>
+      <circle cx="1040" cy="110" r="13" fill="var(--ink)"></circle>
+      <path d="M1033,110 L1038,115 L1048,101" stroke="var(--surface)" stroke-width="2.6"
+            fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+      <text x="1040" y="216" class="d-label">Checkpoint</text>
+      <text x="1040" y="230" class="d-label">entry point</text>
+
+      <!-- Mid-stretch — discouraged -->
+      <rect x="586" y="118" width="8" height="74" rx="2" fill="var(--grid)"
+            stroke="var(--axis)" stroke-width="1"></rect>
+      <circle cx="590" cy="110" r="13" fill="var(--grid)" stroke="var(--axis)"
+              stroke-width="1"></circle>
+      <line x1="583" y1="103" x2="597" y2="117" stroke="var(--severity)" stroke-width="2.6"
+            stroke-linecap="round"></line>
+      <line x1="597" y1="103" x2="583" y2="117" stroke="var(--severity)" stroke-width="2.6"
+            stroke-linecap="round"></line>
+      <text x="590" y="216" class="d-label muted">not mid-</text>
+      <text x="590" y="230" class="d-label muted">stretch</text>
+      <text x="590" y="248" class="d-label muted small">76,000 veh/day</text>
+    </svg>
+  </div>
+  <p class="diagram-caption">One section shown, either direction &mdash; not a specific
+    stretch. Illustrative only: no crash outcome was modelled for checkpoint placement, and
+    nothing here is measured the way the charts on the rest of this site are.</p>
+</section>
+
 <!-- 15 — recommendation, part 2 -->
 <section class="section section-static dark" data-kicker="Part 3 &middot; Recommendation, part 2" data-title="How to run it, and what it cannot see">
   <p class="kicker">Part 3 &middot; Recommendation, part 2</p>
