@@ -116,14 +116,13 @@
   </div>
 </section>
 
-<!-- 13c — did the forecast hold? (STATIC) -->
-<section class="section section-static" data-kicker="Part 2 &middot; Forecast" data-title="Checking the forecast against April">
-  <p class="kicker">Part 2 &middot; Forecast</p>
-  <h1>Checking the forecast against April</h1>
-  <div class="stats">
-    <div class="stat"><div class="v severity">320</div><div class="l">Deaths, April 2026 &mdash; inside the 283&ndash;422 predicted range</div></div>
-    <div class="stat"><div class="v volume">2,471</div><div class="l">Crashes, April 2026 &mdash; below the 2,550&ndash;3,352 predicted range</div></div>
+<!-- 13c — did the forecast hold? (LIVE, static-on-load) -->
+<section class="section section-live" data-kicker="Part 2 &middot; Forecast" data-title="Checking the forecast against April">
+  <div class="live-intro">
+    <p class="kicker">Part 2 &middot; Forecast</p>
+    <h1>Checking the forecast against April</h1>
   </div>
+  <div id="sec-s13c"><div class="frame" id="mount-s13c"></div></div>
   <div class="callout">
     <h2>An out-of-sample check, not a routine claim</h2>
     <p>April 2026 has now happened, so the forecast from the previous slide can be checked
@@ -164,12 +163,10 @@
     </div>
   </div>
   <div class="spacer">
-    <p>Target sections, not provinces &mdash; the 14 sections crashing furthest above their
-       expected rate are 79% motorway, Routes 7 and 9, while deaths per crash concentrate in
-       the north-east. Staff by month: April needs 1.9&times; September's capacity. Surge for
-       the Seven Dangerous Days at roughly 3&times; ordinary staffing, starting two weeks
-       early. Set checkpoints by hour &mdash; weekdays differ by under two points, hours by
-       2.1&times;.</p>
+    <p>Target sections, not provinces &mdash; deaths per crash concentrate in the north-east,
+       but the sections crashing furthest above their expected rate cluster somewhere else.
+       Set checkpoints by hour &mdash; weekdays differ by under two points, hours by
+       2.1&times;. The next screen breaks down exactly where and when.</p>
   </div>
 </section>
 
@@ -399,6 +396,7 @@
     wire("sec-s12", "mount-s12", "assets/data/charts/slide12_monthly.json", "slide12", [0, 1]),
     wire("sec-s13", "mount-s13", "assets/data/charts/slide13_forecast.json", "slide13", [0, 1]),
     wire("sec-s13b", "mount-s13b", "assets/data/charts/slide13b_lag.json", "slide13b", [0, 1]),
+    wire("sec-s13c", "mount-s13c", "assets/data/charts/slide13c_dumbbell.json", "slide13c", [0, 1]),
   ]).then(function () {
     live.sort(function (a, b) { return a.section.offsetTop - b.section.offsetTop; });
     addEventListener("scroll", tick, { passive: true });

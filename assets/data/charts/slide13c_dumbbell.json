@@ -1,0 +1,25 @@
+{
+ "snapshot_date": "2026-05-06",
+ "snapshot_note": "Provisional — a snapshot through 6 May 2026, six days after April closed. Full caveat below the chart.",
+ "metrics": [
+  {
+   "key": "crashes",
+   "title": "Crashes per month",
+   "y2025": 2940,
+   "y2026_actual": 2471,
+   "forecast_mean": 2924.1,
+   "forecast_lo80": 2550.5,
+   "forecast_hi80": 3352.3
+  },
+  {
+   "key": "deaths",
+   "title": "Deaths per month",
+   "y2025": 358,
+   "y2026_actual": 320,
+   "forecast_mean": 345.8,
+   "forecast_lo80": 283.2,
+   "forecast_hi80": 422.1
+  }
+ ],
+ "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
+}

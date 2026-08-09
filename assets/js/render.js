@@ -915,6 +915,62 @@
     return { svg: f.svg, update: update };
   }
 
+  /* -------------------------------------------- slide 13c: forecast vs. reality */
+
+  function slide13c(mount, data, options) {
+    var L = getLayout();
+    var first = L.slide13c(data, 0, options);
+    var f = mountFrame(first, "April 2025 against April 2026, provisional, with the "
+      + "forecast's 80% interval shaded behind both", 56, 88);
+
+    first.panels.forEach(function (panel) {
+      var g = el("g", {});
+      f.gMain.appendChild(g);
+
+      var band = el("rect", { class: "c-band80", fill: panel.color,
+        x: panel.band.x, y: panel.band.y, width: panel.band.width,
+        height: panel.band.height });
+      var bandLabel = el("text", { class: "c-panelnote", x: panel.bandLabel.x,
+        y: panel.bandLabel.y, "text-anchor": "middle" }, panel.bandLabel.text);
+      var stick = el("line", { class: "c-stick", stroke: getLayout().PALETTE.axis,
+        "stroke-width": 3, x1: panel.stick.x1, x2: panel.stick.x2,
+        y1: panel.stick.y, y2: panel.stick.y });
+      var dot25 = el("circle", { class: "c-point", cx: panel.p2025.cx,
+        cy: panel.p2025.cy, r: panel.p2025.r, fill: getLayout().PALETTE.muted });
+      var lab25 = el("text", { class: "c-panelnote", x: panel.p2025.cx,
+        y: panel.p2025.labelY, "text-anchor": "middle" }, panel.p2025.label);
+      var val25 = el("text", { class: "c-value", x: panel.p2025.cx,
+        y: panel.p2025.valueY, "text-anchor": "middle" }, panel.p2025.value);
+      var dot26 = el("circle", { class: "c-point", cx: panel.p2026.cx,
+        cy: panel.p2026.cy, r: panel.p2026.r, fill: panel.color });
+      var lab26 = el("text", { class: "c-panelnote", x: panel.p2026.cx,
+        y: panel.p2026.labelY, "text-anchor": "middle" }, panel.p2026.label);
+      var val26 = el("text", { class: "c-value", x: panel.p2026.cx,
+        y: panel.p2026.valueY, "text-anchor": "middle" }, panel.p2026.value);
+      [band, bandLabel, stick, dot25, lab25, val25, dot26, lab26, val26]
+        .forEach(function (n) { g.appendChild(n); });
+
+      panel.ticks.forEach(function (t) {
+        f.gGrid.appendChild(el("text", { class: "c-tick", x: t.x, y: panel.axisY,
+          "text-anchor": "middle" }, t.label));
+      });
+      f.gText.appendChild(el("text", { class: "c-paneltitle", x: first.plot.x,
+        y: panel.y - 10 }, panel.title));
+    });
+
+    var caveat = el("text", { class: "c-limitation", x: first.caveat.x,
+      y: first.caveat.y }, first.caveat.text);
+    f.gText.appendChild(caveat);
+
+    mount.appendChild(f.svg);
+
+    function update(progress) {
+      L.slide13c(data, progress, options);   // progress accepted, drawn state is fixed
+    }
+    update(0);
+    return { svg: f.svg, update: update };
+  }
+
   /* --------------------------------------------------- slide 9: scatter */
 
   function slide09(mount, data, options) {
@@ -1109,5 +1165,6 @@
   return { slide04: slide04, slide04Story: slide04Story, slide05: slide05,
            slide06: slide06, slide07: slide07, slide08: slide08, slide09: slide09,
            slide10: slide10, slide10b: slide10b, slide11: slide11,
-           slide12: slide12, slide13: slide13, slide13b: slide13b };
+           slide12: slide12, slide13: slide13, slide13b: slide13b,
+           slide13c: slide13c };
 });

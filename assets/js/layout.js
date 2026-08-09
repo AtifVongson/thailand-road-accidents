@@ -110,6 +110,23 @@
     return out;
   }
 
+  /* Same 1/2/5 ladder as niceTicks, but for a range that doesn't start at
+   * zero — a dumbbell's domain is a tight band around real values, not a bar
+   * chart that has to justify its baseline. */
+  function niceTicksRange(min, max, target) {
+    var count = target || 4;
+    var span = max - min;
+    if (!(span > 0) || !isFinite(span)) return [min];
+    var raw = span / count;
+    var mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var norm = raw / mag;
+    var step = (norm >= 5 ? 10 : norm >= 2 ? 5 : norm >= 1 ? 2 : 1) * mag;
+    var start = Math.ceil(min / step) * step;
+    var out = [];
+    for (var v = start; v <= max + 1e-9; v += step) out.push(+v.toFixed(6));
+    return out;
+  }
+
   var fmt = function (n) { return Math.round(n).toLocaleString("en-US"); };
   var mean = function (xs) { return xs.reduce(function (a, b) { return a + b; }, 0) / xs.length; };
 
@@ -1430,6 +1447,76 @@
     };
   }
 
+  /* ------------------------------------------- slide 13c: forecast vs. reality */
+
+  var SLIDE13C_DEFAULTS = {
+    width: 1280, height: 460,
+    margin: { top: 92, right: 60, bottom: 56, left: 60 },
+    panelGap: 96,
+    padFrac: 0.16,   // domain padding beyond the data extent, each side
+    pointR: 9,
+  };
+
+  /* Two horizontal dumbbells, crashes above deaths, each on its own x axis —
+   * the same "small multiples, not a shared scale" rule slide12 and slide13
+   * both follow, since 2,471 crashes and 320 deaths do not share a unit.
+   *
+   * Not scroll-driven: this is one comparison, not a story that unfolds with
+   * distance, so `progress` is accepted for interface symmetry with every
+   * other chart's update(progress) but changes nothing that is drawn.
+   * Progress 0 and 1 being the same complete chart is the invariant every
+   * other slide in this file works to earn; here it's just trivially true.
+   */
+  function slide13c(data, progress, options) {
+    var o = Object.assign({}, SLIDE13C_DEFAULTS, options || {});
+    var p = clamp(progress, 0, 1);   // accepted, unused — see comment above
+    var plot = plotBox(o);
+    var panelH = (plot.h - o.panelGap) / 2;
+
+    var panels = data.metrics.map(function (m, i) {
+      var y0 = plot.y + i * (panelH + o.panelGap);
+      var vals = [m.y2025, m.y2026_actual, m.forecast_lo80, m.forecast_hi80];
+      var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+      var pad = (hi - lo) * o.padFrac;
+      var dLo = lo - pad, dHi = hi + pad;
+      var xOf = function (v) { return plot.x + (v - dLo) / (dHi - dLo) * plot.w; };
+      var midY = y0 + panelH / 2;
+      var held = m.y2026_actual >= m.forecast_lo80 && m.y2026_actual <= m.forecast_hi80;
+
+      return {
+        key: m.key, title: m.title, y: y0, h: panelH,
+        color: m.key === "crashes" ? PALETTE.volume : PALETTE.severity,
+        band: { x: xOf(m.forecast_lo80), y: y0, height: panelH,
+                width: xOf(m.forecast_hi80) - xOf(m.forecast_lo80) },
+        bandLabel: { text: "80% predicted range: " + fmt(m.forecast_lo80) + "–"
+                         + fmt(m.forecast_hi80),
+                     x: xOf((m.forecast_lo80 + m.forecast_hi80) / 2), y: y0 - 14 },
+        stick: { x1: xOf(m.y2025), x2: xOf(m.y2026_actual), y: midY },
+        p2025: { cx: xOf(m.y2025), cy: midY, r: o.pointR,
+                 label: "Apr 2025", value: fmt(m.y2025),
+                 labelY: midY - 26, valueY: midY - 8 },
+        p2026: { cx: xOf(m.y2026_actual), cy: midY, r: o.pointR, held: held,
+                 label: "Apr 2026 (provisional)", value: fmt(m.y2026_actual),
+                 labelY: midY + 30, valueY: midY + 48 },
+        ticks: niceTicksRange(dLo, dHi, 4).map(function (v) {
+          return { value: v, x: xOf(v), label: fmt(v) };
+        }),
+        axisY: y0 + panelH + 28,
+      };
+    });
+
+    return {
+      viewBox: { width: o.width, height: o.height },
+      plot: plot, progress: p,
+      heading: "Checking the forecast against April",
+      subtitle: "April 2025 vs. April 2026 (provisional), against the forecast's own "
+              + "80% interval",
+      panels: panels,
+      caveat: { text: data.snapshot_note, x: 40, y: o.height - 16 },
+      source: data.source, sourceX: o.width - 40,
+    };
+  }
+
   /* -------------------------------------------------- slide 8: the reorder */
 
   var SLIDE08_DEFAULTS = {
@@ -2222,6 +2309,9 @@
     SLIDE13_DEFAULTS: SLIDE13_DEFAULTS,
     slide13b: slide13b,
     SLIDE13B_DEFAULTS: SLIDE13B_DEFAULTS,
+    slide13c: slide13c,
+    SLIDE13C_DEFAULTS: SLIDE13C_DEFAULTS,
+    niceTicksRange: niceTicksRange,
     slide09: slide09,
     slide12: slide12,
     SLIDE04_DEFAULTS: SLIDE04_DEFAULTS,
