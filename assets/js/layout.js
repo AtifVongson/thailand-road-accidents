@@ -1450,8 +1450,11 @@
   /* ------------------------------------------- slide 13c: forecast vs. reality */
 
   var SLIDE13C_DEFAULTS = {
-    width: 1280, height: 460,
-    margin: { top: 92, right: 60, bottom: 56, left: 60 },
+    width: 1280, height: 580,
+    // top clears the 34px heading and the 17px subtitle with room for a panel
+    // title and a band label above the first band; bottom clears the second
+    // panel's ticks, the caveat and the source, each on its own baseline.
+    margin: { top: 150, right: 60, bottom: 96, left: 60 },
     panelGap: 96,
     padFrac: 0.16,   // domain padding beyond the data extent, each side
     pointR: 9,
@@ -1486,11 +1489,15 @@
       return {
         key: m.key, title: m.title, y: y0, h: panelH,
         color: m.key === "crashes" ? PALETTE.volume : PALETTE.severity,
+        // Two stacked rows above the band, not one: the title is left-anchored
+        // and the band label is centred on the band, so a wide enough band
+        // would slide underneath the title if they shared a baseline.
+        titleY: y0 - 32,
         band: { x: xOf(m.forecast_lo80), y: y0, height: panelH,
                 width: xOf(m.forecast_hi80) - xOf(m.forecast_lo80) },
         bandLabel: { text: "80% predicted range: " + fmt(m.forecast_lo80) + "–"
                          + fmt(m.forecast_hi80),
-                     x: xOf((m.forecast_lo80 + m.forecast_hi80) / 2), y: y0 - 14 },
+                     x: xOf((m.forecast_lo80 + m.forecast_hi80) / 2), y: y0 - 12 },
         stick: { x1: xOf(m.y2025), x2: xOf(m.y2026_actual), y: midY },
         p2025: { cx: xOf(m.y2025), cy: midY, r: o.pointR,
                  label: "Apr 2025", value: fmt(m.y2025),
@@ -1512,7 +1519,9 @@
       subtitle: "April 2025 vs. April 2026 (provisional), against the forecast's own "
               + "80% interval",
       panels: panels,
-      caveat: { text: data.snapshot_note, x: 40, y: o.height - 16 },
+      // Its own line above the source, which is right-anchored on the bottom
+      // baseline — sharing that baseline overlapped the two strings.
+      caveat: { text: data.snapshot_note, x: 40, y: o.height - 38 },
       source: data.source, sourceX: o.width - 40,
     };
   }

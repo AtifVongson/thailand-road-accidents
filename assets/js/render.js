@@ -955,7 +955,7 @@
           "text-anchor": "middle" }, t.label));
       });
       f.gText.appendChild(el("text", { class: "c-paneltitle", x: first.plot.x,
-        y: panel.y - 10 }, panel.title));
+        y: panel.titleY }, panel.title));
     });
 
     var caveat = el("text", { class: "c-limitation", x: first.caveat.x,
