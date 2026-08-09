@@ -1478,13 +1478,15 @@
 
     var panels = data.metrics.map(function (m, i) {
       var y0 = plot.y + i * (panelH + o.panelGap);
-      var vals = [m.y2025, m.y2026_actual, m.forecast_lo80, m.forecast_hi80];
+      var vals = [m.y2025, m.y2026_actual, m.forecast_lo95, m.forecast_hi95];
       var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
       var pad = (hi - lo) * o.padFrac;
       var dLo = lo - pad, dHi = hi + pad;
       var xOf = function (v) { return plot.x + (v - dLo) / (dHi - dLo) * plot.w; };
       var midY = y0 + panelH / 2;
-      var held = m.y2026_actual >= m.forecast_lo80 && m.y2026_actual <= m.forecast_hi80;
+      var inside = function (lo_, hi_) {
+        return m.y2026_actual >= lo_ && m.y2026_actual <= hi_;
+      };
 
       return {
         key: m.key, title: m.title, y: y0, h: panelH,
@@ -1493,16 +1495,23 @@
         // and the band label is centred on the band, so a wide enough band
         // would slide underneath the title if they shared a baseline.
         titleY: y0 - 32,
+        // The 95% is drawn first and wider, the 80% nests inside it — the same
+        // order and the same two intervals slide 13's own chart draws.
+        band95: { x: xOf(m.forecast_lo95), y: y0, height: panelH,
+                  width: xOf(m.forecast_hi95) - xOf(m.forecast_lo95) },
         band: { x: xOf(m.forecast_lo80), y: y0, height: panelH,
                 width: xOf(m.forecast_hi80) - xOf(m.forecast_lo80) },
-        bandLabel: { text: "80% predicted range: " + fmt(m.forecast_lo80) + "–"
-                         + fmt(m.forecast_hi80),
-                     x: xOf((m.forecast_lo80 + m.forecast_hi80) / 2), y: y0 - 12 },
+        bandLabel: { text: "Predicted: 80% " + fmt(m.forecast_lo80) + "–"
+                         + fmt(m.forecast_hi80) + " · 95% " + fmt(m.forecast_lo95)
+                         + "–" + fmt(m.forecast_hi95),
+                     x: xOf((m.forecast_lo95 + m.forecast_hi95) / 2), y: y0 - 12 },
         stick: { x1: xOf(m.y2025), x2: xOf(m.y2026_actual), y: midY },
         p2025: { cx: xOf(m.y2025), cy: midY, r: o.pointR,
                  label: "Apr 2025", value: fmt(m.y2025),
                  labelY: midY - 26, valueY: midY - 8 },
-        p2026: { cx: xOf(m.y2026_actual), cy: midY, r: o.pointR, held: held,
+        p2026: { cx: xOf(m.y2026_actual), cy: midY, r: o.pointR,
+                 held80: inside(m.forecast_lo80, m.forecast_hi80),
+                 held95: inside(m.forecast_lo95, m.forecast_hi95),
                  label: "Apr 2026 (provisional)", value: fmt(m.y2026_actual),
                  labelY: midY + 30, valueY: midY + 48 },
         ticks: niceTicksRange(dLo, dHi, 4).map(function (v) {

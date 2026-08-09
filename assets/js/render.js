@@ -927,6 +927,9 @@
       var g = el("g", {});
       f.gMain.appendChild(g);
 
+      var band95 = el("rect", { class: "c-band95", fill: panel.color,
+        x: panel.band95.x, y: panel.band95.y, width: panel.band95.width,
+        height: panel.band95.height });
       var band = el("rect", { class: "c-band80", fill: panel.color,
         x: panel.band.x, y: panel.band.y, width: panel.band.width,
         height: panel.band.height });
@@ -947,7 +950,7 @@
         y: panel.p2026.labelY, "text-anchor": "middle" }, panel.p2026.label);
       var val26 = el("text", { class: "c-value", x: panel.p2026.cx,
         y: panel.p2026.valueY, "text-anchor": "middle" }, panel.p2026.value);
-      [band, bandLabel, stick, dot25, lab25, val25, dot26, lab26, val26]
+      [band95, band, bandLabel, stick, dot25, lab25, val25, dot26, lab26, val26]
         .forEach(function (n) { g.appendChild(n); });
 
       panel.ticks.forEach(function (t) {

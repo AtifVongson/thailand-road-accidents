@@ -8,8 +8,10 @@
    "y2025": 2940,
    "y2026_actual": 2471,
    "forecast_mean": 2924.1,
-   "forecast_lo80": 2550.5,
-   "forecast_hi80": 3352.3
+   "forecast_lo80": 2550,
+   "forecast_hi80": 3352,
+   "forecast_lo95": 2372,
+   "forecast_hi95": 3604
   },
   {
    "key": "deaths",
@@ -17,8 +19,10 @@
    "y2025": 358,
    "y2026_actual": 320,
    "forecast_mean": 345.8,
-   "forecast_lo80": 283.2,
-   "forecast_hi80": 422.1
+   "forecast_lo80": 283,
+   "forecast_hi80": 422,
+   "forecast_lo95": 255,
+   "forecast_hi95": 469
   }
  ],
  "source": "Highway accident records, Office of the Permanent Secretary, Ministry of Transport, 2021–2025"
