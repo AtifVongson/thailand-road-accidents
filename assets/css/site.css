@@ -178,17 +178,6 @@ img { max-width: 100%; display: block; }
 .section-static.dark .callout p { color: #e8e7e0; }
 .callout p:last-child { margin-bottom: 0; }
 .callout p b { font-weight: 680; }
-.callout h3 {
-  font-size: 12px; color: var(--ink-2); margin: 14px 0 6px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .03em;
-}
-.callout h3:first-of-type { margin-top: 0; }
-.section-static.dark .callout h3 { color: #cfcec4; }
-.callout ul { margin: 0 0 8px; padding-left: 20px; }
-.callout li { font-size: 13.5px; line-height: 1.55; color: var(--ink); margin-bottom: 4px; }
-.section-static.dark .callout li { color: #e8e7e0; }
-.callout li:last-child { margin-bottom: 0; }
-.callout li b { font-weight: 680; }
 
 .refs h2 { font-size: 13px; color: var(--severity); margin: 22px 0 8px; font-weight: 700; }
 .refs ul { margin: 0 0 4px; padding-left: 18px; }
