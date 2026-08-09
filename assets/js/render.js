@@ -193,9 +193,14 @@
   /* ----------------------------------------- slide 5: three panels of bars */
 
   /* Bins never move sideways and the y-axis is fixed across both acts, so the
-   * gridlines, the even-split rule, the panel titles and the x tick labels are
-   * written once at mount and never touched again. Only bar heights, bar colour,
-   * callout opacity and the two swapping headings change per frame. */
+   * gridlines, the even-split rule and the x tick labels are written once at
+   * mount and never touched again. Bar heights, bar colour, callout opacity,
+   * the legend swatch's fill and the panel titles' opacity change per frame.
+   *
+   * The panel titles moved into that per-frame set on 9 Aug, when the panels
+   * stopped flipping together: each panel now carries two titles, one per
+   * metric, and swaps them on its own act rather than sharing one heading with
+   * the other two. There is no chart-level heading or axis title any more. */
   function slide05(mount, data, options) {
     var L = getLayout();
     var first = L.slide05(data, 0, options);
@@ -205,7 +210,8 @@
       viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
       role: "img",
       "aria-label": "Crashes by hour, day of week and month, re-heighting to show "
-        + "the same three views by deaths",
+        + "the same three views by deaths. Hours from 19:00 to 04:00 are "
+        + "highlighted; the rest are greyed.",
     });
 
     var gGrid = el("g", { class: "c-grid" });
@@ -213,27 +219,34 @@
     var gText = el("g", { class: "c-text" });
     svg.appendChild(gGrid); svg.appendChild(gBars); svg.appendChild(gText);
 
-    var headings = first.headings.map(function (h) {
-      var t = el("text", { class: "c-heading", x: 40, y: 62 }, h.text);
-      gText.appendChild(t);
-      return t;
+    // No chart-level heading or axis title: with the panels flipping in two
+    // acts, neither could be true of all three at once. The metric now rides on
+    // each panel's own title.
+    var lg = first.legend;
+    var legendSwatch = el("rect", {
+      class: "c-legendswatch", x: lg.x, y: lg.y - lg.swatch,
+      width: lg.swatch, height: lg.swatch, rx: 1.5,
     });
+    gText.appendChild(legendSwatch);
+    gText.appendChild(el("text", {
+      class: "c-legendlabel", x: lg.x + lg.swatch + 8, y: lg.y,
+    }, lg.text));
     gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle));
-    var axisTitles = first.axisTitles.map(function (a) {
-      var t = el("text", { class: "c-axistitle", x: a.x, y: a.y,
-                           "text-anchor": a.anchor }, a.text);
-      gText.appendChild(t);
-      return t;
-    });
     gText.appendChild(el("text", {
       class: "c-source", x: first.sourceX, y: first.viewBox.height - 18, "text-anchor": "end",
     }, first.source));
 
-    var bars = {}, notes = {};
+    var bars = {}, notes = {}, panelTitles = {};
     first.panels.forEach(function (panel) {
-      gText.appendChild(el("text", {
-        class: "c-paneltitle", x: panel.x, y: panel.y - 16,
-      }, panel.title));
+      // Two overlaid titles per panel, one per metric, hard-swapped so only one
+      // is ever painted — same reason the chart heading they replaced did.
+      panelTitles[panel.key] = panel.titles.map(function (ti) {
+        var t = el("text", {
+          class: "c-paneltitle", x: panel.x, y: panel.y - 16,
+        }, ti.text);
+        gText.appendChild(t);
+        return t;
+      });
 
       panel.yTicks.forEach(function (tk) {
         gGrid.appendChild(el("line", {
@@ -248,8 +261,11 @@
         class: "c-evenline", x1: panel.x, x2: panel.x + panel.w,
         y1: panel.evenLine.y, y2: panel.evenLine.y,
       }));
+      // Beside the line's right end, outside the panel — not above it, inside,
+      // where a tall bar in the last slot drew straight over it. Vertically
+      // centred on the line now that nothing forces it above.
       gGrid.appendChild(el("text", {
-        class: "c-evenlabel", x: panel.x + panel.w, y: panel.evenLine.y - 6,
+        class: "c-evenlabel", x: panel.evenLine.labelX, y: panel.evenLine.y + 4,
       }, panel.evenLine.label));
 
       gGrid.appendChild(el("line", {
@@ -290,8 +306,14 @@
           set(notes[n.key], { x: n.x, y: n.y, opacity: n.opacity.toFixed(3) });
         });
       });
-      m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity); });
-      m.axisTitles.forEach(function (a, i) { axisTitles[i].setAttribute("opacity", a.opacity); });
+      m.panels.forEach(function (panel) {
+        panel.titles.forEach(function (ti, i) {
+          panelTitles[panel.key][i].setAttribute("opacity", ti.opacity);
+        });
+      });
+      // The swatch tracks the hour panel's hue so the legend never claims a
+      // colour the bars are not currently wearing.
+      legendSwatch.setAttribute("fill", m.legend.color);
     }
 
     update(0);

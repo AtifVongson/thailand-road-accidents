@@ -165,20 +165,55 @@
     width: 1280,
     height: 720,
     margin: { top: 138, right: 44, bottom: 104, left: 66 },
-    // Matches fig01_when's width_ratios, so the live chart and the deck figure
-    // are recognisably the same picture.
+    // panelRatios still carry fig01_when's width_ratios, but the two pictures
+    // diverged on 9 Aug 2026: the live chart gained the night-window highlight,
+    // per-panel titles and a legend, and the deck figure did not. Deliberate —
+    // the presentation runs live in a browser and the deck is the backup. Do not
+    // read the shared ratios as a promise that the two still match.
     panelRatios: [1.5, 1, 1.2],
     panelGap: 54,
     barShare: 0.72,        // of a slot; the rest is the gap between bars
     headroom: 1.15,        // the space callouts sit in, above the tallest bar
     xTickEvery: { hour: 3, dow: 1, month: 1 },
     noteCharWidth: 6.6,    // ~0.55em at the 12px callout, for overflow clamping
+    // 19:00-04:00 inclusive: ten hours carrying 34.6% of crashes and 41.9% of
+    // deaths, both recomputed from the bin counts rather than read off the
+    // prose. The window wraps midnight, so on a 00->23 axis it draws as two
+    // blocks at opposite edges — which is why it needs the legend to read as one
+    // thing. Re-basing the axis to start at 05:00 would make it contiguous and
+    // was considered and declined; it would desync the x ticks from the deck.
+    nightHours: [19, 20, 21, 22, 23, 0, 1, 2, 3, 4],
+    // Two acts on one scalar. The hour panel flips first because it is the
+    // slide's subject, then the other two together. Each panel reads its own
+    // local progress off this split, so a panel's callouts gate on ITS OWN
+    // motion — gating on global progress would print the hour panel's number
+    // while its bars were still interpolating across two denominators.
+    actStops: { hour: [0, 0.5], dow: [0.5, 1], month: [0.5, 1] },
   };
 
-  /* Three panels re-heighting from share-of-crashes to share-of-deaths on one
-   * scalar. Nothing reorders — the bins are chronological and stay put — so the
-   * only thing that moves is height, which is the whole point: 16:00 sags and
-   * 19:00 climbs past it.
+  /* Three panels re-heighting from share-of-crashes to share-of-deaths, in two
+   * acts: the hour panel first, then the weekday and month panels together.
+   * Nothing reorders — the bins are chronological and stay put — so the only
+   * thing that moves is height, which is the whole point: 16:00 sags and 19:00
+   * climbs past it.
+   *
+   * Staging costs the chart its single shared heading and axis title. Between
+   * the acts the hour panel is showing deaths while the other two still show
+   * crashes, and one label above all three would be false for part of every
+   * scroll. So the metric moved INTO the panel titles, which flip one act at a
+   * time and are therefore true at every position. That is also why the titles
+   * repeat "When crashes happen" rather than sharing a stem: mid-scroll, the
+   * repetition is what lets an audience see one panel has moved on and two have
+   * not.
+   *
+   * The hour panel additionally greys everything outside 19:00-04:00. Hue still
+   * carries the metric — blue crashes, orange deaths, per the palette rule at
+   * the top of this file — and the grey carries the window, so the two encodings
+   * do not collide. Worth knowing when reading the crash act: the tallest bar in
+   * the hour panel is 16:00, which is OUTSIDE the window and therefore grey,
+   * while 02:00, the quietest hour, is inside it and coloured. That is not a
+   * rendering fault, it is the argument — the busiest hour is not the deadliest,
+   * which is exactly why a schedule built on traffic volume misses this window.
    *
    * The y-axis is FIXED across both acts, per panel, at `headroom` x the larger
    * of the two metrics' maxima. This is the decision the chart turns on. Scaling
@@ -197,7 +232,16 @@
   function slide05(data, progress, options) {
     var o = Object.assign({}, SLIDE05_DEFAULTS, options || {});
     var p = clamp(progress, 0, 1);
-    var t = smoothstep(p);
+
+    // A panel's own 0->1 across its act, so every panel-local decision — bar
+    // height, hue, title swap, callout gating — is answered by its own motion
+    // and not by where the scroll happens to be overall.
+    function localOf(key) {
+      var stop = o.actStops[key] || [0, 1];
+      return clamp((p - stop[0]) / (stop[1] - stop[0]), 0, 1);
+    }
+    var nightSet = {};
+    o.nightHours.forEach(function (h) { nightSet[h] = true; });
 
     var plot = {
       x: o.margin.left, y: o.margin.top,
@@ -212,7 +256,10 @@
     var cursor = plot.x;
     var panels = data.panels.map(function (src, pi) {
       var w = usable * (ratios[pi] || 1) / ratioSum;
-      var panel = { key: src.key, title: src.title, x: cursor, y: plot.y, w: w, h: plot.h };
+      var local = localOf(src.key);
+      var t = smoothstep(local);
+      var panel = { key: src.key, title: src.title, x: cursor, y: plot.y, w: w, h: plot.h,
+                    local: local };
       cursor += w + o.panelGap;
 
       var bins = src.bins;
@@ -226,9 +273,17 @@
       var slot = panel.w / bins.length;
       var barW = slot * o.barShare;
 
+      // Only the hour panel has a window to mark. The weekday panel's claim is
+      // that nothing stands out, and the month panel carries the April-against-
+      // September ratio that Tab 3's staffing case rests on — greying either
+      // would argue against a finding the deck makes elsewhere.
+      var windowed = src.key === "hour";
+      var metricHue = mixHex(PALETTE.volume, PALETTE.severity, t);
+
       var bars = bins.map(function (b, i) {
         var value = lerp(b.pc_crash, b.pc_death, t);
         var y = yOf(value);
+        var inWindow = !windowed || !!nightSet[parseInt(b.label, 10)];
         return {
           key: src.key + "-" + b.label,
           label: b.label,
@@ -236,7 +291,8 @@
           width: barW,
           y: y,
           height: panel.y + panel.h - y,
-          color: mixHex(PALETTE.volume, PALETTE.severity, t),
+          inWindow: inWindow,
+          color: inWindow ? metricHue : PALETTE.grid,
           value: value,
         };
       });
@@ -281,9 +337,35 @@
       var pct = function (v) { return v.toFixed(1) + "%"; };
 
       var notes = [];
-      [["pc_crash", atRestOut(p)], ["pc_death", atRestIn(p)]].forEach(function (pair) {
+      // Gated on the panel's own progress, not the scroll's. Same rule as
+      // before and for the same reason: a bar mid-flight is interpolating
+      // between two denominators, so it is not a share of anything and no
+      // number may sit on it. Staging just moves where "mid-flight" is.
+      [["pc_crash", atRestOut(local)], ["pc_death", atRestIn(local)]].forEach(function (pair) {
         var field = pair[0], op = pair[1];
         var peak = extreme(field, hi);
+        if (src.key === "hour") {
+          // The window's share, not the extremes. The peak/low pair was
+          // replaced on 9 Aug: with the highlight on, "peak 16:00" labels a
+          // grey bar and "low 02:00" labels a coloured one, which reads as a
+          // contradiction rather than as the point. The window share is also
+          // the number the slide's closing sentence rests on.
+          var raw = field === "pc_crash" ? "crashes" : "deaths";
+          var tot = field === "pc_crash" ? data.total_crashes : data.total_deaths;
+          // Recomputed from the counts, not summed from the rounded percentages
+          // — summing pc_death over the window gives 42.0%, which would put a
+          // number on screen that contradicts the prose's 41.9%.
+          var inWin = bins.reduce(function (a, b) {
+            return a + (nightSet[parseInt(b.label, 10)] ? b[raw] : 0);
+          }, 0);
+          notes.push({
+            key: src.key + "-window-" + field,
+            text: "19:00–04:00: " + pct(100 * inWin / tot) + " of " + raw,
+            x: panel.x + 4, y: panel.y + 18, anchorX: panel.x + 4,
+            width: 0, opacity: op, anchor: "start",
+          });
+          return;
+        }
         if (src.key === "dow") {
           // The weekday panel's claim is the absence of a peak, so naming one
           // would argue against the slide. It gets the spread instead.
@@ -299,44 +381,58 @@
           });
           return;
         }
+        // Month only — hour and dow both returned above.
         var tag = bins[peak].note ? " (" + bins[peak].note + ")" : "";
         notes.push(noteAt(bins[peak], peak, "peak " + name(bins[peak])
           + " " + pct(bins[peak][field]) + tag, op));
-        if (src.key === "hour") {
-          var low = extreme(field, lo);
-          notes.push(noteAt(bins[low], low, "low " + name(bins[low])
-            + " " + pct(bins[low][field]), op));
-        }
       });
+
+      // "By hour" -> "by hour", so the dimension reads as the tail of a sentence
+      // rather than a second heading.
+      var dim = src.title.charAt(0).toLowerCase() + src.title.slice(1);
 
       return Object.assign(panel, {
         yMax: yMax, bars: bars, xTicks: xTicks, yTicks: yTicks, notes: notes,
+        // Two titles per panel, hard-swapped at this panel's own midpoint. The
+        // hard swap is inherited from the chart heading these replaced: a fade
+        // renders both strings on one baseline, and since they differ only in
+        // one word, "crashes" and "deaths" come out overstruck.
+        titles: [
+          { text: "When crashes happen, " + dim, opacity: swapOut(local) },
+          { text: "When deaths happen, " + dim, opacity: swapIn(local) },
+        ],
         // Metric-independent, so it is drawn once at full opacity and never
         // fades: the only thing on screen that stays true mid-morph.
+        //
+        // Sits OUTSIDE the panel's right edge as of 9 Aug — inside, right-
+        // aligned, it was overdrawn by whatever bar occupied the last slot. The
+        // word "even" went with the move: the full "even 14.3%" needs 73px and
+        // the gap between panels is 54px, so the number alone is what fits. The
+        // dashed line and the legend carry the meaning the word used to.
         evenLine: { value: src.even_split, y: yOf(src.even_split),
-                    label: "even " + src.even_split.toFixed(1) + "%" },
+                    label: src.even_split.toFixed(1) + "%",
+                    labelX: panel.x + panel.w + 6 },
       });
     });
 
+    // The chart-level heading and axis title were removed on 9 Aug. Both said
+    // one thing about all three panels, and once the panels stopped flipping
+    // together there was no one thing true of all three. Their content did not
+    // disappear — it moved into the per-panel titles above, which is the only
+    // place it can be stated correctly now.
     return {
       viewBox: { width: o.width, height: o.height },
       plot: plot, progress: p,
-      headings: [
-        { text: "When crashes happen", opacity: swapOut(p) },
-        { text: "When deaths happen", opacity: swapIn(p) },
-      ],
-      // Right-anchored on the panel titles' own baseline. Left-aligned under the
-      // subtitle is where this started and the two overstruck each other; the
-      // panel titles occupy the left of that line, so the unit goes to the end
-      // of it, clear of the month panel's title.
-      axisTitles: [
-        { text: "% of all crashes", opacity: swapOut(p),
-          x: o.width - o.margin.right, y: plot.y - 16, anchor: "end" },
-        { text: "% of all deaths", opacity: swapIn(p),
-          x: o.width - o.margin.right, y: plot.y - 16, anchor: "end" },
-      ],
       subtitle: "Hours differ far more than days do — and more so by deaths than "
               + "by crashes. Line marks an even share.",
+      // Names the two blocks at opposite ends of the hour axis as one window.
+      // Without it the highlight reads as two unrelated groups, because the
+      // window wraps midnight and the axis does not.
+      legend: {
+        text: "19:00–04:00",
+        color: mixHex(PALETTE.volume, PALETTE.severity, smoothstep(localOf("hour"))),
+        x: 40, y: 62, swatch: 11,
+      },
       panels: panels,
       source: data.source,
       sourceX: o.width - 40,

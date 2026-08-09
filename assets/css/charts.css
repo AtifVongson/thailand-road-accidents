@@ -67,10 +67,21 @@
  * than as data. */
 .chart .c-paneltitle { font-size: 16px; font-weight: 640; fill: var(--ink-2); }
 .chart .c-evenline   { stroke: var(--axis); stroke-width: 1.2; stroke-dasharray: 5 4; }
-.chart .c-evenlabel  { font-size: 12px; fill: var(--muted); text-anchor: end; }
+/* `start`, not `end`: as of 9 Aug the label hangs outside the panel's right
+ * edge rather than sitting inside it, where bars in the last slot drew over it.
+ * This rule is the one that decides the anchor — setting text-anchor on the
+ * node would be silently ignored, same trap as .c-tick-y above. */
+.chart .c-evenlabel  { font-size: 12px; fill: var(--muted); text-anchor: start; }
 .chart .c-note       { font-size: 12.5px; font-weight: 640; fill: var(--ink-2);
                        text-anchor: middle; }
 .chart .c-note.is-start { text-anchor: start; }
+
+/* Slide 5's window legend. Names 19:00-04:00 as one thing, because the window
+ * wraps midnight and so draws as two blocks at opposite ends of the axis. The
+ * swatch is filled from script, tracking whichever hue the hour panel currently
+ * wears, so it cannot advertise a colour the bars are not using. */
+.chart .c-legendswatch { stroke: none; }
+.chart .c-legendlabel  { font-size: 14px; font-weight: 640; fill: var(--ink-2); }
 
 /* Slide 6's carousel. Cards are placed by a transform, so these sizes are in
  * the layout module's local card space and shrink with the card — a bottom card
