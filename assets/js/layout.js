@@ -480,8 +480,10 @@
     labelGate: 0.6,       // prominence below which value labels are suppressed
   };
 
-  /* Three cards on one ellipse, rotating counter-clockwise, with the left-hand
-   * metric flipping once before the first rotation.
+  /* Three cards on one ellipse, rotating counter-clockwise, each flipping its
+   * own left-hand metric once, at the point it is shown as the main card —
+   * not all three together at card 0's flip. See cardFlipWindow, below,
+   * for why each card's window falls where it does.
    *
    * Counter-clockwise, not clockwise: leftward is where finished things go in a
    * left-to-right reading order, so the card being explained descends to the
@@ -512,14 +514,44 @@
     // The metric flip owns the first segment; the two rotations own the rest.
     // Each segment eases independently so a card settles at each stop rather
     // than sweeping through it.
-    var mp = clamp((p - S[0]) / (S[1] - S[0]), 0, 1);
-    var metricT = smoothstep(mp);
     var rot = smoothstep(clamp((p - S[1]) / (S[2] - S[1]), 0, 1))
             + smoothstep(clamp((p - S[2]) / (S[3] - S[2]), 0, 1));
     var phi = -120 * rot;   // negative = counter-clockwise
 
+    /* Until 9 Aug, one shared `metricT` drove every card's colour, row order,
+     * value labels and panel title at once — so road and weather flipped to
+     * "deaths" in lock-step with vehicle's own hold-and-flip segment, while
+     * still small and off to the side, never yet the card being shown.
+     *
+     * Card 0 keeps its dedicated hold: it owns the whole first segment
+     * [S[0], S[1]] and flips while stationary at the top, exactly as before.
+     * Cards 1 and 2 have no such hold — they only ever pass through the top,
+     * mid-rotation — so their window is centred on the exact moment their own
+     * prominence overtakes the card ahead of them. With three cards spaced
+     * 120° apart and a single -120° rotation per segment, that crossover is
+     * provably at the segment's own midpoint: prominence is a function of
+     * cos(theta), the two competing cards' angles are always 120° apart, and
+     * cos(phi) = cos(120+phi) at phi=-60 — which lands at local segment
+     * progress 0.5 because smoothstep(0.5) is exactly 0.5. Verified
+     * numerically against this same formula, not just derived on paper.
+     */
+    function cardFlipWindow(ci) {
+      if (ci === 0) return [S[0], S[1]];
+      var segStart = S[ci], segEnd = S[ci + 1];
+      var mid = (segStart + segEnd) / 2;
+      var half = (segEnd - segStart) / 4;
+      return [mid - half, mid + half];
+    }
+
     var RAD = Math.PI / 180;
     var cards = data.cards.map(function (src, ci) {
+      var win = cardFlipWindow(ci);
+      // Local to this card: 0 before its window opens, 1 from the moment it
+      // closes, ratcheting forward the same way card 0 always has — a card
+      // that has already been shown as the main chart does not revert to
+      // "crashes" framing on its way back down.
+      var mp = clamp((p - win[0]) / (win[1] - win[0]), 0, 1);
+      var metricT = smoothstep(mp);
       var theta = (o.baseAngles[ci] + phi) * RAD;
       // 1 at the top, 0 at either bottom position, smooth in between.
       var prom = clamp((Math.cos(theta) + 0.5) / 1.5, 0, 1);
@@ -666,7 +698,11 @@
     var mi = data.motorcycle_involvement;
     return {
       viewBox: { width: o.width, height: o.height },
-      progress: p, rotation: phi, metric: metricT,
+      // No single "metric" scalar any more — as of 9 Aug each card carries its
+      // own flip progress (see cardFlipWindow above), so one shared number
+      // would not mean the same thing for all three. Nothing outside this
+      // function ever read the old field.
+      progress: p, rotation: phi,
       stops: S, leadCard: cards[leadIdx].key,
       headings: cards.map(function (c, i) {
         return { key: c.key, text: (COPY[c.key] || {}).heading || c.title,
