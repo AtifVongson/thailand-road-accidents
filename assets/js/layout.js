@@ -633,6 +633,14 @@
             color: r.thin ? PALETTE.axis : PALETTE.severity,
             values: [{ text: r.death_rate.toFixed(1), opacity: gate }],
             valueX: sevX + (r.death_rate / sevMax) * barSpan + 10,
+            // Motorcycle's severity bar is the one this card's whole argument
+            // rests on — 32.0 against a 12.6 all-crash line — so it carries a
+            // second, non-colour encoding as well as the hue. A diagonal
+            // texture separates it from the seven other orange bars on this
+            // panel without relying on shade alone. No other row gets it: the
+            // point is to mark the one bar the slide argues from, not to
+            // decorate every row.
+            texture: src.key === "vehicle" && r.label === "Motorcycle",
           },
         };
       });
@@ -714,6 +722,26 @@
                  opacity: i === leadIdx ? 1 : 0 };
       }),
       cards: cards,
+      /* Sits in the open canvas directly below the card, not beside the
+       * Motorcycle bar itself — measured, not assumed: the bar's own row has
+       * only 15.5px of clearance to the row below it (both panels share one
+       * `y` per row, so severity climbs with volume as the card flips), nowhere
+       * near enough for a second line of legible text. The area below the
+       * card's rendered bottom edge (y=500 at full size) is genuinely open —
+       * the existing limitation note two rows down doesn't start until
+       * y=782 — so the recommendation goes there instead, directly under the
+       * card rather than pixel-adjacent to the one bar it is about.
+       *
+       * This is a recommendation, not a measurement — unlike the limitation
+       * note below, which states what the data shows. Kept as its own object
+       * rather than folded into `limitation.lines` so that distinction stays
+       * visible in the data, not just in the wording. */
+      insight: {
+        text: "Insight: motorcycle-focused enforcement and training should be "
+            + "a staffing priority.",
+        x: 40, y: 524,
+        opacity: cards[0].prominence,
+      },
       /* The strongest motorcycle number in the file is the one no bar here can
        * carry, so it is stated instead of omitted. Tied to the vehicle card's
        * prominence, because it is a caveat about that card and would be

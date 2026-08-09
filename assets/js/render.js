@@ -334,12 +334,37 @@
       viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
       role: "img",
       "aria-label": "Vehicle type, road alignment and weather, each as crash share "
-        + "against deaths per 100 crashes, rotating through a carousel",
+        + "against deaths per 100 crashes, rotating through a carousel. The "
+        + "motorcycle death-rate bar carries a diagonal texture.",
     });
 
     var gText = el("g", { class: "c-text" });
     var gCards = el("g", { class: "c-cards" });
     svg.appendChild(gCards); svg.appendChild(gText);
+
+    // The Motorcycle severity bar's diagonal texture. Its background is the
+    // row's OWN computed colour, not a colour named again here — this file
+    // does not decide what severity orange is, layout.js does. One 8px tile
+    // rotated 45deg, tiled by the SVG engine across whatever width the bar
+    // ends up at, so the pattern needs no upkeep as data changes the bar's
+    // length. Severity fill is set once at mount and never touched again in
+    // update() — a death rate does not change with scroll — so the pattern
+    // needs no per-frame handling either.
+    var texturedRow = null;
+    first.cards.forEach(function (c) {
+      c.rows.forEach(function (r) { if (r.sev.texture) texturedRow = r; });
+    });
+    if (texturedRow) {
+      var defs = el("defs", {});
+      var pattern = el("pattern", {
+        id: "s6-texture", patternUnits: "userSpaceOnUse",
+        width: 8, height: 8, patternTransform: "rotate(45)",
+      });
+      pattern.appendChild(el("rect", { width: 8, height: 8, fill: texturedRow.sev.color }));
+      pattern.appendChild(el("line", { x1: 0, y1: 0, x2: 0, y2: 8, class: "c-texture-line" }));
+      defs.appendChild(pattern);
+      svg.appendChild(defs);
+    }
 
     var headings = first.headings.map(function (h) {
       var t = el("text", { class: "c-heading", x: 40, y: 54 }, h.text);
@@ -351,6 +376,9 @@
       gText.appendChild(t);
       return t;
     });
+    var insight = el("text", { class: "c-insight", x: first.insight.x, y: first.insight.y },
+                     first.insight.text);
+    gText.appendChild(insight);
     var limitation = first.limitation.lines.map(function (ln) {
       var t = el("text", { class: "c-limitation", x: ln.x, y: ln.y }, ln.text);
       gText.appendChild(t);
@@ -391,7 +419,7 @@
         var rg = el("g", { class: r.thin ? "is-thin" : "" });
         var volBar = el("rect", { class: "c-bar", rx: 2, x: r.vol.x, height: r.height });
         var sevBar = el("rect", { class: "c-bar", rx: 2, x: r.sev.x, height: r.height,
-                                  fill: r.sev.color });
+                                  fill: r.sev.texture ? "url(#s6-texture)" : r.sev.color });
         var name = el("text", { class: "c-rowlabel", x: r.labelX }, r.label);
         rg.appendChild(volBar); rg.appendChild(sevBar); rg.appendChild(name);
         var volValues = r.vol.values.map(function (v) {
@@ -449,6 +477,7 @@
 
       m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity); });
       m.subtitles.forEach(function (s, i) { subtitles[i].setAttribute("opacity", s.opacity); });
+      insight.setAttribute("opacity", m.insight.opacity.toFixed(3));
       limitation.forEach(function (t) {
         t.setAttribute("opacity", m.limitation.opacity.toFixed(3));
       });
