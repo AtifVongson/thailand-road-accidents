@@ -259,6 +259,48 @@ img { max-width: 100%; display: block; }
   display: none; line-height: 1.6;
 }
 
+/* ------------------------------------------------------------ map (14c)
+ * Item 3, re-applied: a second, independent MapLibre instance (map-tab3c.js)
+ * driving three scroll-acts, laid out map-left/text-right inside one pin
+ * rather than the full-bleed overlay slide 14's map uses — the only
+ * two-column pin on the site. Colours here (#eb6834/#52514e in the JS paint
+ * expressions) are chosen to match --severity/--ink-2 exactly, so the map
+ * and this legend text never disagree about what a colour means. */
+.pin.split-pin { padding: 0; display: flex; align-items: stretch; }
+.split-map { flex: 1 1 56%; position: relative; }
+.split-map #map14c { position: absolute; inset: 0; background: var(--surface); }
+.split-text {
+  flex: 1 1 44%; overflow-y: auto; background: var(--paper);
+  padding: clamp(20px, 3vw, 40px) clamp(22px, 3vw, 44px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.act-panel h3 { margin: 0 0 10px; font-size: 19px; font-weight: 680; }
+.act-panel p { margin: 0 0 12px; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+.act-panel p.note { font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+.rank-list {
+  list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 22px;
+  font-size: 12px; line-height: 1.75;
+}
+.rank-list li { break-inside: avoid; }
+.rank-list b { color: var(--severity); font-weight: 700; margin-right: 4px; }
+.rank-list .ratio { color: var(--muted); font-size: 10.5px; }
+
+.stat-row { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 640; margin: 8px 0; }
+.stat-row .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.stat-row .dot.motorway { background: var(--severity); }
+.stat-row .dot.ordinary { background: var(--ink-2); }
+
+.when-list { list-style: none; margin: 14px 0 0; padding: 0; }
+.when-list li {
+  font-size: 13.5px; line-height: 1.6; color: var(--ink); margin-bottom: 10px;
+  padding-left: 16px; position: relative;
+}
+.when-list li::before {
+  content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--severity);
+}
+
 /* ---------------------------------------------------------- scroll cue */
 .cue { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
        font-size: 12px; color: var(--muted); letter-spacing: .04em; z-index: 5;
