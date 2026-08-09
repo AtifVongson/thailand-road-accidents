@@ -291,13 +291,13 @@ img { max-width: 100%; display: block; }
 .stat-row .dot.motorway { background: var(--severity); }
 .stat-row .dot.ordinary { background: var(--ink-2); }
 
-/* Count badge for an anchor holding more than one section. A MapLibre
- * Marker element, so MapLibre owns its position through the drill-down
- * camera move and this rule only has to describe how it looks. */
-.map-count-badge {
-  background: var(--ink); color: var(--surface); font-weight: 700; font-size: 11.5px;
-  border-radius: 999px; padding: 3px 9px; white-space: nowrap; pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,.25); transition: none;
+/* Route-number shield, a MapLibre Marker so it tracks the drill-down
+ * camera on its own. The SVG carries its own fill/stroke (map-tab3c.js
+ * comment explains why: a simplified stand-in for the real Thai highway
+ * shield, not a reproduction of it) — this rule only positions the drop
+ * shadow and the fade. */
+.route-shield {
+  pointer-events: none; filter: drop-shadow(0 2px 5px rgba(0,0,0,.3)); transition: none;
 }
 
 /* Act 3's three multipliers. Deliberately HTML bars, not SVG: this panel is

@@ -12,19 +12,25 @@
  * this module only draws numbers it is handed.
  *
  * The anchor is honest to "this route, this province," not to the exact km
- * marker, which is why the km stays text and is never implied by pin
- * placement. Six of the fourteen share one anchor (all "Route 7, Chon
- * Buri") — zooming cannot separate points that are the same point, so the
- * drill-down badges that anchor with its count rather than fanning six
- * invented positions out of one real one.
+ * marker — 15_build_slide14c.py places it by walking the real route
+ * geometry: one point on the line for a section alone in its province,
+ * several sections in the same (route, province) spread across the real
+ * path in km order. That spread is why every anchor sits within a metre of
+ * the drawn line (the first version averaged coordinates instead, which put
+ * two Bangkok-area anchors 9-11km off the road — averaging points on a
+ * curve does not land on the curve) and why six Route 7 / Chon Buri
+ * sections read as six distinct points strung along ~33km of the corridor
+ * once the camera drills in, not one point wearing a count badge.
  *
  * Act 1 (p < 1/3): national frame, provinces faded back, dots fade in
  * coloured by excess ratio. Act 2 ([1/3, 2/3)): camera drills into the
  * Route 7/9 corridor, dots recolour by route category, Routes 7 and 9 draw
- * in full — real geometry, not illustration — and the shared anchor gets its
- * count badge. Act 3 ([2/3, 1]): map holds Act 2's state; nothing in the
- * WHEN figures is spatial, so nothing on the map pretends to animate for
- * it, and the panel carries the three multipliers instead. */
+ * in full — real geometry, not illustration — each carrying a simplified
+ * route-number shield (white/black, no Garuda emblem — reproducing the
+ * actual government emblem isn't attempted here). Act 3 ([2/3, 1]): map
+ * holds Act 2's state; nothing in the WHEN figures is spatial, so nothing
+ * on the map pretends to animate for it, and the panel carries the three
+ * multipliers instead. */
 (function () {
   "use strict";
 
@@ -126,32 +132,48 @@
       ? { center: [fitted.center.lng, fitted.center.lat], zoom: fitted.zoom }
       : CAM_NATIONAL;
 
-    // Count badge for any anchor holding more than one section. A MapLibre
-    // Marker, not a symbol layer: the style carries no glyphs URL on purpose
-    // (a venue with no network still has to render this map), and Marker
-    // keeps itself positioned through the camera move without a projection
-    // loop of our own.
-    var badges = [];
-    var seen = {};
-    sections.forEach(function (s) {
-      if (s.anchor_count < 2) return;
-      var key = s.lng + "," + s.lat;
-      if (seen[key]) return;
-      seen[key] = true;
+    // Route-number shields, one per route, at the midpoint (by vertex
+    // index) of that route's longest single segment feature — a label
+    // position, not a data claim, so it doesn't need the anchor script's
+    // arc-length precision. Simplified white/black shield, no Garuda
+    // emblem: reproducing the actual government road-sign artwork isn't
+    // attempted here (sourced from en.wikipedia.org/wiki/Road_signs_in_Thailand
+    // and wiki.aaroads.com/wiki/Road_signs_in_Thailand — white shield,
+    // Garuda emblem, black route number is the real design; this keeps
+    // only the white/black/route-number part). A MapLibre Marker, not a
+    // symbol layer: the style carries no glyphs URL on purpose (a venue
+    // with no network still has to render this map), and Marker keeps
+    // itself positioned through the camera move without a projection loop
+    // of our own.
+    function shieldEl(number) {
       var el = document.createElement("div");
-      el.className = "map-count-badge";
-      el.textContent = "×" + s.anchor_count;
-      el.setAttribute("aria-label", s.anchor_count + " sections at this anchor");
+      el.className = "route-shield";
+      el.innerHTML =
+        '<svg width="30" height="36" viewBox="0 0 30 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+        '<path d="M2,4 Q2,1 5,1 L25,1 Q28,1 28,4 L28,16 Q28,27 15,35 Q2,27 2,16 Z" ' +
+        'fill="#fcfcfb" stroke="#26251f" stroke-width="2"/>' +
+        '<text x="15" y="19" text-anchor="middle" font-weight="800" font-size="14" fill="#26251f">' +
+        number + '</text></svg>';
+      el.setAttribute("aria-label", "Route " + number);
       el.style.opacity = 0;
-      badges.push(el);
-      new maplibregl.Marker({ element: el, anchor: "left", offset: [14, -14] })
-        .setLngLat([s.lng, s.lat]).addTo(map);
+      return el;
+    }
+    var shields = [7, 9].map(function (route) {
+      var feats = route79.features.filter(function (f) {
+        return f.properties.code === ROUTE_CODE[route];
+      });
+      var longest = feats.reduce(function (a, b) {
+        return b.geometry.coordinates.length > a.geometry.coordinates.length ? b : a;
+      }, feats[0]);
+      var mid = longest.geometry.coordinates[Math.floor(longest.geometry.coordinates.length / 2)];
+      var el = shieldEl(route);
+      new maplibregl.Marker({ element: el, anchor: "center" }).setLngLat(mid).addTo(map);
+      return el;
     });
 
     var caption = document.getElementById("map14c-caption");
     var motorwayN = sections.filter(function (s) { return s.category === "motorway"; }).length;
     var ordinaryN = sections.length - motorwayN;
-    var sharedN = sections.filter(function (s) { return s.anchor_count > 1; }).length;
 
     function rankList() {
       return sections.map(function (s) {
@@ -187,11 +209,10 @@
       " of 14 on Routes 7/9 (motorway)</div>" +
       "<div class=\"stat-row\"><span class=\"dot ordinary\"></span>" + ordinaryN +
       " of 14 on Routes 1/4 (ordinary highway)</div>" +
-      "<p class=\"note\">The badge marks " + sharedN + " sections sharing one anchor: they " +
-      "are all Route 7 in Chon Buri, at different km markers this data cannot place more " +
-      "precisely than the province. The " + ordinaryN + " ordinary-highway sections sit " +
-      "outside this frame &mdash; Tak and Nakhon Sawan to the north, Phetchaburi to the " +
-      "south-west.</p>" +
+      "<p class=\"note\">Six of the eleven are all Route 7 in Chon Buri &mdash; strung out " +
+      "along roughly 33km of the corridor by their km marker, not stacked in one place. The " +
+      ordinaryN + " ordinary-highway sections sit outside this frame &mdash; Tak and Nakhon " +
+      "Sawan to the north, Phetchaburi to the south-west.</p>" +
       "<p class=\"note\">A different pattern from the choropleth two screens up: deaths per " +
       "crash run highest in the north-east &mdash; 6 of the 10 highest-rate provinces, led " +
       "by Mukdahan at 29.0 per 100 crashes &mdash; while these fourteen sections sit on the " +
@@ -219,7 +240,7 @@
       var catBlend = seg(p, P1 * 0.85, A2(0.4));
       var routeIn = seg(p, P1 * 0.9, A2(0.4));
       var drill = seg(p, P1 * 0.95, A2(0.55));
-      var badgeIn = seg(p, A2(0.35), A2(0.75));
+      var shieldIn = seg(p, A2(0.3), A2(0.7));
 
       map.jumpTo({
         center: [lerp(CAM_NATIONAL.center[0], CAM_ROUTE79.center[0], drill),
@@ -232,7 +253,7 @@
       map.setPaintProperty("dots-rank", "circle-opacity", dotsIn * (1 - catBlend));
       map.setPaintProperty("dots-category", "circle-opacity", dotsIn * catBlend);
       map.setPaintProperty("route79-line", "line-opacity", routeIn * 0.85);
-      badges.forEach(function (el) { el.style.opacity = badgeIn; });
+      shields.forEach(function (el) { el.style.opacity = shieldIn; });
 
       var act = p < P1 ? 0 : (p < P2 ? 1 : 2);
       if (act !== lastAct) {
