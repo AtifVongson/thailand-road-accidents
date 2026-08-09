@@ -291,6 +291,35 @@ img { max-width: 100%; display: block; }
 .stat-row .dot.motorway { background: var(--severity); }
 .stat-row .dot.ordinary { background: var(--ink-2); }
 
+/* Count badge for an anchor holding more than one section. A MapLibre
+ * Marker element, so MapLibre owns its position through the drill-down
+ * camera move and this rule only has to describe how it looks. */
+.map-count-badge {
+  background: var(--ink); color: var(--surface); font-weight: 700; font-size: 11.5px;
+  border-radius: 999px; padding: 3px 9px; white-space: nowrap; pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25); transition: none;
+}
+
+/* Act 3's three multipliers. Deliberately HTML bars, not SVG: this panel is
+ * a normal flow layout, so the detail lines wrap on their own and the
+ * "SVG text does not wrap" trap never applies. Widths come from the
+ * precomputed multiples in slide14c_when.json — no maths in this file or
+ * in map-tab3c.js, only proportion. */
+.when-bars { margin: 14px 0 4px; }
+.wb-row { margin-bottom: 14px; }
+.wb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.wb-name { font-size: 13px; font-weight: 660; color: var(--ink); }
+.wb-mult { font-size: 15px; font-weight: 700; color: var(--severity); }
+.wb-track {
+  height: 10px; border-radius: 999px; background: var(--grid); margin: 5px 0 4px;
+  overflow: hidden;
+}
+.wb-bar { height: 100%; border-radius: 999px; background: var(--severity); }
+.wb-bar.daily { background: #f4855a; }
+.wb-bar.monthly { background: #f9b697; }
+.wb-bar.seasonal { background: #c74e20; }
+.wb-detail { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
 .when-list { list-style: none; margin: 14px 0 0; padding: 0; }
 .when-list li {
   font-size: 13.5px; line-height: 1.6; color: var(--ink); margin-bottom: 10px;

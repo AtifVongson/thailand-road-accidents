@@ -1,0 +1,39 @@
+{
+  "measure": "crashes",
+  "baseline_note": "Each row compares a peak against its own quiet baseline -- the quietest hour, the trough month, an ordinary day. They are not three readings off one shared baseline, so read the ranking, not the arithmetic between rows.",
+  "bars": [
+    {
+      "key": "daily",
+      "label": "Daily",
+      "multiple": 2.08,
+      "hi_label": "16:00",
+      "hi": 6365,
+      "lo_label": "02:00",
+      "lo": 3058,
+      "detail": "busiest hour vs. quietest, 16:00 against 02:00",
+      "source": "slide05_when.json, hour panel, crash counts 2021-2025"
+    },
+    {
+      "key": "monthly",
+      "label": "Monthly",
+      "multiple": 1.9,
+      "hi_label": "April",
+      "hi": 2924,
+      "lo_label": "September",
+      "lo": 1539,
+      "detail": "April against September, on next year's forecast",
+      "source": "slide13_forecast.json, 2026-04 and 2026-09 point forecasts"
+    },
+    {
+      "key": "seasonal",
+      "label": "Seasonal",
+      "multiple": 3.12,
+      "hi_label": "Seven Dangerous Days",
+      "hi": 189.0,
+      "lo_label": "ordinary day",
+      "lo": 60.5,
+      "detail": "Songkran and New Year windows against an ordinary day",
+      "source": "slide12_monthly.json, campaign_windows.both_combined"
+    }
+  ]
+}

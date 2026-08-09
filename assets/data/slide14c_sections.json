@@ -11,7 +11,8 @@
       "lng": 100.97902,
       "lat": 13.06712,
       "anchor_method": "intersect",
-      "n_matched_vertices": 98
+      "n_matched_vertices": 98,
+      "anchor_count": 6
     },
     {
       "rank": 2,
@@ -24,7 +25,8 @@
       "lng": 100.57619,
       "lat": 14.03034,
       "anchor_method": "intersect",
-      "n_matched_vertices": 23
+      "n_matched_vertices": 23,
+      "anchor_count": 1
     },
     {
       "rank": 3,
@@ -37,7 +39,8 @@
       "lng": 100.97902,
       "lat": 13.06712,
       "anchor_method": "intersect",
-      "n_matched_vertices": 98
+      "n_matched_vertices": 98,
+      "anchor_count": 6
     },
     {
       "rank": 4,
@@ -50,7 +53,8 @@
       "lng": 100.2448,
       "lat": 15.48008,
       "anchor_method": "intersect",
-      "n_matched_vertices": 95
+      "n_matched_vertices": 95,
+      "anchor_count": 1
     },
     {
       "rank": 5,
@@ -63,7 +67,8 @@
       "lng": 100.56389,
       "lat": 13.72731,
       "anchor_method": "intersect",
-      "n_matched_vertices": 41
+      "n_matched_vertices": 41,
+      "anchor_count": 1
     },
     {
       "rank": 6,
@@ -76,7 +81,8 @@
       "lng": 100.97902,
       "lat": 13.06712,
       "anchor_method": "intersect",
-      "n_matched_vertices": 98
+      "n_matched_vertices": 98,
+      "anchor_count": 6
     },
     {
       "rank": 7,
@@ -89,7 +95,8 @@
       "lng": 100.73734,
       "lat": 13.73372,
       "anchor_method": "intersect",
-      "n_matched_vertices": 16
+      "n_matched_vertices": 16,
+      "anchor_count": 1
     },
     {
       "rank": 8,
@@ -102,7 +109,8 @@
       "lng": 99.13268,
       "lat": 17.01185,
       "anchor_method": "intersect",
-      "n_matched_vertices": 74
+      "n_matched_vertices": 74,
+      "anchor_count": 1
     },
     {
       "rank": 9,
@@ -115,7 +123,8 @@
       "lng": 100.97902,
       "lat": 13.06712,
       "anchor_method": "intersect",
-      "n_matched_vertices": 98
+      "n_matched_vertices": 98,
+      "anchor_count": 6
     },
     {
       "rank": 10,
@@ -128,7 +137,8 @@
       "lng": 99.90903,
       "lat": 12.9879,
       "anchor_method": "intersect",
-      "n_matched_vertices": 49
+      "n_matched_vertices": 49,
+      "anchor_count": 1
     },
     {
       "rank": 11,
@@ -141,7 +151,8 @@
       "lng": 100.97902,
       "lat": 13.06712,
       "anchor_method": "intersect",
-      "n_matched_vertices": 98
+      "n_matched_vertices": 98,
+      "anchor_count": 6
     },
     {
       "rank": 12,
@@ -154,7 +165,8 @@
       "lng": 100.95153,
       "lat": 13.59434,
       "anchor_method": "intersect",
-      "n_matched_vertices": 6
+      "n_matched_vertices": 6,
+      "anchor_count": 1
     },
     {
       "rank": 13,
@@ -167,7 +179,8 @@
       "lng": 100.97902,
       "lat": 13.06712,
       "anchor_method": "intersect",
-      "n_matched_vertices": 98
+      "n_matched_vertices": 98,
+      "anchor_count": 6
     },
     {
       "rank": 14,
@@ -180,7 +193,8 @@
       "lng": 100.83823,
       "lat": 13.67424,
       "anchor_method": "intersect",
-      "n_matched_vertices": 2
+      "n_matched_vertices": 2,
+      "anchor_count": 1
     }
   ]
 }
