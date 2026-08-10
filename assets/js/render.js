@@ -1135,6 +1135,19 @@
     }, first.summary.text);
     gText.appendChild(summary);
 
+    // The band key. Every coordinate and the blended swatch colour come from
+    // layout.js; this only places what it is handed. Painted once — which
+    // window is which colour does not change with scroll.
+    first.legend.entries.forEach(function (e) {
+      gText.appendChild(el("rect", {
+        class: "c-legendswatch", x: e.swatchX, y: first.legend.y - first.legend.swatch,
+        width: first.legend.swatch, height: first.legend.swatch, rx: 1.5, fill: e.color,
+      }));
+      gText.appendChild(el("text", {
+        class: "c-legendlabel", x: e.labelX, y: first.legend.y,
+      }, e.text));
+    });
+
     first.xTicks.forEach(function (t) {
       gGrid.appendChild(el("text", {
         class: "c-tick", x: t.x, y: first.panels[1].y + first.panels[1].h + 24, "text-anchor": "middle",

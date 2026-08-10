@@ -2322,6 +2322,35 @@
       });
     }
 
+    /* Two shaded colours need a key, now that they mean different windows.
+     *
+     * The swatch is the band's colour already blended against the surface at
+     * the 0.24 the bands are drawn with, then painted opaque — so it is the
+     * exact colour on the chart rather than the saturated hex the bands never
+     * actually show, and an 11px square does not have to survive being 76%
+     * transparent to be legible.
+     *
+     * Dates are not repeated here: the subtitle directly above already gives
+     * both windows in full, and a key that restates them is two lines of the
+     * same sentence. Always visible, unlike the summary — it explains what the
+     * shading will mean, which is worth knowing before the first band arrives.
+     */
+    var legendSwatch = 11, legendGapAfter = 26, legendCharW = 13 * 0.52;
+    var legendX = 40;
+    var legendEntries = [
+      { key: "songkran", text: "Songkran", base: PALETTE.songkran },
+      { key: "new_year", text: "New Year", base: PALETTE.newYear },
+    ].map(function (e) {
+      var labelX = legendX + legendSwatch + 7;
+      var entry = {
+        key: e.key, text: e.text,
+        color: mixHex(PALETTE.surface, e.base, 0.24),
+        swatchX: legendX, labelX: labelX,
+      };
+      legendX = labelX + e.text.length * legendCharW + legendGapAfter;
+      return entry;
+    });
+
     return {
       viewBox: { width: o.width, height: o.height },
       plot: plot, progress: p, reveal: reveal,
@@ -2331,6 +2360,9 @@
         Object.assign({}, panels.deaths, { line: lines.deaths,
           ticks: yTickSet("deaths") }),
       ],
+      // Same baseline as the summary opposite it: legend left, multipliers
+      // right, both on the one line between the subtitle and the panel titles.
+      legend: { y: o.margin.top - 50, swatch: legendSwatch, entries: legendEntries },
       bands: bandGeom,
       xTicks: xTicks,
       heading: "Festivals drive the year, not the calendar average",
