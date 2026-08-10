@@ -1047,6 +1047,19 @@
       return t;
     });
 
+    // Both acts' coefficients are painted and then hidden by opacity, the same
+    // way the headings and axis titles above work — one act shows at a time.
+    var statActs = first.stat.acts.map(function (act) {
+      return act.lines.map(function (line, i) {
+        var t = el("text", {
+          class: i === 0 ? "c-stat" : "c-limitation",
+          x: first.stat.x, y: first.stat.y + i * first.stat.lineGap,
+        }, line);
+        gText.appendChild(t);
+        return t;
+      });
+    });
+
     // x grid — never moves, drawn once
     first.xTicks.forEach(function (t) {
       gGrid.appendChild(el("line", {
@@ -1100,6 +1113,9 @@
 
       m.axisTitles.forEach(function (a, i) { axisTitles[i].setAttribute("opacity", a.opacity.toFixed(3)); });
       m.headings.forEach(function (h, i) { headings[i].setAttribute("opacity", h.opacity.toFixed(3)); });
+      m.stat.acts.forEach(function (act, i) {
+        statActs[i].forEach(function (n) { n.setAttribute("opacity", act.opacity.toFixed(3)); });
+      });
     }
 
     update(0);

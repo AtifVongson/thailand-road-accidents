@@ -1,6 +1,18 @@
 {
  "sections": 160,
  "crashes_covered": 26027,
+ "same_volume_spread": {
+  "ratio": 50.1,
+  "tolerance_pct": 10,
+  "high": {
+   "aadt": 65542,
+   "crashes": 501
+  },
+  "low": {
+   "aadt": 66008,
+   "crashes": 10
+  }
+ },
  "scope_note": "AADT exists only for the 6 DOH main routes, so this panel runs on 160 survey sections covering 26,027 crashes — about a quarter of the national file, not all of it.",
  "panel_a": {
   "metric": "crashes",

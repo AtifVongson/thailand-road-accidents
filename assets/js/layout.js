@@ -132,6 +132,13 @@
     return out;
   }
 
+  /* A correlation with its sign spelled out, using a real minus rather than a
+   * hyphen — at 15px a hyphen in front of a digit reads as a dash between two
+   * numbers, and these appear next to a "·" separator. */
+  var signed = function (r) {
+    return (r < 0 ? "−" : "+") + Math.abs(r).toFixed(2);
+  };
+
   var fmt = function (n) { return Math.round(n).toLocaleString("en-US"); };
   var mean = function (xs) { return xs.reduce(function (a, b) { return a + b; }, 0) / xs.length; };
 
@@ -2180,6 +2187,31 @@
         { metric: "crashes", ticks: yTickSet(maxCrashes, fadeOut(p), false) },
         { metric: "deaths_per_crash", ticks: yTickSet(maxDpc, fadeIn(p), true) },
       ],
+      /* The correlations, in the top-left corner the cloud never reaches: the
+       * points climb left-to-right, so nothing is ever drawn above the low-AADT
+       * end. Two lines per act — the coefficients, then what they do not say.
+       *
+       * A correlation describes the slope of the cloud, not its thickness, and
+       * "predicts" in the heading is read as "determines" unless the thickness
+       * is stated. Hence the spread: two sections carrying traffic within 10%
+       * of each other differ by 50x on crashes. It is computed in
+       * 09_chart_data.py against the tightest reading of "the same volume" —
+       * at +/-20% it is 117x — so the number on screen understates.
+       *
+       * Hard-swapped, not faded: mid-scroll neither pair of coefficients is
+       * true of the cloud being drawn, the same rule the axis titles follow. */
+      stat: {
+        x: plot.x + 16, y: plot.y + 36, lineGap: 24,
+        acts: [
+          { opacity: swapOut(p),
+            lines: ["Pearson " + signed(A.pearson_r) + "  ·  Spearman " + signed(A.spearman_r),
+                    "At the same traffic volume, crash counts still differ by up to "
+                    + Math.round(data.same_volume_spread.ratio) + "×."] },
+          { opacity: swapIn(p),
+            lines: ["Pearson " + signed(B.pearson_r) + "  ·  Spearman " + signed(B.spearman_r),
+                    "Reversed, and very weak."] },
+        ],
+      },
       axisTitles: [
         { text: "Crashes per section (5-year total)", opacity: swapOut(p),
           x: plot.x, y: plot.y - 16 },
