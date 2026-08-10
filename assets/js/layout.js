@@ -1544,6 +1544,11 @@
       var dLo = lo - pad, dHi = hi + pad;
       var xOf = function (v) { return plot.x + (v - dLo) / (dHi - dLo) * plot.w; };
       var midY = y0 + panelH / 2;
+      // Both markers label below their own dot, on one baseline. Splitting
+      // them — 2025 above, 2026 below — gave the two ends opposite reading
+      // orders, and put 2025's value inside the shaded band, where a number
+      // sat on top of the interval it was meant to be compared against.
+      var labelY = midY + 30, valueY = midY + 48;
       var inside = function (lo_, hi_) {
         return m.y2026_actual >= lo_ && m.y2026_actual <= hi_;
       };
@@ -1568,12 +1573,12 @@
         stick: { x1: xOf(m.y2025), x2: xOf(m.y2026_actual), y: midY },
         p2025: { cx: xOf(m.y2025), cy: midY, r: o.pointR,
                  label: "Apr 2025", value: fmt(m.y2025),
-                 labelY: midY - 26, valueY: midY - 8 },
+                 labelY: labelY, valueY: valueY },
         p2026: { cx: xOf(m.y2026_actual), cy: midY, r: o.pointR,
                  held80: inside(m.forecast_lo80, m.forecast_hi80),
                  held95: inside(m.forecast_lo95, m.forecast_hi95),
                  label: "Apr 2026 (provisional)", value: fmt(m.y2026_actual),
-                 labelY: midY + 30, valueY: midY + 48 },
+                 labelY: labelY, valueY: valueY },
         ticks: niceTicksRange(dLo, dHi, 4).map(function (v) {
           return { value: v, x: xOf(v), label: fmt(v) };
         }),
