@@ -1685,7 +1685,22 @@
       var frac = lerp(d.crashes / maxCrashes, d.deaths / maxDeaths, local);
       var vis0 = d.rank_crashes <= N ? 1 : 0;
       var vis1 = d.rank_deaths <= N ? 1 : 0;
+      var onBoth = vis0 === 1 && vis1 === 1;
       var w = frac * plot.w;
+      /* Colour marks which list a province is on, not which metric the chart
+       * is currently showing. The eight on both lists are the ones that do not
+       * make the point — they are there either way — so they sit in axis grey,
+       * and the four that appear on one list only carry their list's colour:
+       * blue for the crash ranking it leaves after, orange for the death
+       * ranking it only enters. Each act therefore has exactly four coloured
+       * bars, and they are the four that changed.
+       *
+       * Fixed per row rather than interpolated. It was mixHex(volume,
+       * severity, local), which coloured all sixteen rows by scroll position —
+       * that says "the metric changed", which the axis title and value labels
+       * already say, and it left the eight unchanged provinces as loud as the
+       * four that moved. The row label has drawn this same distinction all
+       * along, via .c-rowlabel.is-both; the bar now agrees with its label. */
       return {
         key: d.label,
         label: d.label,
@@ -1693,9 +1708,10 @@
         height: barH,
         x: plot.x,
         width: w,
-        color: mixHex(PALETTE.volume, PALETTE.severity, local),
+        color: onBoth ? PALETTE.axis
+             : vis1 === 1 ? PALETTE.severity : PALETTE.volume,
         opacity: lerp(vis0, vis1, local),
-        onBothLists: vis0 === 1 && vis1 === 1,
+        onBothLists: onBoth,
         labelX: plot.x - 14,
         labelWidth: d.label.length * o.labelCharWidth,
         valueX: plot.x + w + 12,
