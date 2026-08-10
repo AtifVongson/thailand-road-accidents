@@ -346,7 +346,7 @@
       role: "img",
       "aria-label": "Vehicle type, road alignment and weather, each as crash share "
         + "against deaths per 100 crashes, rotating through a carousel. The "
-        + "motorcycle death-rate bar carries a diagonal texture.",
+        + "motorcycle bar carries a diagonal texture on both panels.",
     });
 
     var gText = el("g", { class: "c-text" });
@@ -361,19 +361,33 @@
     // length. Severity fill is set once at mount and never touched again in
     // update() — a death rate does not change with scroll — so the pattern
     // needs no per-frame handling either.
-    var texturedRow = null;
+    var texturedRow = null, texturedVolRow = null;
     first.cards.forEach(function (c) {
-      c.rows.forEach(function (r) { if (r.sev.texture) texturedRow = r; });
-    });
-    if (texturedRow) {
-      var defs = el("defs", {});
-      var pattern = el("pattern", {
-        id: "s6-texture", patternUnits: "userSpaceOnUse",
-        width: 8, height: 8, patternTransform: "rotate(45)",
+      c.rows.forEach(function (r) {
+        if (r.sev.texture) texturedRow = r;
+        if (r.vol.texture) texturedVolRow = r;
       });
-      pattern.appendChild(el("rect", { width: 8, height: 8, fill: texturedRow.sev.color }));
-      pattern.appendChild(el("line", { x1: 0, y1: 0, x2: 0, y2: 8, class: "c-texture-line" }));
-      defs.appendChild(pattern);
+    });
+    var volTextureBg = null;
+    if (texturedRow || texturedVolRow) {
+      var defs = el("defs", {});
+      function tile(id, bgFill) {
+        var pat = el("pattern", {
+          id: id, patternUnits: "userSpaceOnUse",
+          width: 8, height: 8, patternTransform: "rotate(45)",
+        });
+        var bg = el("rect", { width: 8, height: 8, fill: bgFill });
+        pat.appendChild(bg);
+        pat.appendChild(el("line", { x1: 0, y1: 0, x2: 0, y2: 8, class: "c-texture-line" }));
+        defs.appendChild(pat);
+        return bg;
+      }
+      if (texturedRow) tile("s6-texture", texturedRow.sev.color);
+      // A second tile rather than reusing the first: this one's background has
+      // to be repainted every frame, and the severity tile must not be dragged
+      // along with it — the two bars are the same colour only at the very end
+      // of the flip.
+      if (texturedVolRow) volTextureBg = tile("s6-texture-vol", texturedVolRow.vol.color);
       svg.appendChild(defs);
     }
 
@@ -472,7 +486,16 @@
         });
         card.rows.forEach(function (r) {
           var n = node.rows[r.key];
-          set(n.volBar, { y: r.y, width: Math.max(0, r.vol.width), fill: r.vol.color });
+          // The textured row paints through its pattern, and the pattern's own
+          // background follows the fill this bar would otherwise have — the
+          // volume bar mixes blue to orange across the flip, so a background
+          // resolved once at mount would leave the texture sitting on a colour
+          // the bar stopped wearing.
+          if (r.vol.texture && volTextureBg) {
+            volTextureBg.setAttribute("fill", r.vol.color);
+          }
+          set(n.volBar, { y: r.y, width: Math.max(0, r.vol.width),
+                          fill: r.vol.texture ? "url(#s6-texture-vol)" : r.vol.color });
           set(n.sevBar, { y: r.y, width: Math.max(0, r.sev.width) });
           set(n.name, { y: r.y + r.height / 2 });
           r.vol.values.forEach(function (v, i) {

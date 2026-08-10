@@ -531,6 +531,10 @@
     restBand: 0.02,
     dimOffTop: 0.55,      // opacity of a card away from the top position
     labelGate: 0.6,       // prominence below which value labels are suppressed
+    // How much of card 0's segment passes before its metric flip starts, so
+    // "% of all crashes" is on screen with its numbers before anything moves.
+    // See cardFlipWindow().
+    flipLeadIn: 0.25,
   };
 
   /* Three cards on one ellipse, rotating counter-clockwise, each flipping its
@@ -589,7 +593,15 @@
      * numerically against this same formula, not just derived on paper.
      */
     function cardFlipWindow(ci) {
-      if (ci === 0) return [S[0], S[1]];
+      // Card 0 holds before it flips rather than starting mid-morph on the
+      // first pixel of scroll. Without the lead-in its window opened at S[0],
+      // so `mp` left 0 immediately and the volume value labels — gated on
+      // being at rest, because a morphing bar is a share of neither metric —
+      // were readable for under 1% of the scroll, while the panel title went
+      // on claiming "% of all crashes" for the first 17%. The panel showed a
+      // metric it never put numbers to. The lead-in is a quarter of the
+      // segment, the same inset cards 1 and 2 already get from `half` below.
+      if (ci === 0) return [S[0] + (S[1] - S[0]) * o.flipLeadIn, S[1]];
       var segStart = S[ci], segEnd = S[ci + 1];
       var mid = (segStart + segEnd) / 2;
       var half = (segEnd - segStart) / 4;
@@ -677,6 +689,13 @@
               { text: r.pc_death.toFixed(1) + "%", opacity: inOp },
             ],
             valueX: volX + (volValue / volMax) * barSpan + 10,
+            // The same mark the severity panel puts on this row, for the same
+            // reason: Motorcycle is the row the card argues from, and it should
+            // carry a non-colour encoding on both panels rather than only on
+            // the one. Unlike the severity bar, this one's fill animates from
+            // volume blue to severity orange across the flip, so its pattern
+            // background cannot be resolved once — render.js repaints it.
+            texture: src.key === "vehicle" && r.label === "Motorcycle",
           },
           sev: {
             x: sevX, width: (r.death_rate / sevMax) * barSpan,
