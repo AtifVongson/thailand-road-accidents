@@ -15,6 +15,9 @@
   --axis:     #c3c2b7;
   --volume:   #2a78d6;
   --severity: #eb6834;
+  /* The two campaign windows, slots 6 and 7 of theme.py's SERIES. */
+  --songkran: #4a3aa7;
+  --new-year: #e34948;
 }
 
 /* Type is sized for a projector read from the back of a room, not for a laptop
@@ -128,7 +131,11 @@
 .chart .c-point   { opacity: 0.72; }
 .chart .c-trendline { stroke-linecap: round; }
 .chart .c-line    { }
-.chart .c-band    { fill: var(--severity); }
+/* No fill here. The two campaign windows are different colours now, so the
+ * fill is a per-band attribute set from layout.js's palette — and a fill in
+ * this rule would win over that attribute, which is the trap this project
+ * has hit before. Opacity only, the same split .c-band80/.c-band95 use. */
+.chart .c-band    { }
 .chart .c-summary { font-size: 15px; font-weight: 640; fill: var(--ink-2); }
 
 /* No transitions here on purpose. Motion is driven by scroll position through

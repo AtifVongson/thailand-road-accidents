@@ -34,6 +34,11 @@
     axis: "#c3c2b7",
     volume: "#2a78d6",
     severity: "#eb6834",
+    // Slots 6 and 7 of theme.py's SERIES, for the two campaign windows on
+    // slide 12. Taken from the categorical ladder rather than picked fresh,
+    // so the shading stays inside the palette the figures already use.
+    songkran: "#4a3aa7",
+    newYear: "#e34948",
   };
 
   /* ------------------------------------------------------------- numbers */
@@ -2283,6 +2288,10 @@
       var x1 = xOf(b.end) + (padded ? (plot.w / last) * 0.42 : 0);
       return {
         type: b.type, year: b.year, x: x0, width: Math.max(0, x1 - x0),
+        // One colour per window, not one for both. Shaded identically they
+        // read as a single recurring event; Songkran and New Year are two,
+        // counted separately, and the subtitle names them separately.
+        color: b.type === "songkran" ? PALETTE.songkran : PALETTE.newYear,
         opacity: bandOpacity(b) * 0.24,
         // Month indices, not pixels — exposed so a check can confirm a band
         // starts lighting up before the reveal cursor reaches it, not at it.

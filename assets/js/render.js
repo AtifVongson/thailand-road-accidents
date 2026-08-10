@@ -1162,8 +1162,11 @@
       return { path: path, ticks: ticks };
     });
 
-    var bandNodes = first.bands.map(function () {
-      var rect = el("rect", { class: "c-band" });
+    // Fill comes from the band's own colour, not from charts.css: the two
+    // campaign windows are different colours, and it is set once here because
+    // a band never changes which window it belongs to.
+    var bandNodes = first.bands.map(function (b) {
+      var rect = el("rect", { class: "c-band", fill: b.color });
       gBands.appendChild(rect);
       return { rect: rect };
     });
