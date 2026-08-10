@@ -210,8 +210,9 @@
       viewBox: "0 0 " + first.viewBox.width + " " + first.viewBox.height,
       role: "img",
       "aria-label": "Crashes by hour, day of week and month, re-heighting to show "
-        + "the same three views by deaths. Hours from 19:00 to 04:00 are "
-        + "highlighted; the rest are greyed.",
+        + "the same three views by deaths. On the hour panel, 13:00 to 16:00 is "
+        + "highlighted while the chart reads crashes, then 19:00 to 04:00 while "
+        + "it reads deaths; the rest are greyed.",
     });
 
     var gGrid = el("g", { class: "c-grid" });
@@ -228,9 +229,16 @@
       width: lg.swatch, height: lg.swatch, rx: 1.5,
     });
     gText.appendChild(legendSwatch);
-    gText.appendChild(el("text", {
-      class: "c-legendlabel", x: lg.x + lg.swatch + 8, y: lg.y,
-    }, lg.text));
+    // Two overlaid labels, hard-swapped by opacity — same pattern as the panel
+    // titles below, and for the same reason: the window the legend names
+    // changes identity between acts, so only one string may ever be painted.
+    var legendLabels = lg.labels.map(function (lb) {
+      var t = el("text", {
+        class: "c-legendlabel", x: lg.x + lg.swatch + 8, y: lg.y,
+      }, lb.text);
+      gText.appendChild(t);
+      return t;
+    });
     gText.appendChild(el("text", { class: "c-subtitle", x: 40, y: 94 }, first.subtitle));
     gText.appendChild(el("text", {
       class: "c-source", x: first.sourceX, y: first.viewBox.height - 18, "text-anchor": "end",
@@ -314,6 +322,9 @@
       // The swatch tracks the hour panel's hue so the legend never claims a
       // colour the bars are not currently wearing.
       legendSwatch.setAttribute("fill", m.legend.color);
+      m.legend.labels.forEach(function (lb, i) {
+        legendLabels[i].setAttribute("opacity", lb.opacity);
+      });
     }
 
     update(0);

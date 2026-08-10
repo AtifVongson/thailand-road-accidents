@@ -193,12 +193,20 @@
     headroom: 1.15,        // the space callouts sit in, above the tallest bar
     xTickEvery: { hour: 3, dow: 1, month: 1 },
     noteCharWidth: 6.6,    // ~0.55em at the 12px callout, for overflow clamping
-    // 19:00-04:00 inclusive: ten hours carrying 34.6% of crashes and 41.9% of
-    // deaths, both recomputed from the bin counts rather than read off the
-    // prose. The window wraps midnight, so on a 00->23 axis it draws as two
-    // blocks at opposite edges — which is why it needs the legend to read as one
-    // thing. Re-basing the axis to start at 05:00 would make it contiguous and
-    // was considered and declined; it would desync the x ticks from the deck.
+    // Two different windows now, one per act — not the same ten hours recoloured.
+    // 13:00-16:00 is the afternoon block that actually carries the most crashes
+    // (16:00 alone is the single busiest hour); 19:00-04:00 is where deaths
+    // concentrate instead (34.6% of crashes but 41.9% of deaths, both
+    // recomputed from the bin counts, not read off the prose). Highlighting the
+    // day window first and only then revealing the night window is what makes
+    // "counted by deaths the peak MOVES to 19:00" (tab1.html's own sentence) an
+    // honest description of what the chart just did, rather than a claim about
+    // a window that was on screen the whole time. The night window wraps
+    // midnight, so on a 00->23 axis it draws as two blocks at opposite edges —
+    // which is why it needs the legend to read as one thing. Re-basing the axis
+    // to start at 05:00 would make it contiguous and was considered and
+    // declined; it would desync the x ticks from the deck.
+    dayHours: [13, 14, 15, 16],
     nightHours: [19, 20, 21, 22, 23, 0, 1, 2, 3, 4],
     // Two acts on one scalar. The hour panel flips first because it is the
     // slide's subject, then the other two together. Each panel reads its own
@@ -257,8 +265,9 @@
       var stop = o.actStops[key] || [0, 1];
       return clamp((p - stop[0]) / (stop[1] - stop[0]), 0, 1);
     }
-    var nightSet = {};
+    var nightSet = {}, daySet = {};
     o.nightHours.forEach(function (h) { nightSet[h] = true; });
+    o.dayHours.forEach(function (h) { daySet[h] = true; });
 
     var plot = {
       x: o.margin.left, y: o.margin.top,
@@ -296,11 +305,17 @@
       // would argue against a finding the deck makes elsewhere.
       var windowed = src.key === "hour";
       var metricHue = mixHex(PALETTE.volume, PALETTE.severity, t);
+      // Hard swap at the panel's own midpoint — same threshold swapOut/swapIn
+      // use for the titles, and for the same reason: an hour cannot be
+      // half-in-the-crash-window and half-in-the-night-window, so there is no
+      // honest crossfade between the two sets, only a moment where one becomes
+      // the other. Hue still crossfades continuously; only membership swaps.
+      var activeSet = local < 0.5 ? daySet : nightSet;
 
       var bars = bins.map(function (b, i) {
         var value = lerp(b.pc_crash, b.pc_death, t);
         var y = yOf(value);
-        var inWindow = !windowed || !!nightSet[parseInt(b.label, 10)];
+        var inWindow = !windowed || !!activeSet[parseInt(b.label, 10)];
         return {
           key: src.key + "-" + b.label,
           label: b.label,
@@ -367,17 +382,27 @@
           // grey bar and "low 02:00" labels a coloured one, which reads as a
           // contradiction rather than as the point. The window share is also
           // the number the slide's closing sentence rests on.
+          //
+          // Each metric names the window that is actually highlighted for it —
+          // crashes against the afternoon block, deaths against the night
+          // window — not the same window twice with two different numbers
+          // stapled on. Getting this wrong (leaving both notes pointed at
+          // 19:00-04:00 after the highlight itself started swapping) would be
+          // exactly the "label says one thing, bar shows another" contradiction
+          // this note replaced in the first place.
           var raw = field === "pc_crash" ? "crashes" : "deaths";
           var tot = field === "pc_crash" ? data.total_crashes : data.total_deaths;
+          var winSet = field === "pc_crash" ? daySet : nightSet;
+          var winLabel = field === "pc_crash" ? "13:00–16:00" : "19:00–04:00";
           // Recomputed from the counts, not summed from the rounded percentages
           // — summing pc_death over the window gives 42.0%, which would put a
           // number on screen that contradicts the prose's 41.9%.
           var inWin = bins.reduce(function (a, b) {
-            return a + (nightSet[parseInt(b.label, 10)] ? b[raw] : 0);
+            return a + (winSet[parseInt(b.label, 10)] ? b[raw] : 0);
           }, 0);
           notes.push({
             key: src.key + "-window-" + field,
-            text: "19:00–04:00: " + pct(100 * inWin / tot) + " of " + raw,
+            text: winLabel + ": " + pct(100 * inWin / tot) + " of " + raw,
             x: panel.x + 4, y: panel.y + 18, anchorX: panel.x + 4,
             width: 0, opacity: op, anchor: "start",
           });
@@ -437,18 +462,29 @@
     // together there was no one thing true of all three. Their content did not
     // disappear — it moved into the per-panel titles above, which is the only
     // place it can be stated correctly now.
+    var hourPanel = panels.filter(function (pl) { return pl.key === "hour"; })[0];
+    var hourLocal = localOf("hour");
     return {
       viewBox: { width: o.width, height: o.height },
       plot: plot, progress: p,
       subtitle: "Hours differ far more than days do — and more so by deaths than "
               + "by crashes. Line marks an even share.",
-      // Names the two blocks at opposite ends of the hour axis as one window.
-      // Without it the highlight reads as two unrelated groups, because the
-      // window wraps midnight and the axis does not.
+      // Names the two blocks at opposite ends of a window as one thing — the
+      // night window wraps midnight, so on this axis it draws as two blocks at
+      // opposite edges. Sits directly under the hour panel's own window-share
+      // note (moved there — it used to float at the top of the whole chart,
+      // disconnected from the bars it was naming) and hard-swaps its label at
+      // the same midpoint the bar highlight itself swaps at, so the legend
+      // never names a window the bars are not currently wearing. Position is
+      // fixed (hourPanel.x/y do not move between acts — only bar height does),
+      // so only the two labels' opacity needs to animate per frame.
       legend: {
-        text: "19:00–04:00",
-        color: mixHex(PALETTE.volume, PALETTE.severity, smoothstep(localOf("hour"))),
-        x: 40, y: 62, swatch: 11,
+        color: mixHex(PALETTE.volume, PALETTE.severity, smoothstep(hourLocal)),
+        x: hourPanel.x + 4, y: hourPanel.y + 40, swatch: 11,
+        labels: [
+          { text: "13:00–16:00", opacity: swapOut(hourLocal) },
+          { text: "19:00–04:00", opacity: swapIn(hourLocal) },
+        ],
       },
       panels: panels,
       source: data.source,
